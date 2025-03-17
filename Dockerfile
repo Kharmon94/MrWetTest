@@ -30,9 +30,9 @@ ENV RAILS_ENV="production" \
 # --- Build Stage ---
 FROM base AS build
 
-# Install build packages required for compiling gems.
+# Install build packages required for compiling gems, including libpq-dev for PostgreSQL.
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config && \
+    apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config libpq-dev && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Copy Gemfile and Gemfile.lock, then install gems.
