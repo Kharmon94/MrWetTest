@@ -1,0 +1,24 @@
+<h1>Start Your Assessment</h1>
+<p>
+  Please read the instructions carefully before beginning the test.
+  You will be required to accept the following honor statement:
+</p>
+<p>
+  <em>
+    "I do not have any other web browsers open on the computer being used for the exam.
+    I will not use any communication device to seek or receive information to assist me
+    with answering the questions contained in this assessment. I affirm that I will not
+    give or receive any unauthorized help on this exam and that all work will be my own."
+  </em>
+</p>
+
+<%= form_with url: assessments_path, method: :post do |form| %>
+  <%= form.hidden_field :course_id, value: @course.id %>
+  <div>
+    <%= form.check_box :honor_statement, {}, '1', '0' %>
+    <%= form.label :honor_statement, "I agree to the honor statement" %>
+  </div>
+  <div>
+    <%= form.submit "Start Assessment" %>
+  </div>
+<% end %>

@@ -1,0 +1,19 @@
+<h1>Answer Your Assessment</h1>
+<p>Please answer all questions. Once submitted, you cannot change your answers.</p>
+
+<%= form_with model: @assessment, url: assessment_path(@assessment), method: :patch do |form| %>
+  <ul>
+    <% @assessment.assessment_questions.each do |aq| %>
+      <li>
+        <strong>Question:</strong> <%= aq.question.content %>
+        <div>
+          <%= label_tag "assessment_questions[#{aq.id}]", "Your Answer:" %>
+          <%= text_field_tag "assessment_questions[#{aq.id}]", aq.chosen_answer %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+  <div>
+    <%= form.submit "Submit Assessment" %>
+  </div>
+<% end %>

@@ -1,0 +1,14 @@
+<h1>My Assessments</h1>
+
+<% if @assessments.any? %>
+  <ul>
+    <% @assessments.each do |assessment| %>
+      <li>
+        <%= link_to "Assessment ##{assessment.id} - Score: #{assessment.score || 'Not Graded'}", assessment_path(assessment) %>
+        <small>(Taken at: <%= assessment.taken_at.strftime("%Y-%m-%d %H:%M") if assessment.taken_at %>)</small>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You have not taken any assessments yet.</p>
+<% end %>

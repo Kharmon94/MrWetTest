@@ -1,0 +1,24 @@
+<h1>Your Assessment</h1>
+<p>Started at: <%= @assessment.taken_at.strftime("%Y-%m-%d %H:%M") %></p>
+
+<% if @assessment.submitted? %>
+  <p>Your score: <%= @assessment.score %>%</p>
+<% else %>
+  <p>This assessment is still in progress.</p>
+<% end %>
+
+<% if @assessment.assessment_questions.any? %>
+  <ul>
+    <% @assessment.assessment_questions.each do |aq| %>
+      <li>
+        <strong>Question:</strong> <%= aq.question.content %><br>
+        <strong>Your Answer:</strong> <%= aq.chosen_answer.presence || "Not answered" %><br>
+        <% if @assessment.submitted? %>
+          <strong>Correct Answer:</strong> <%= aq.question.correct_answer %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No questions available.</p>
+<% end %>
