@@ -16,7 +16,7 @@ FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 # Set working directory for the Rails app.
 WORKDIR /rails
 
-# Install base packages. Adjust as needed for your app (e.g. libvips is used by image processing gems).
+# Install base packages.
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
@@ -30,7 +30,7 @@ ENV RAILS_ENV="production" \
 # --- Build Stage ---
 FROM base AS build
 
-# Install build packages required for compiling gems, including libpq-dev for PostgreSQL.
+# Install build packages required for compiling gems, including libpq-dev for pg.
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config libpq-dev && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
@@ -42,6 +42,9 @@ RUN bundle install && \
 
 # Copy the rest of the application code.
 COPY . .
+
+# Ensure bin/rails is executable.
+RUN chmod +x ./bin/rails
 
 # Precompile bootsnap code for faster boot times.
 RUN bundle exec bootsnap precompile app/ lib/
