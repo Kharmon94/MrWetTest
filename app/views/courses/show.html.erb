@@ -1,2 +1,16 @@
-<h1>Courses#show</h1>
-<p>Find me in app/views/courses/show.html.erb</p>
+<h1><%= @course.title %></h1>
+<p><%= @course.description %></p>
+<p>Price: <%= number_to_currency(@course.price) %></p>
+
+<%# Optionally, list lessons if you have them %>
+<% if @course.lessons.any? %>
+  <h2>Lessons</h2>
+  <ul>
+    <% @course.lessons.order(:position).each do |lesson| %>
+      <li>
+        <strong><%= lesson.title %></strong><br>
+        <%= lesson.content %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

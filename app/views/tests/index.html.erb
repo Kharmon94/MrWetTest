@@ -1,2 +1,8 @@
-<h1>Tests#index</h1>
-<p>Find me in app/views/tests/index.html.erb</p>
+<h1>Available Tests</h1>
+<ul>
+  <% @tests.each do |test| %>
+    <li>
+      <%= link_to test.title, test_path(test) %>
+    </li>
+  <% end %>
+</ul>

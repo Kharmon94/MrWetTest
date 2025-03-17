@@ -1,0 +1,12 @@
+<h1>Your Test Results</h1>
+<p>Test: <%= @test_attempt.test.title %></p>
+<p>Score: <%= @test_attempt.score %>%</p>
+<ul>
+  <% @test_attempt.test_attempt_questions.each do |taq| %>
+    <li>
+      <strong>Question:</strong> <%= taq.question.content %><br>
+      <strong>Your Answer:</strong> <%= taq.chosen_answer.presence || "Not answered" %><br>
+      <strong>Correct Answer:</strong> <%= taq.question.correct_answer %>
+    </li>
+  <% end %>
+</ul>

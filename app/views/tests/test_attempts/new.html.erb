@@ -1,0 +1,18 @@
+<h1>Start Test: <%= @test.title %></h1>
+<p><%= @test.instructions %></p>
+<p>Please read and accept the honor statement before beginning:</p>
+<blockquote>
+  "I do not have any other web browsers open on the computer being used for the exam.
+  I will not use any communication device to seek or receive information to assist me with answering the questions contained in this test.
+  I affirm that I will not give or receive any unauthorized help on this exam and that all work will be my own."
+</blockquote>
+<%= form_with url: tests_test_attempts_path, method: :post do |form| %>
+  <%= hidden_field_tag :test_id, @test.id %>
+  <div>
+    <%= form.check_box :honor_statement, {}, '1', '0' %>
+    <%= form.label :honor_statement, "I agree to the honor statement" %>
+  </div>
+  <div>
+    <%= form.submit "Start Test" %>
+  </div>
+<% end %>

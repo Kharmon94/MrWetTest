@@ -1,2 +1,5 @@
-<h1>Tests#show</h1>
-<p>Find me in app/views/tests/show.html.erb</p>
+<h1><%= @test.title %></h1>
+<p><%= @test.description %></p>
+<p>Price: <%= number_to_currency(@test.price) %></p>
+<p><%= @test.instructions %></p>
+<%= link_to "Take Test", new_tests_test_attempt_path(test_id: @test.id) %>

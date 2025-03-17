@@ -1,0 +1,16 @@
+<h1>Answer Test: <%= @test_attempt.test.title %></h1>
+<p>Please answer all questions. Once submitted, your answers cannot be changed.</p>
+<%= form_with model: @test_attempt, url: tests_test_attempt_path(@test_attempt), method: :patch do |form| %>
+  <ul>
+    <% @test_attempt.test_attempt_questions.each do |taq| %>
+      <li>
+        <strong>Question:</strong> <%= taq.question.content %><br>
+        <%= label_tag "test_attempt_questions[#{taq.id}]", "Your Answer:" %>
+        <%= text_field_tag "test_attempt_questions[#{taq.id}]", taq.chosen_answer %>
+      </li>
+    <% end %>
+  </ul>
+  <div>
+    <%= form.submit "Submit Test" %>
+  </div>
+<% end %>

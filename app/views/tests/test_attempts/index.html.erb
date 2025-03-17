@@ -1,0 +1,12 @@
+<h1>My Test Attempts</h1>
+<% if @test_attempts.any? %>
+  <ul>
+    <% @test_attempts.each do |attempt| %>
+      <li>
+        <%= link_to "Test Attempt ##{attempt.id} - Score: #{attempt.score || 'Not graded'}", tests_test_attempt_path(attempt) %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You haven't taken any tests yet.</p>
+<% end %>

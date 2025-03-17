@@ -1,2 +1,8 @@
-<h1>Courses#index</h1>
-<p>Find me in app/views/courses/index.html.erb</p>
+<h1>Courses</h1>
+<ul>
+  <% @courses.each do |course| %>
+    <li>
+      <%= link_to course.title, course_path(course) %>
+    </li>
+  <% end %>
+</ul>

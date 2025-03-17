@@ -9,9 +9,6 @@
     <%= csp_meta_tag %>
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
@@ -20,7 +17,7 @@
     <%= javascript_importmap_tags %>
 
     <style>
-      /* Navigation Bar Styles */
+      /* Basic navigation styling */
       .navbar {
         background-color: #333;
         overflow: hidden;
@@ -37,7 +34,9 @@
         background-color: #ddd;
         color: black;
       }
-      /* Flash Messages */
+      .container {
+        padding: 20px;
+      }
       .flash {
         padding: 10px;
         margin: 10px 0;
@@ -50,20 +49,16 @@
         background-color: #fdecea;
         border: 1px solid #f5c6cb;
       }
-      /* Content Container */
-      .container {
-        padding: 20px;
-      }
     </style>
   </head>
 
   <body>
     <nav class="navbar">
       <%= link_to "Home", root_path %>
+      <%= link_to "Courses", courses_path %>
+      <%= link_to "Tests", tests_path %>
       <% if user_signed_in? %>
-        <%= link_to "Courses", courses_path %>
-        <%= link_to "Start Assessment", new_assessment_path(course_id: 1) %>
-        <%= link_to "My Assessments", assessments_path %>
+        <%= link_to "My Test Attempts", tests_test_attempts_path %>
         <%= link_to "Log Out", destroy_user_session_path, method: :delete %>
       <% else %>
         <%= link_to "Sign In", new_user_session_path %>
@@ -76,10 +71,10 @@
 
     <div class="container">
       <% if notice.present? %>
-        <p class="flash notice"><%= notice %></p>
+        <div class="flash notice"><%= notice %></div>
       <% end %>
       <% if alert.present? %>
-        <p class="flash alert"><%= alert %></p>
+        <div class="flash alert"><%= alert %></div>
       <% end %>
       <%= yield %>
     </div>
