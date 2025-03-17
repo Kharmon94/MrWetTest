@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_17_014505) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_17_024422) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -80,10 +80,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_17_014505) do
   create_table "questions", force: :cascade do |t|
     t.text "content"
     t.string "correct_answer"
-    t.integer "course_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["course_id"], name: "index_questions_on_course_id"
+    t.integer "test_id", null: false
+    t.index ["test_id"], name: "index_questions_on_test_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -95,6 +95,37 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_17_014505) do
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["name"], name: "index_roles_on_name"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
+  end
+
+  create_table "test_attempt_questions", force: :cascade do |t|
+    t.integer "test_attempt_id", null: false
+    t.integer "question_id", null: false
+    t.string "chosen_answer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["question_id"], name: "index_test_attempt_questions_on_question_id"
+    t.index ["test_attempt_id"], name: "index_test_attempt_questions_on_test_attempt_id"
+  end
+
+  create_table "test_attempts", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "test_id", null: false
+    t.decimal "score"
+    t.boolean "submitted"
+    t.datetime "taken_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["test_id"], name: "index_test_attempts_on_test_id"
+    t.index ["user_id"], name: "index_test_attempts_on_user_id"
+  end
+
+  create_table "tests", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.decimal "price"
+    t.text "instructions"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -122,5 +153,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_17_014505) do
   add_foreign_key "assessments", "courses"
   add_foreign_key "assessments", "users"
   add_foreign_key "lessons", "courses"
-  add_foreign_key "questions", "courses"
+  add_foreign_key "questions", "tests"
+  add_foreign_key "test_attempt_questions", "questions"
+  add_foreign_key "test_attempt_questions", "test_attempts"
+  add_foreign_key "test_attempts", "tests"
+  add_foreign_key "test_attempts", "users"
 end

@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  test: one
+  score: 9.99
+  submitted: false
+  taken_at: 2025-03-16 22:42:34
+
+two:
+  user: two
+  test: two
+  score: 9.99
+  submitted: false
+  taken_at: 2025-03-16 22:42:34

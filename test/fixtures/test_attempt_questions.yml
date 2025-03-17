@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  test_attempt: one
+  question: one
+  chosen_answer: MyString
+
+two:
+  test_attempt: two
+  question: two
+  chosen_answer: MyString
