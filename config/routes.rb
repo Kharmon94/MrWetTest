@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
-  get "tests/index"
-  get "tests/show"
-  # Health check route: returns 200 if the app boots with no exceptions.
+  # Health check route
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Devise routes for user authentication.
@@ -10,16 +8,16 @@ Rails.application.routes.draw do
   # Active Admin routes for the admin panel.
   ActiveAdmin.routes(self)
 
-  # Routes for Course products.
+  # Courses routes
   resources :courses
 
-  # Routes for Test products.
-  resources :tests, only: [:index, :show]
-
-  # Test side: routes for test-taking functionality.
+  # Test side: test-taking functionality.
   namespace :tests do
     resources :test_attempts, only: [:index, :new, :create, :edit, :update, :show]
   end
+
+  # Routes for Test products (available tests).
+  resources :tests, only: [:index, :show], constraints: { id: /\d+/ }
 
   # Root path route.
   root to: "home#index"
