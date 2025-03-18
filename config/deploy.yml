@@ -5,10 +5,10 @@ servers:
   web:
     - 127.0.0.1
 
-registry:
-  username: dummy
-  password:
-    - DUMMY_PASSWORD
+# registry:
+#   username: dummy
+#   password:
+#     - DUMMY_PASSWORD
 
 env:
   secret:
