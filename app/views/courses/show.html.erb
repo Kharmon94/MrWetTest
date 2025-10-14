@@ -1,8 +1,15 @@
+<% if @course.thumbnail.attached? %>
+  <%= image_tag @course.thumbnail.variant(resize_to_limit: [300, 300]), alt: "Course Thumbnail" %>
+<% else %>
+  <p>No thumbnail available</p>
+<% end %>
+
 <h1><%= @course.title %></h1>
+
 <p><%= @course.description %></p>
+
 <p>Price: <%= number_to_currency(@course.price) %></p>
 
-<%# Optionally, list lessons if you have them %>
 <% if @course.lessons.any? %>
   <h2>Lessons</h2>
   <ul>

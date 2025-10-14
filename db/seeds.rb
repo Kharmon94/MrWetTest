@@ -43,3 +43,4 @@ end
 ta2.update!(score: ta2.calculate_score)
 
 puts "✅ Seed complete!"
+AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?

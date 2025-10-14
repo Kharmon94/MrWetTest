@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :admin_users, ActiveAdmin::Devise.config
   # Health check route
   get "up" => "rails/health#show", as: :rails_health_check
 
@@ -21,4 +22,7 @@ Rails.application.routes.draw do
 
   # Root path route.
   root to: "home#index"
+  
+  # Favicon route
+  get '/favicon.ico', to: proc { [204, {}, []] }
 end

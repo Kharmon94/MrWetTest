@@ -1,0 +1,13 @@
+{
+  "name": "app",
+  "private": "true",
+  "dependencies": {
+    "sass": "^1.86.3"
+  },
+  "scripts": {
+    "build:css": "sass ./app/assets/stylesheets/application.sass.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.2"
+  }
+}
