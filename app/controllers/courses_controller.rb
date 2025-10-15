@@ -4,7 +4,32 @@ class CoursesController < ApplicationController
 
   # GET /courses
   def index
-    @courses = Course.all
+    if user_signed_in?
+      if current_user.has_role?(:admin)
+        # Admins see all courses
+        @courses = Course.all
+        @show_all_courses = true
+      else
+        # Regular users see their purchased/enrolled courses
+        @courses = current_user.purchased_courses
+        @show_all_courses = false
+      end
+    else
+      # Guests see all courses (but can't access them)
+      @courses = Course.all
+      @show_all_courses = true
+    end
+  end
+
+  # GET /courses/browse
+  def browse
+    if user_signed_in? && !current_user.has_role?(:admin)
+      @courses = Course.all
+      @show_all_courses = true
+      render :index
+    else
+      redirect_to courses_path
+    end
   end
 
   # GET /courses/:id

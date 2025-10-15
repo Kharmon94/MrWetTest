@@ -1,0 +1,137 @@
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-gradient h3 mb-0">Payment Details</h1>
+        <%= link_to "← Back to Payments", payments_path, class: "btn btn-outline-secondary" %>
+      </div>
+
+      <div class="card" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+        <div class="card-body p-4" style="color: var(--text-primary);">
+          <div class="row">
+            <div class="col-md-8">
+              <!-- Payment Information -->
+              <div class="mb-4">
+                <h5 class="fw-semibold mb-3">Payment Information</h5>
+                <div class="row g-3">
+                  <div class="col-sm-6">
+                    <label class="form-label small" style="color: var(--text-muted);">Payment ID</label>
+                    <div class="fw-semibold" style="color: var(--text-primary);"><%= @payment.id %></div>
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="form-label small" style="color: var(--text-muted);">Amount</label>
+                    <div class="fw-semibold text-success"><%= @payment.formatted_amount %></div>
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="form-label small" style="color: var(--text-muted);">Status</label>
+                    <div>
+                      <% case @payment.status %>
+                      <% when 'succeeded' %>
+                        <span class="badge bg-success fs-6">Completed</span>
+                      <% when 'pending' %>
+                        <span class="badge bg-warning fs-6">Pending</span>
+                      <% when 'failed' %>
+                        <span class="badge bg-danger fs-6">Failed</span>
+                      <% when 'canceled' %>
+                        <span class="badge bg-secondary fs-6">Canceled</span>
+                      <% when 'requires_action' %>
+                        <span class="badge bg-info fs-6">Action Required</span>
+                      <% else %>
+                        <span class="badge bg-light text-dark fs-6"><%= @payment.status.titleize %></span>
+                      <% end %>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="form-label small" style="color: var(--text-muted);">Date</label>
+                    <div class="fw-semibold" style="color: var(--text-primary);"><%= l @payment.created_at, format: :long %></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Item Information -->
+              <% if @payment.payable.present? %>
+                <div class="mb-4">
+                  <h5 class="fw-semibold mb-3">Item Details</h5>
+                  <div class="d-flex align-items-start">
+                    <div class="me-3">
+                      <% if @payment.payable.is_a?(Course) %>
+                        <div class="bg-primary bg-opacity-10 rounded p-3">
+                          <i class="fas fa-graduation-cap text-primary fs-4"></i>
+                        </div>
+                      <% elsif @payment.payable.is_a?(Test) %>
+                        <div class="bg-success bg-opacity-10 rounded p-3">
+                          <i class="fas fa-clipboard-check text-success fs-4"></i>
+                        </div>
+                      <% end %>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h6 class="mb-1"><%= @payment.payable.title %></h6>
+                      <p class="small mb-2" style="color: var(--text-muted);"><%= @payment.payable_type_display %></p>
+                      <% if @payment.payable.respond_to?(:description) %>
+                        <p class="small mb-0" style="color: var(--text-muted);"><%= truncate(@payment.payable.description, length: 100) %></p>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+
+              <!-- Stripe Payment Intent Information -->
+              <% if @payment_intent.present? %>
+                <div class="mb-4">
+                  <h5 class="fw-semibold mb-3">Transaction Details</h5>
+                  <div class="row g-3">
+                    <div class="col-sm-6">
+                      <label class="form-label small" style="color: var(--text-muted);">Stripe Payment Intent ID</label>
+                      <div class="font-monospace small" style="color: var(--text-primary);"><%= @payment_intent.id %></div>
+                    </div>
+                    <div class="col-sm-6">
+                      <label class="form-label small" style="color: var(--text-muted);">Payment Method</label>
+                      <div class="fw-semibold" style="color: var(--text-primary);">
+                        <% if @payment_intent.payment_method %>
+                          <%= @payment_intent.payment_method.type.titleize %>
+                        <% else %>
+                          Not set
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+
+            <div class="col-md-4">
+              <!-- Actions -->
+              <div class="card" style="background: var(--bg-tertiary); border: 1px solid var(--border-primary);">
+                <div class="card-body" style="color: var(--text-primary);">
+                  <h6 class="fw-semibold mb-3">Actions</h6>
+                  
+                  <% if @payment.successful? && @payment.payable.present? %>
+                    <%= link_to "Access #{@payment.payable.class.name}", @payment.payable, 
+                        class: "btn btn-success w-100 mb-2" %>
+                  <% elsif @payment.pending? %>
+                    <div class="alert alert-warning small mb-3">
+                      <i class="fas fa-clock me-1"></i>
+                      Your payment is being processed. Please complete the payment to access this content.
+                    </div>
+                  <% elsif @payment.requires_action? %>
+                    <div class="alert alert-info small mb-3">
+                      <i class="fas fa-exclamation-triangle me-1"></i>
+                      Additional action is required to complete your payment.
+                    </div>
+                  <% elsif @payment.failed? %>
+                    <div class="alert alert-danger small mb-3">
+                      <i class="fas fa-times-circle me-1"></i>
+                      Your payment failed. Please try again.
+                    </div>
+                  <% end %>
+
+                  <%= link_to "View All Payments", payments_path, class: "btn btn-outline-secondary w-100" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

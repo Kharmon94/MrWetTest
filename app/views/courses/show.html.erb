@@ -1,23 +1,133 @@
-<% if @course.thumbnail.attached? %>
-  <%= image_tag @course.thumbnail.variant(resize_to_limit: [300, 300]), alt: "Course Thumbnail" %>
-<% else %>
-  <p>No thumbnail available</p>
-<% end %>
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <!-- Course Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-gradient h2 mb-0"><%= @course.title %></h1>
+        <%= link_to "← Back to Courses", courses_path, class: "btn btn-outline-secondary" %>
+      </div>
 
-<h1><%= @course.title %></h1>
+      <!-- Course Info Card -->
+      <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+        <div class="card-body p-4" style="color: var(--text-primary);">
+          <div class="row">
+            <div class="col-md-8">
+              <h5 class="fw-semibold mb-3" style="color: var(--text-primary);">Course Information</h5>
+              <p style="color: var(--text-secondary); margin-bottom: 1.5rem;"><%= @course.description %></p>
+              
+              <div class="row g-3">
+                <div class="col-sm-6">
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-dollar-sign text-success me-2"></i>
+                    <span style="color: var(--text-primary);"><strong>Price:</strong> <%= @course.formatted_price %></span>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-book text-primary me-2"></i>
+                    <span style="color: var(--text-primary);"><strong>Lessons:</strong> <%= @course.lessons.count %></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-4">
+              <% if @course.thumbnail.attached? %>
+                <%= image_tag @course.thumbnail.variant(resize_to_limit: [200, 200]), 
+                    alt: "Course Thumbnail", 
+                    class: "img-fluid rounded",
+                    style: "border: 1px solid var(--border-primary);" %>
+              <% else %>
+                <div class="bg-light rounded d-flex align-items-center justify-content-center" 
+                     style="height: 200px; background: var(--bg-tertiary) !important; border: 1px solid var(--border-primary);">
+                  <i class="fas fa-image text-muted" style="font-size: 3rem; color: var(--text-muted);"></i>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
 
-<p><%= @course.description %></p>
+      <!-- Access Control -->
+      <% unless current_user&.can_access?(@course) %>
+        <div class="alert alert-warning" style="background: var(--bg-tertiary); border-color: var(--border-primary); color: var(--text-primary);">
+          <i class="fas fa-lock me-2"></i>
+          <% if @course.free? %>
+            Sign in to access this course.
+          <% else %>
+            Purchase this course to access all lessons and materials.
+          <% end %>
+        </div>
+      <% end %>
 
-<p>Price: <%= number_to_currency(@course.price) %></p>
+      <!-- Lessons Section -->
+      <% if @course.lessons.any? %>
+        <div class="card" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+          <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+            <h5 class="mb-0" style="color: var(--text-primary);">
+              <i class="fas fa-list me-2"></i>Course Lessons
+            </h5>
+          </div>
+          <div class="card-body p-0">
+            <div class="list-group list-group-flush">
+              <% @course.lessons.order(:position).each do |lesson| %>
+                <div class="list-group-item" style="background: var(--bg-secondary); border-color: var(--border-primary); color: var(--text-primary);">
+                  <div class="d-flex align-items-start">
+                    <div class="me-3">
+                      <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" 
+                           style="width: 40px; height: 40px;">
+                        <i class="fas fa-play text-primary"></i>
+                      </div>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h6 class="mb-2" style="color: var(--text-primary);"><%= lesson.title %></h6>
+                      <p class="mb-0 small" style="color: var(--text-secondary);">
+                        <%= truncate(lesson.content, length: 150) %>
+                      </p>
+                    </div>
+                    <% if current_user&.can_access?(@course) %>
+                      <div class="ms-3">
+                        <span class="badge bg-success">Available</span>
+                      </div>
+                    <% else %>
+                      <div class="ms-3">
+                        <span class="badge bg-secondary">Locked</span>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <div class="text-center py-5">
+          <div class="mb-4">
+            <i class="fas fa-book-open" style="font-size: 4rem; color: var(--text-muted);"></i>
+          </div>
+          <h4 style="color: var(--text-muted); margin-bottom: 1rem;">No Lessons Yet</h4>
+          <p style="color: var(--text-muted);">Lessons will be added to this course soon!</p>
+        </div>
+      <% end %>
 
-<% if @course.lessons.any? %>
-  <h2>Lessons</h2>
-  <ul>
-    <% @course.lessons.order(:position).each do |lesson| %>
-      <li>
-        <strong><%= lesson.title %></strong><br>
-        <%= lesson.content %>
-      </li>
-    <% end %>
-  </ul>
-<% end %>
+      <!-- Action Buttons -->
+      <div class="d-flex gap-3 justify-content-center mt-4">
+        <% if current_user %>
+          <% if current_user.can_access?(@course) %>
+            <button class="btn btn-primary" disabled>
+              <i class="fas fa-check me-2"></i>You have access to this course
+            </button>
+          <% elsif @course.free? %>
+            <%= link_to "Enroll Free", "#", class: "btn btn-success" %>
+          <% else %>
+            <%= link_to "Purchase - #{@course.formatted_price}", 
+                new_payment_path(payable_type: 'Course', payable_id: @course.id), 
+                class: "btn btn-primary" %>
+          <% end %>
+        <% else %>
+          <%= link_to "Sign In to Enroll", new_user_session_path, class: "btn btn-primary" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

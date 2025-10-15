@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   end
 
   # Courses routes
+  get 'courses/browse', to: 'courses#browse', as: :browse_courses
   resources :courses
 
   # Test side: test-taking functionality.
@@ -24,6 +25,20 @@ Rails.application.routes.draw do
 
   # Routes for Test products (available tests).
   resources :tests, only: [:index, :show], constraints: { id: /\d+/ }
+
+  # Payment routes
+  resources :payments, only: [:index, :show, :new, :create] do
+    member do
+      post :confirm
+    end
+  end
+  
+  # Payment success and cancel routes
+  get 'payments/success', to: 'payments#success', as: :payment_success
+  get 'payments/cancel', to: 'payments#cancel', as: :payment_cancel
+
+  # Stripe webhooks
+  post 'webhooks/stripe', to: 'webhooks#stripe'
 
   # Root path route.
   root to: "home#index"

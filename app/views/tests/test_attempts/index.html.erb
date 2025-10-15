@@ -1,12 +1,80 @@
-<h1>My Test Attempts</h1>
-<% if @test_attempts.any? %>
-  <ul>
-    <% @test_attempts.each do |attempt| %>
-      <li>
-        <%= link_to "Test Attempt ##{attempt.id} - Score: #{attempt.score || 'Not graded'}", tests_test_attempt_path(attempt) %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>You haven't taken any tests yet.</p>
-<% end %>
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-10 mx-auto">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-gradient h3 mb-0">My Test Attempts</h1>
+        <%= link_to "← Back to Tests", tests_path, class: "btn btn-outline-secondary" %>
+      </div>
+
+      <% if @test_attempts.any? %>
+        <div class="card" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0" style="color: var(--text-primary);">
+                <thead style="background: var(--bg-tertiary); color: var(--text-primary);">
+                  <tr>
+                    <th>Test</th>
+                    <th>Score</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @test_attempts.each do |attempt| %>
+                    <tr style="color: var(--text-primary); border-color: var(--border-primary);">
+                      <td style="color: var(--text-primary);">
+                        <div class="d-flex align-items-center">
+                          <div class="me-3">
+                            <div class="bg-primary bg-opacity-10 rounded p-2">
+                              <i class="fas fa-clipboard-check text-primary"></i>
+                            </div>
+                          </div>
+                          <div>
+                            <h6 class="mb-0"><%= attempt.test.title %></h6>
+                            <small style="color: var(--text-muted);">Attempt #<%= attempt.id %></small>
+                          </div>
+                        </div>
+                      </td>
+                      <td style="color: var(--text-primary);">
+                        <% if attempt.score.present? %>
+                          <span class="fw-semibold text-success"><%= number_with_precision(attempt.score, precision: 1) %>%</span>
+                        <% else %>
+                          <span style="color: var(--text-muted);">Not graded</span>
+                        <% end %>
+                      </td>
+                      <td style="color: var(--text-primary);">
+                        <% if attempt.submitted? %>
+                          <span class="badge bg-success">Completed</span>
+                        <% else %>
+                          <span class="badge bg-warning">In Progress</span>
+                        <% end %>
+                      </td>
+                      <td style="color: var(--text-primary);">
+                        <span style="color: var(--text-muted);"><%= l attempt.taken_at || attempt.created_at, format: :short %></span>
+                      </td>
+                      <td style="color: var(--text-primary);">
+                        <%= link_to "View", tests_test_attempt_path(attempt), class: "btn btn-sm btn-outline-primary" %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <div class="text-center py-5">
+          <div class="mb-4">
+            <i class="fas fa-clipboard-list" style="font-size: 4rem; color: var(--text-muted);"></i>
+          </div>
+          <h4 style="color: var(--text-muted); margin-bottom: 1rem;">No Test Attempts Yet</h4>
+          <p style="color: var(--text-muted); margin-bottom: 1.5rem;">You haven't taken any tests yet. Browse our available tests to get started!</p>
+          <div class="d-flex gap-3 justify-content-center">
+            <%= link_to "Browse Tests", tests_path, class: "btn btn-primary" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

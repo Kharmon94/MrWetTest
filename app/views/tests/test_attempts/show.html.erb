@@ -1,12 +1,266 @@
-<h1>Your Test Results</h1>
-<p>Test: <%= @test_attempt.test.title %></p>
-<p>Score: <%= @test_attempt.score %>%</p>
-<ul>
-  <% @test_attempt.test_attempt_questions.each do |taq| %>
-    <li>
-      <strong>Question:</strong> <%= taq.question.content %><br>
-      <strong>Your Answer:</strong> <%= taq.chosen_answer.presence || "Not answered" %><br>
-      <strong>Correct Answer:</strong> <%= taq.question.correct_answer %>
-    </li>
-  <% end %>
-</ul>
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-10 mx-auto">
+      <!-- Header Section -->
+      <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+          <h1 class="text-gradient h2 mb-2">Test Results</h1>
+          <p class="text-muted mb-0" style="color: var(--text-secondary);">
+            <i class="fas fa-clipboard-check me-2"></i>
+            Detailed analysis of your test performance
+          </p>
+        </div>
+        <%= link_to "← Back to Test Attempts", tests_test_attempts_path, class: "btn btn-outline-secondary" %>
+      </div>
+
+      <!-- Test Overview Card -->
+      <div class="card mb-5" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+        <div class="card-body p-4" style="color: var(--text-primary);">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h3 class="mb-3" style="color: var(--text-primary);">
+                <i class="fas fa-graduation-cap text-primary me-3"></i>
+                <%= @test_attempt.test.title %>
+              </h3>
+              
+              <div class="row g-3">
+                <div class="col-sm-6">
+                  <div class="d-flex align-items-center">
+                    <div class="bg-primary bg-opacity-10 rounded p-2 me-3">
+                      <i class="fas fa-calendar-alt text-primary"></i>
+                    </div>
+                    <div>
+                      <small style="color: var(--text-muted);">Test Date</small>
+                      <div class="fw-semibold" style="color: var(--text-primary);">
+                        <%= l @test_attempt.taken_at || @test_attempt.created_at, format: :long %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-sm-6">
+                  <div class="d-flex align-items-center">
+                    <div class="bg-success bg-opacity-10 rounded p-2 me-3">
+                      <i class="fas fa-clock text-success"></i>
+                    </div>
+                    <div>
+                      <small style="color: var(--text-muted);">Duration</small>
+                      <div class="fw-semibold" style="color: var(--text-primary);">
+                        <% if @test_attempt.taken_at && @test_attempt.created_at %>
+                          <%= distance_of_time_in_words(@test_attempt.created_at, @test_attempt.taken_at) %>
+                        <% else %>
+                          N/A
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-4 text-center">
+              <div class="position-relative d-inline-block">
+                <!-- Score Circle -->
+                <svg width="120" height="120" class="score-circle">
+                  <circle cx="60" cy="60" r="50" fill="none" stroke="var(--border-primary)" stroke-width="8"/>
+                  <circle cx="60" cy="60" r="50" fill="none" 
+                          stroke="<%= @test_attempt.score && @test_attempt.score >= 70 ? 'var(--success-500)' : @test_attempt.score && @test_attempt.score >= 50 ? 'var(--warning-500)' : 'var(--danger-500)' %>" 
+                          stroke-width="8" 
+                          stroke-dasharray="<%= 2 * Math::PI * 50 %>" 
+                          stroke-dashoffset="<%= 2 * Math::PI * 50 * (1 - (@test_attempt.score || 0) / 100.0) %>"
+                          stroke-linecap="round"
+                          transform="rotate(-90 60 60)"/>
+                </svg>
+                <div class="position-absolute top-50 start-50 translate-middle text-center">
+                  <div class="h2 mb-0 fw-bold" style="color: var(--text-primary);">
+                    <%= @test_attempt.score || 0 %>%
+                  </div>
+                  <small style="color: var(--text-muted);">Score</small>
+                </div>
+              </div>
+              
+              <div class="mt-3">
+                <% if @test_attempt.score %>
+                  <% if @test_attempt.score >= 90 %>
+                    <span class="badge bg-success fs-6 px-3 py-2">Excellent</span>
+                  <% elsif @test_attempt.score >= 80 %>
+                    <span class="badge bg-success fs-6 px-3 py-2">Very Good</span>
+                  <% elsif @test_attempt.score >= 70 %>
+                    <span class="badge bg-warning fs-6 px-3 py-2">Good</span>
+                  <% elsif @test_attempt.score >= 50 %>
+                    <span class="badge bg-warning fs-6 px-3 py-2">Pass</span>
+                  <% else %>
+                    <span class="badge bg-danger fs-6 px-3 py-2">Needs Improvement</span>
+                  <% end %>
+                <% else %>
+                  <span class="badge bg-secondary fs-6 px-3 py-2">Not Graded</span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Statistics -->
+      <div class="row g-4 mb-5">
+        <div class="col-md-4">
+          <div class="card text-center" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+            <div class="card-body p-4" style="color: var(--text-primary);">
+              <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                <i class="fas fa-check text-success fs-4"></i>
+              </div>
+              <h4 class="fw-bold mb-2" style="color: var(--text-primary);">
+                <%= @test_attempt.test_attempt_questions.select { |taq| taq.chosen_answer == taq.question.correct_answer }.count %>
+              </h4>
+              <p class="mb-0" style="color: var(--text-secondary);">Correct Answers</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-4">
+          <div class="card text-center" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+            <div class="card-body p-4" style="color: var(--text-primary);">
+              <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                <i class="fas fa-times text-danger fs-4"></i>
+              </div>
+              <h4 class="fw-bold mb-2" style="color: var(--text-primary);">
+                <%= @test_attempt.test_attempt_questions.select { |taq| taq.chosen_answer.present? && taq.chosen_answer != taq.question.correct_answer }.count %>
+              </h4>
+              <p class="mb-0" style="color: var(--text-secondary);">Incorrect Answers</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-4">
+          <div class="card text-center" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+            <div class="card-body p-4" style="color: var(--text-primary);">
+              <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                <i class="fas fa-question text-warning fs-4"></i>
+              </div>
+              <h4 class="fw-bold mb-2" style="color: var(--text-primary);">
+                <%= @test_attempt.test_attempt_questions.select { |taq| taq.chosen_answer.blank? }.count %>
+              </h4>
+              <p class="mb-0" style="color: var(--text-secondary);">Unanswered</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question Analysis -->
+      <div class="card" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+        <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+          <h5 class="mb-0" style="color: var(--text-primary);">
+            <i class="fas fa-chart-line me-2"></i>
+            Question-by-Question Analysis
+          </h5>
+        </div>
+        <div class="card-body p-0">
+          <% @test_attempt.test_attempt_questions.each_with_index do |taq, index| %>
+            <div class="border-bottom" style="border-color: var(--border-primary) !important;">
+              <div class="p-4" style="color: var(--text-primary);">
+                <div class="row">
+                  <div class="col-md-1">
+                    <div class="d-flex align-items-center justify-content-center">
+                      <div class="rounded-circle d-flex align-items-center justify-content-center <%= taq.chosen_answer == taq.question.correct_answer ? 'bg-success' : taq.chosen_answer.present? ? 'bg-danger' : 'bg-warning' %> text-white fw-bold" 
+                           style="width: 40px; height: 40px; font-size: 0.9rem;">
+                        <%= index + 1 %>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-11">
+                    <div class="d-flex align-items-start justify-content-between mb-3">
+                      <h6 class="mb-2 fw-semibold" style="color: var(--text-primary);">
+                        Question <%= index + 1 %>
+                      </h6>
+                      <div>
+                        <% if taq.chosen_answer == taq.question.correct_answer %>
+                          <span class="badge bg-success">
+                            <i class="fas fa-check me-1"></i>Correct
+                          </span>
+                        <% elsif taq.chosen_answer.present? %>
+                          <span class="badge bg-danger">
+                            <i class="fas fa-times me-1"></i>Incorrect
+                          </span>
+                        <% else %>
+                          <span class="badge bg-warning">
+                            <i class="fas fa-question me-1"></i>Unanswered
+                          </span>
+                        <% end %>
+                      </div>
+                    </div>
+                    
+                    <p class="mb-3" style="color: var(--text-secondary); line-height: 1.6;">
+                      <%= taq.question.content %>
+                    </p>
+                    
+                    <div class="row g-3">
+                      <div class="col-md-6">
+                        <div class="p-3 rounded" style="background: var(--bg-tertiary); border: 1px solid var(--border-primary);">
+                          <small class="fw-semibold" style="color: var(--text-muted);">Your Answer:</small>
+                          <div class="mt-1" style="color: var(--text-primary);">
+                            <% if taq.chosen_answer.present? %>
+                              <span class="<%= taq.chosen_answer == taq.question.correct_answer ? 'text-success' : 'text-danger' %> fw-semibold">
+                                <%= taq.chosen_answer %>
+                              </span>
+                            <% else %>
+                              <span class="text-warning">Not answered</span>
+                            <% end %>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="col-md-6">
+                        <div class="p-3 rounded" style="background: var(--bg-tertiary); border: 1px solid var(--border-primary);">
+                          <small class="fw-semibold" style="color: var(--text-muted);">Correct Answer:</small>
+                          <div class="mt-1 text-success fw-semibold" style="color: var(--text-primary);">
+                            <%= taq.question.correct_answer %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="d-flex gap-3 justify-content-center mt-5">
+        <%= link_to "Take Test Again", new_tests_test_attempt_path(test_id: @test_attempt.test.id), 
+            class: "btn btn-outline-primary btn-lg" %>
+        <%= link_to "View All Tests", tests_path, class: "btn btn-primary btn-lg" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.score-circle {
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.score-circle circle {
+  transition: stroke-dashoffset 1s ease-in-out;
+}
+
+.badge {
+  font-weight: 500;
+}
+
+.card {
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.border-bottom:last-child {
+  border-bottom: none !important;
+}
+</style>

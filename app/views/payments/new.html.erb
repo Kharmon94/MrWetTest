@@ -1,0 +1,174 @@
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-gradient h3 mb-0">Complete Purchase</h1>
+        <%= link_to "← Cancel", @payable_item, class: "btn btn-outline-secondary" %>
+      </div>
+
+      <div class="card" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+        <div class="card-body p-4" style="color: var(--text-primary);">
+          <div class="row">
+            <div class="col-md-6">
+              <!-- Item Summary -->
+              <div class="mb-4">
+                <h5 class="fw-semibold mb-3">Order Summary</h5>
+                <div class="d-flex align-items-start">
+                  <div class="me-3">
+                    <% if @payable_item.is_a?(Course) %>
+                      <div class="bg-primary bg-opacity-10 rounded p-3">
+                        <i class="fas fa-graduation-cap text-primary fs-4"></i>
+                      </div>
+                    <% elsif @payable_item.is_a?(Test) %>
+                      <div class="bg-success bg-opacity-10 rounded p-3">
+                        <i class="fas fa-clipboard-check text-success fs-4"></i>
+                      </div>
+                    <% end %>
+                  </div>
+                  <div class="flex-grow-1">
+                    <h6 class="mb-1"><%= @payable_item.title %></h6>
+                    <p class="small mb-2" style="color: var(--text-muted);"><%= @payable_item.class.name %></p>
+                    <% if @payable_item.respond_to?(:description) %>
+                      <p class="small mb-2" style="color: var(--text-muted);"><%= truncate(@payable_item.description, length: 120) %></p>
+                    <% end %>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <span class="h5 text-success mb-0"><%= @payable_item.formatted_price %></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Payment Form -->
+              <div>
+                <h5 class="fw-semibold mb-3">Payment Information</h5>
+                
+                <%= form_with model: @payment, local: true, class: "needs-validation", novalidate: true do |form| %>
+                  <!-- Hidden fields -->
+                  <%= form.hidden_field :payable_type, value: @payable_item.class.name %>
+                  <%= form.hidden_field :payable_id, value: @payable_item.id %>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" value="<%= current_user.email %>" readonly>
+                    <div class="form-text" style="color: var(--text-muted);">Payment receipt will be sent to this email</div>
+                  </div>
+
+                  <div class="mb-4">
+                    <label class="form-label">Payment Method</label>
+                    <div class="border rounded p-3" style="background: var(--bg-tertiary); border-color: var(--border-primary) !important;">
+                      <div class="d-flex align-items-center">
+                        <i class="fab fa-cc-stripe text-primary fs-3 me-3"></i>
+                        <div>
+                          <div class="fw-semibold" style="color: var(--text-primary);">Stripe Secure Payment</div>
+                          <small style="color: var(--text-muted);">We accept all major credit cards</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="d-grid gap-2">
+                    <%= form.submit "Complete Purchase - #{@payable_item.formatted_price}", 
+                        class: "btn btn-primary btn-lg", 
+                        data: { disable_with: "Processing..." } %>
+                    <small class="text-center" style="color: var(--text-muted);">
+                      <i class="fas fa-lock me-1"></i>
+                      Your payment information is secure and encrypted
+                    </small>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <!-- Payment Details -->
+              <div class="card" style="background: var(--bg-tertiary); border: 1px solid var(--border-primary);">
+                <div class="card-body" style="color: var(--text-primary);">
+                  <h6 class="fw-semibold mb-3">Payment Details</h6>
+                  
+                  <div class="d-flex justify-content-between mb-2" style="color: var(--text-primary);">
+                    <span>Item:</span>
+                    <span><%= @payable_item.title %></span>
+                  </div>
+                  
+                  <div class="d-flex justify-content-between mb-2" style="color: var(--text-primary);">
+                    <span>Type:</span>
+                    <span><%= @payable_item.class.name %></span>
+                  </div>
+                  
+                  <hr>
+                  
+                  <div class="d-flex justify-content-between mb-2" style="color: var(--text-primary);">
+                    <span>Subtotal:</span>
+                    <span><%= @payable_item.formatted_price %></span>
+                  </div>
+                  
+                  <div class="d-flex justify-content-between mb-2" style="color: var(--text-primary);">
+                    <span>Processing Fee:</span>
+                    <span class="text-success">Free</span>
+                  </div>
+                  
+                  <hr style="border-color: var(--border-primary);">
+                  
+                  <div class="d-flex justify-content-between fw-bold" style="color: var(--text-primary);">
+                    <span>Total:</span>
+                    <span class="text-success"><%= @payable_item.formatted_price %></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Security Information -->
+              <div class="mt-4">
+                <h6 class="fw-semibold mb-3">Security & Trust</h6>
+                <div class="row g-2">
+                  <div class="col-6">
+                    <div class="d-flex align-items-center small" style="color: var(--text-primary);">
+                      <i class="fas fa-shield-alt text-success me-2"></i>
+                      <span>SSL Secured</span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="d-flex align-items-center small" style="color: var(--text-primary);">
+                      <i class="fas fa-lock text-success me-2"></i>
+                      <span>Encrypted</span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="d-flex align-items-center small" style="color: var(--text-primary);">
+                      <i class="fas fa-credit-card text-success me-2"></i>
+                      <span>PCI Compliant</span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="d-flex align-items-center small" style="color: var(--text-primary);">
+                      <i class="fas fa-undo text-success me-2"></i>
+                      <span>Money Back</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Form validation
+  (function() {
+    'use strict';
+    window.addEventListener('load', function() {
+      var forms = document.getElementsByClassName('needs-validation');
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+</script>

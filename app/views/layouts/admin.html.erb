@@ -14,22 +14,97 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <style>
-      /* Admin-specific styles */
+       <style>
+         /* Admin-specific design system variables */
+         :root {
+           /* Light Theme */
+           --primary-50: #f8fafc;
+           --primary-100: #f1f5f9;
+           --primary-200: #e2e8f0;
+           --primary-300: #cbd5e1;
+           --primary-400: #94a3b8;
+           --primary-500: #64748b;
+           --primary-600: #475569;
+           --primary-700: #334155;
+           --primary-800: #1e293b;
+           --primary-900: #0f172a;
+           
+           --accent-500: #3b82f6;
+           --accent-600: #2563eb;
+           
+           --success-500: #10b981;
+           --warning-500: #f59e0b;
+           --danger-500: #ef4444;
+           --info-500: #06b6d4;
+           
+           --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+           --font-family-mono: 'JetBrains Mono', 'SF Mono', Monaco, Consolas, monospace;
+           
+           --space-xs: 0.25rem;
+           --space-sm: 0.5rem;
+           --space-md: 1rem;
+           --space-lg: 1.5rem;
+           --space-xl: 2rem;
+           --space-2xl: 3rem;
+           
+           --radius-sm: 0.25rem;
+           --radius-md: 0.5rem;
+           --radius-lg: 0.75rem;
+           --radius-xl: 1rem;
+           
+           --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+           --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+           --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+           --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+           
+           --transition-fast: 150ms ease-in-out;
+           --transition-normal: 250ms ease-in-out;
+           --transition-slow: 350ms ease-in-out;
+           
+           /* Light theme colors */
+           --bg-primary: var(--primary-50);
+           --bg-secondary: #ffffff;
+           --bg-tertiary: var(--primary-100);
+           --bg-overlay: rgba(255, 255, 255, 0.8);
+           --text-primary: var(--primary-900);
+           --text-secondary: var(--primary-600);
+           --text-muted: var(--primary-500);
+           --border-primary: var(--primary-200);
+           --border-secondary: var(--primary-300);
+           --glass-bg: rgba(255, 255, 255, 0.8);
+           --glass-border: rgba(0, 0, 0, 0.1);
+         }
+         
+         [data-theme="dark"] {
+           /* Dark theme colors */
+           --bg-primary: var(--primary-900);
+           --bg-secondary: var(--primary-800);
+           --bg-tertiary: var(--primary-700);
+           --bg-overlay: rgba(0, 0, 0, 0.8);
+           --text-primary: var(--primary-50);
+           --text-secondary: var(--primary-300);
+           --text-muted: var(--primary-400);
+           --border-primary: var(--primary-700);
+           --border-secondary: var(--primary-600);
+           --glass-bg: rgba(0, 0, 0, 0.8);
+           --glass-border: rgba(255, 255, 255, 0.1);
+         }
+
+         /* Admin-specific styles */
       .admin-sidebar {
         min-height: 100vh;
-        background: rgba(0, 0, 0, 0.8);
-        backdrop-filter: blur(10px);
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        background: var(--bg-secondary);
+        border-right: 1px solid var(--border-primary);
       }
       
       .admin-content {
-        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        background: var(--bg-primary);
         min-height: 100vh;
+        color: var(--text-primary);
       }
       
       .admin-nav-link {
-        color: #ffffff;
+        color: var(--text-secondary);
         text-decoration: none;
         padding: 0.75rem 1rem;
         display: block;
@@ -39,20 +114,20 @@
       }
       
       .admin-nav-link:hover, .admin-nav-link.active {
-        background: rgba(255, 255, 255, 0.1);
-        color: #ffffff;
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
         transform: translateX(4px);
       }
       
       .admin-card {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-primary);
         border-radius: 12px;
       }
       
       .admin-stats-card {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-primary);
         border-radius: 12px;
         padding: 1.5rem;
         text-align: center;

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_21_210700) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_15_004258) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -108,6 +108,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_21_210700) do
     t.index ["course_id"], name: "index_lessons_on_course_id"
   end
 
+  create_table "payments", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "stripe_payment_intent_id"
+    t.decimal "amount"
+    t.string "currency"
+    t.string "status"
+    t.string "payment_method"
+    t.text "metadata"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "payable_type", null: false
+    t.bigint "payable_id", null: false
+    t.index ["payable_type", "payable_id"], name: "index_payments_on_payable"
+    t.index ["user_id"], name: "index_payments_on_user_id"
+  end
+
   create_table "questions", force: :cascade do |t|
     t.text "content"
     t.string "correct_answer"
@@ -186,6 +202,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_21_210700) do
   add_foreign_key "assessments", "courses"
   add_foreign_key "assessments", "users"
   add_foreign_key "lessons", "courses"
+  add_foreign_key "payments", "users"
   add_foreign_key "questions", "tests"
   add_foreign_key "test_attempt_questions", "questions"
   add_foreign_key "test_attempt_questions", "test_attempts"

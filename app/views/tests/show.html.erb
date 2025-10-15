@@ -1,5 +1,77 @@
-<h1><%= @test.title %></h1>
-<p><%= @test.description %></p>
-<p>Price: <%= number_to_currency(@test.price) %></p>
-<p><%= @test.instructions %></p>
-<%= link_to "Take Test", new_tests_test_attempt_path(test_id: @test.id) %>
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <!-- Test Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-gradient h2 mb-0"><%= @test.title %></h1>
+        <%= link_to "← Back to Tests", tests_path, class: "btn btn-outline-secondary" %>
+      </div>
+
+      <!-- Test Info Card -->
+      <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+        <div class="card-body p-4" style="color: var(--text-primary);">
+          <h5 class="fw-semibold mb-3" style="color: var(--text-primary);">Test Information</h5>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem;"><%= @test.description %></p>
+          
+          <div class="row g-3">
+            <div class="col-sm-6">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-dollar-sign text-success me-2"></i>
+                <span style="color: var(--text-primary);"><strong>Price:</strong> <%= @test.formatted_price %></span>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-question-circle text-primary me-2"></i>
+                <span style="color: var(--text-primary);"><strong>Questions:</strong> <%= @test.questions.count %></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Instructions Card -->
+      <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+        <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+          <h5 class="mb-0" style="color: var(--text-primary);">
+            <i class="fas fa-info-circle me-2"></i>Test Instructions
+          </h5>
+        </div>
+        <div class="card-body" style="color: var(--text-secondary);">
+          <%= simple_format(@test.instructions) %>
+        </div>
+      </div>
+
+      <!-- Access Control -->
+      <% unless current_user&.can_access?(@test) %>
+        <div class="alert alert-warning" style="background: var(--bg-tertiary); border-color: var(--border-primary); color: var(--text-primary);">
+          <i class="fas fa-lock me-2"></i>
+          <% if @test.free? %>
+            Sign in to take this test.
+          <% else %>
+            Purchase this test to access all questions and get your results.
+          <% end %>
+        </div>
+      <% end %>
+
+      <!-- Action Buttons -->
+      <div class="d-flex gap-3 justify-content-center">
+        <% if current_user %>
+          <% if current_user.can_access?(@test) %>
+            <%= link_to "Take Test", new_tests_test_attempt_path(test_id: @test.id), 
+                class: "btn btn-primary btn-lg px-5" %>
+          <% elsif @test.free? %>
+            <%= link_to "Take Free Test", new_tests_test_attempt_path(test_id: @test.id), 
+                class: "btn btn-success btn-lg px-5" %>
+          <% else %>
+            <%= link_to "Purchase - #{@test.formatted_price}", 
+                new_payment_path(payable_type: 'Test', payable_id: @test.id), 
+                class: "btn btn-primary btn-lg px-5" %>
+          <% end %>
+        <% else %>
+          <%= link_to "Sign In to Take Test", new_user_session_path, class: "btn btn-primary btn-lg px-5" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,26 +1,57 @@
-<h2>Log in</h2>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+      <div class="card" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+        <div class="card-body p-4" style="color: var(--text-primary);">
+          <div class="text-center mb-4">
+            <h2 class="h3 mb-0" style="color: var(--text-primary);">Welcome Back</h2>
+            <p class="text-muted mt-2" style="color: var(--text-secondary);">Sign in to your account</p>
+          </div>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+          <%= form_for(resource, as: resource_name, url: session_path(resource_name), 
+                       html: { class: "needs-validation", novalidate: true }) do |f| %>
+            <div class="mb-3">
+              <%= f.label :email, class: "form-label", style: "color: var(--text-primary);" %>
+              <%= f.email_field :email, 
+                  autofocus: true, 
+                  autocomplete: "email",
+                  class: "form-control",
+                  style: "background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary);",
+                  required: true %>
+            </div>
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
-  </div>
+            <div class="mb-3">
+              <%= f.label :password, class: "form-label", style: "color: var(--text-primary);" %>
+              <%= f.password_field :password, 
+                  autocomplete: "current-password",
+                  class: "form-control",
+                  style: "background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary);",
+                  required: true %>
+            </div>
 
-  <% if devise_mapping.rememberable? %>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
+            <% if devise_mapping.rememberable? %>
+              <div class="mb-3 form-check">
+                <%= f.check_box :remember_me, class: "form-check-input" %>
+                <%= f.label :remember_me, class: "form-check-label", style: "color: var(--text-primary);" %>
+              </div>
+            <% end %>
+
+            <div class="d-grid">
+              <%= f.submit "Sign In", class: "btn btn-primary btn-lg" %>
+            </div>
+          <% end %>
+
+          <hr style="border-color: var(--border-primary); margin: 1.5rem 0;">
+
+          <div class="text-center">
+            <small style="color: var(--text-muted);">
+              Don't have an account? 
+              <%= link_to "Sign up", new_user_registration_path, 
+                  style: "color: var(--accent-500); text-decoration: none;" %>
+            </small>
+          </div>
+        </div>
+      </div>
     </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit "Log in" %>
   </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>

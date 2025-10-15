@@ -1,12 +1,10 @@
 <% if resource.errors.any? %>
-  <div id="error_explanation" data-turbo-cache="false">
-    <h2>
-      <%= I18n.t("errors.messages.not_saved",
-                 count: resource.errors.count,
-                 resource: resource.class.model_name.human.downcase)
-       %>
-    </h2>
-    <ul>
+  <div id="error_explanation" class="alert alert-danger" data-turbo-cache="false" 
+       style="background: var(--bg-tertiary); border: 1px solid var(--danger-500); color: var(--text-primary);">
+    <h6 class="alert-heading mb-2" style="color: var(--danger-500);">
+      <%= pluralize(resource.errors.count, "error") %> prohibited this <%= resource.class.model_name.human.downcase %> from being saved:
+    </h6>
+    <ul class="mb-0" style="color: var(--text-primary);">
       <% resource.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>

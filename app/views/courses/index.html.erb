@@ -1,11 +1,26 @@
 <!-- Page Header -->
 <div class="d-flex justify-content-between align-items-center mb-5">
   <div>
-    <h1 class="display-4 fw-bold text-gradient mb-2">Courses</h1>
-    <p class="text-white-50">Explore our comprehensive course offerings</p>
+    <% if user_signed_in? && !current_user.has_role?(:admin) %>
+      <% if @show_all_courses %>
+        <h1 class="display-4 fw-bold text-gradient mb-2">Browse All Courses</h1>
+        <p style="color: var(--text-secondary);">Discover new courses to enhance your learning</p>
+      <% else %>
+        <h1 class="display-4 fw-bold text-gradient mb-2">My Courses</h1>
+        <p style="color: var(--text-secondary);">Your enrolled and purchased courses</p>
+      <% end %>
+    <% elsif user_signed_in? && current_user.has_role?(:admin) %>
+      <h1 class="display-4 fw-bold text-gradient mb-2">All Courses</h1>
+      <p style="color: var(--text-secondary);">Manage all course offerings</p>
+    <% else %>
+      <h1 class="display-4 fw-bold text-gradient mb-2">Available Courses</h1>
+      <p style="color: var(--text-secondary);">Sign in to access your courses or browse our offerings</p>
+    <% end %>
   </div>
-  <% if current_user && current_user.has_role?(:admin) %>
+  <% if user_signed_in? && current_user.has_role?(:admin) %>
     <%= link_to "Add New Course", new_course_path, class: "btn btn-primary" %>
+  <% elsif user_signed_in? && !current_user.has_role?(:admin) && @show_all_courses %>
+    <%= link_to "My Courses", courses_path, class: "btn btn-outline-primary" %>
   <% end %>
 </div>
 
@@ -14,25 +29,44 @@
   <div class="row g-4">
     <% @courses.each do |course| %>
       <div class="col-lg-4 col-md-6">
-        <div class="card h-100 glass-effect">
-          <div class="card-body d-flex flex-column">
+        <div class="card h-100 glass-effect" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+          <div class="card-body d-flex flex-column" style="color: var(--text-primary);">
             <div class="mb-3">
-              <h5 class="card-title text-white fw-bold"><%= course.title %></h5>
-              <p class="card-text text-white-50"><%= truncate(course.description, length: 120) %></p>
+              <h5 class="card-title fw-bold" style="color: var(--text-primary);"><%= course.title %></h5>
+              <p class="card-text" style="color: var(--text-secondary);"><%= truncate(course.description, length: 120) %></p>
             </div>
             
             <div class="mt-auto">
               <div class="d-flex justify-content-between align-items-center mb-3">
-                <span class="badge bg-primary fs-6 px-3 py-2">
-                  $<%= number_with_precision(course.price, precision: 2) %>
+                <span class="badge <%= course.free? ? 'bg-success' : 'bg-primary' %> fs-6 px-3 py-2">
+                  <%= course.formatted_price %>
                 </span>
-                <small class="text-white-50">
+                <small style="color: var(--text-muted);">
                   <%= pluralize(course.lessons.count, 'lesson') %>
                 </small>
               </div>
               
-              <%= link_to "View Course", course_path(course), 
-                  class: "btn btn-primary w-100" %>
+              <div class="d-grid gap-2">
+                <% if user_signed_in? %>
+                  <% if current_user.can_access?(course) %>
+                    <%= link_to "Access Course", course_path(course), 
+                        class: "btn btn-success w-100" %>
+                    <small class="text-center" style="color: var(--text-muted);">
+                      <i class="fas fa-check-circle me-1"></i>Enrolled
+                    </small>
+                  <% elsif course.free? %>
+                    <%= link_to "Enroll Free", course_path(course), 
+                        class: "btn btn-primary w-100" %>
+                  <% else %>
+                    <%= link_to "Purchase - #{course.formatted_price}", 
+                        new_payment_path(payable_type: 'Course', payable_id: course.id), 
+                        class: "btn btn-outline-primary w-100" %>
+                  <% end %>
+                <% else %>
+                  <%= link_to "Sign In to Enroll", new_user_session_path, 
+                      class: "btn btn-outline-primary w-100" %>
+                <% end %>
+              </div>
             </div>
           </div>
         </div>
@@ -42,12 +76,33 @@
 <% else %>
   <div class="text-center py-5">
     <div class="mb-4">
-      <svg width="64" height="64" fill="currentColor" class="text-white-50" viewBox="0 0 16 16">
-        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-      </svg>
+      <% if user_signed_in? && !current_user.has_role?(:admin) %>
+        <i class="fas fa-graduation-cap" style="font-size: 4rem; color: var(--text-muted);"></i>
+      <% else %>
+        <svg width="64" height="64" fill="currentColor" style="color: var(--text-muted);" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+        </svg>
+      <% end %>
     </div>
-    <h3 class="text-white">No Courses Available</h3>
-    <p class="text-white-50">Check back soon for new course offerings!</p>
+    
+    <% if user_signed_in? && !current_user.has_role?(:admin) %>
+      <% if @show_all_courses %>
+        <h3 style="color: var(--text-primary);">No Courses Available</h3>
+        <p style="color: var(--text-secondary);">Check back soon for new course offerings!</p>
+      <% else %>
+        <h3 style="color: var(--text-primary);">No Enrolled Courses Yet</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+          You haven't enrolled in any courses yet. Start your learning journey today!
+        </p>
+        <div class="d-flex gap-3 justify-content-center">
+          <%= link_to "Browse All Courses", browse_courses_path, class: "btn btn-primary" %>
+          <%= link_to "View Tests", tests_path, class: "btn btn-outline-primary" %>
+        </div>
+      <% end %>
+    <% else %>
+      <h3 style="color: var(--text-primary);">No Courses Available</h3>
+      <p style="color: var(--text-secondary);">Check back soon for new course offerings!</p>
+    <% end %>
   </div>
 <% end %>
