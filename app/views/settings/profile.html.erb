@@ -140,7 +140,7 @@
               <div class="col-md-3">
                 <div class="text-center">
                   <div class="h4 mb-1 text-warning">
-                    <%= (@user.created_at..Time.current).count / 1.day %> days
+                    <%= ((Time.current - @user.created_at) / 1.day).round %> days
                   </div>
                   <small style="color: var(--text-secondary);">Member Duration</small>
                 </div>
