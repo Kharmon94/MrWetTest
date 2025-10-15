@@ -1,13 +1,21 @@
 Rails.application.routes.draw do
-  devise_for :admin_users, ActiveAdmin::Devise.config
   # Health check route
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Devise routes for user authentication.
   devise_for :users
+  
+  # Manual sign out route
+  delete '/users/sign_out', to: 'devise/sessions#destroy', as: :destroy_user_session
 
-  # Active Admin routes for the admin panel.
-  ActiveAdmin.routes(self)
+  # Custom Admin Panel routes
+  namespace :admin do
+    root to: 'dashboard#index'
+    resources :users
+    resources :courses
+    resources :tests
+    resources :questions
+  end
 
   # Courses routes
   resources :courses

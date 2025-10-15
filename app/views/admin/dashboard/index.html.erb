@@ -1,0 +1,116 @@
+<% content_for :title, "Admin Dashboard" %>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2 text-white">Admin Dashboard</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <span class="badge bg-primary">Welcome, <%= current_user.email %></span>
+    </div>
+  </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="admin-stats-card">
+      <div class="admin-stats-number"><%= @stats[:total_users] %></div>
+      <div class="text-white-50">Total Users</div>
+    </div>
+  </div>
+  
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="admin-stats-card">
+      <div class="admin-stats-number"><%= @stats[:total_courses] %></div>
+      <div class="text-white-50">Total Courses</div>
+    </div>
+  </div>
+  
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="admin-stats-card">
+      <div class="admin-stats-number"><%= @stats[:total_tests] %></div>
+      <div class="text-white-50">Total Tests</div>
+    </div>
+  </div>
+  
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="admin-stats-card">
+      <div class="admin-stats-number"><%= @stats[:total_questions] %></div>
+      <div class="text-white-50">Total Questions</div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row">
+  <div class="col-lg-6">
+    <div class="admin-card p-4">
+      <h5 class="text-white mb-3">Recent Users</h5>
+      <% if @stats[:recent_users].any? %>
+        <div class="list-group list-group-flush">
+          <% @stats[:recent_users].each do |user| %>
+            <div class="list-group-item bg-transparent border-0 px-0">
+              <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1 text-white"><%= user.email %></h6>
+                <small class="text-muted"><%= time_ago_in_words(user.created_at) %> ago</small>
+              </div>
+              <small class="text-muted">
+                <% if user.has_role?(:admin) %>
+                  <span class="badge bg-danger">Admin</span>
+                <% else %>
+                  <span class="badge bg-secondary">User</span>
+                <% end %>
+              </small>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-muted">No users found.</p>
+      <% end %>
+    </div>
+  </div>
+  
+  <div class="col-lg-6">
+    <div class="admin-card p-4">
+      <h5 class="text-white mb-3">Recent Test Attempts</h5>
+      <% if @stats[:recent_test_attempts].any? %>
+        <div class="list-group list-group-flush">
+          <% @stats[:recent_test_attempts].each do |attempt| %>
+            <div class="list-group-item bg-transparent border-0 px-0">
+              <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1 text-white"><%= attempt.user.email %></h6>
+                <small class="text-muted"><%= time_ago_in_words(attempt.taken_at) %> ago</small>
+              </div>
+              <p class="mb-1 text-muted"><%= attempt.test.title %></p>
+              <small class="text-muted">
+                Score: <%= attempt.score %>% | 
+                Status: 
+                <% if attempt.submitted? %>
+                  <span class="badge bg-success">Completed</span>
+                <% else %>
+                  <span class="badge bg-warning">In Progress</span>
+                <% end %>
+              </small>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-muted">No test attempts found.</p>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="admin-card p-4">
+      <h5 class="text-white mb-3">Quick Actions</h5>
+      <div class="btn-group" role="group">
+        <%= link_to "Manage Users", admin_users_path, class: "btn btn-outline-primary" %>
+        <%= link_to "Manage Courses", admin_courses_path, class: "btn btn-outline-primary" %>
+        <%= link_to "Manage Tests", admin_tests_path, class: "btn btn-outline-primary" %>
+        <%= link_to "Manage Questions", admin_questions_path, class: "btn btn-outline-primary" %>
+      </div>
+    </div>
+  </div>
+</div>

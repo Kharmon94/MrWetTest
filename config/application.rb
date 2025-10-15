@@ -2,7 +2,6 @@ require_relative "boot"
 require "rails/all"
 require "devise"
 require "rolify"
-require "activeadmin"
 require "stripe"
 
 module MrWetTest

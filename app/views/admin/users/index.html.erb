@@ -1,0 +1,67 @@
+<% content_for :title, "Manage Users" %>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2 text-white">Manage Users</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <span class="badge bg-info">Total: <%= @users.count %></span>
+    </div>
+  </div>
+</div>
+
+<div class="admin-card p-4">
+  <% if @users.any? %>
+    <div class="table-responsive">
+      <table class="table table-dark table-hover">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @users.each do |user| %>
+            <tr>
+              <td><%= user.email %></td>
+              <td>
+                <% if user.roles.any? %>
+                  <% user.roles.each do |role| %>
+                    <span class="badge bg-<%= role.name == 'admin' ? 'danger' : 'secondary' %>">
+                      <%= role.name.capitalize %>
+                    </span>
+                  <% end %>
+                <% else %>
+                  <span class="text-muted">No roles</span>
+                <% end %>
+              </td>
+              <td><%= user.created_at.strftime("%B %d, %Y") %></td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <%= link_to "View", admin_user_path(user), class: "btn btn-outline-primary btn-sm" %>
+                  <%= link_to "Edit", edit_admin_user_path(user), class: "btn btn-outline-secondary btn-sm" %>
+                  <%= link_to "Delete", admin_user_path(user), 
+                      method: :delete, 
+                      data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
+                      class: "btn btn-outline-danger btn-sm" %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    
+    <% if defined?(Kaminari) && @users.respond_to?(:current_page) %>
+      <div class="d-flex justify-content-center mt-4">
+        <%= paginate @users, theme: 'twitter-bootstrap-4' %>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="text-center py-5">
+      <h5 class="text-white">No users found</h5>
+      <p class="text-muted">There are no users in the system yet.</p>
+    </div>
+  <% end %>
+</div>

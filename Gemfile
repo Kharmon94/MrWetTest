@@ -23,7 +23,6 @@ gem 'aws-sdk-s3', '~> 1.48'
 # gem "bcrypt", "~> 3.1.7"
 gem 'devise'
 gem 'warden', '~> 1.2.9'
-gem 'activeadmin', '~> 4.0.0.beta15'
 gem 'cancancan'
 gem 'rolify'
 gem 'kaminari'
