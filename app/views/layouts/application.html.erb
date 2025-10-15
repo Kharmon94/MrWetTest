@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-theme="dark">
   <head>
     <title><%= content_for(:title) || "Mr Wet Test" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -13,175 +13,490 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-      /* Monochrome theme customizations */
+      /* Production-Ready Design System - Inspired by Awwwards Winners */
+      
+      /* CSS Custom Properties for Theme System */
       :root {
-        --bs-body-bg: #0a0a0a;
-        --bs-body-color: #ffffff;
-        --bs-primary: #ffffff;
-        --bs-secondary: #6c757d;
-        --bs-success: #ffffff;
-        --bs-info: #ffffff;
-        --bs-warning: #ffffff;
-        --bs-danger: #ffffff;
-        --bs-light: #f8f9fa;
-        --bs-dark: #212529;
+        /* Light Theme Colors */
+        --primary-50: #f8fafc;
+        --primary-100: #f1f5f9;
+        --primary-200: #e2e8f0;
+        --primary-300: #cbd5e1;
+        --primary-400: #94a3b8;
+        --primary-500: #64748b;
+        --primary-600: #475569;
+        --primary-700: #334155;
+        --primary-800: #1e293b;
+        --primary-900: #0f172a;
+        
+        /* Accent Colors */
+        --accent-500: #3b82f6;
+        --accent-600: #2563eb;
+        --accent-700: #1d4ed8;
+        
+        /* Success/Error Colors */
+        --success-500: #10b981;
+        --error-500: #ef4444;
+        --warning-500: #f59e0b;
+        
+        /* Typography */
+        --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+        
+        /* Spacing Scale */
+        --space-xs: 0.25rem;
+        --space-sm: 0.5rem;
+        --space-md: 1rem;
+        --space-lg: 1.5rem;
+        --space-xl: 2rem;
+        --space-2xl: 3rem;
+        --space-3xl: 4rem;
+        
+        /* Border Radius */
+        --radius-sm: 0.375rem;
+        --radius-md: 0.5rem;
+        --radius-lg: 0.75rem;
+        --radius-xl: 1rem;
+        --radius-2xl: 1.5rem;
+        
+        /* Shadows */
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        
+        /* Transitions */
+        --transition-fast: 150ms ease-in-out;
+        --transition-normal: 250ms ease-in-out;
+        --transition-slow: 350ms ease-in-out;
       }
-
+      
+      /* Dark Theme Variables */
+      [data-theme="dark"] {
+        --bg-primary: var(--primary-900);
+        --bg-secondary: var(--primary-800);
+        --bg-tertiary: var(--primary-700);
+        --bg-overlay: rgba(15, 23, 42, 0.8);
+        --text-primary: var(--primary-50);
+        --text-secondary: var(--primary-300);
+        --text-muted: var(--primary-400);
+        --border-primary: var(--primary-700);
+        --border-secondary: var(--primary-600);
+        --glass-bg: rgba(255, 255, 255, 0.05);
+        --glass-border: rgba(255, 255, 255, 0.1);
+      }
+      
+      /* Light Theme Variables */
+      [data-theme="light"] {
+        --bg-primary: var(--primary-50);
+        --bg-secondary: #ffffff;
+        --bg-tertiary: var(--primary-100);
+        --bg-overlay: rgba(255, 255, 255, 0.8);
+        --text-primary: var(--primary-900);
+        --text-secondary: var(--primary-600);
+        --text-muted: var(--primary-500);
+        --border-primary: var(--primary-200);
+        --border-secondary: var(--primary-300);
+        --glass-bg: rgba(255, 255, 255, 0.8);
+        --glass-border: rgba(0, 0, 0, 0.1);
+      }
+      
+      /* Base Styles */
+      * {
+        box-sizing: border-box;
+      }
+      
+      html {
+        scroll-behavior: smooth;
+      }
+      
       body {
-        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        font-family: var(--font-family-primary);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.6;
+        transition: background-color var(--transition-normal), color var(--transition-normal);
         min-height: 100vh;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        margin: 0;
+        padding: 0;
+        font-weight: 400;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
-
+      
+      /* Typography Scale */
+      h1, h2, h3, h4, h5, h6 {
+        font-weight: 600;
+        line-height: 1.2;
+        color: var(--text-primary);
+        margin-bottom: var(--space-md);
+      }
+      
+      h1 { font-size: 2.5rem; }
+      h2 { font-size: 2rem; }
+      h3 { font-size: 1.5rem; }
+      h4 { font-size: 1.25rem; }
+      h5 { font-size: 1.125rem; }
+      h6 { font-size: 1rem; }
+      
+      p {
+        color: var(--text-secondary);
+        margin-bottom: var(--space-md);
+      }
+      
+      /* Navigation Styles */
       .navbar {
-        background: rgba(255, 255, 255, 0.05) !important;
-        backdrop-filter: blur(10px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        background: var(--glass-bg) !important;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border-primary);
+        transition: all var(--transition-normal);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        padding: var(--space-md) 0;
       }
-
-      .navbar-brand, .nav-link {
-        color: #ffffff !important;
+      
+      .navbar-brand {
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: var(--text-primary) !important;
+        text-decoration: none;
+        transition: color var(--transition-fast);
+      }
+      
+      .navbar-brand:hover {
+        color: var(--accent-500) !important;
+      }
+      
+      .nav-link {
+        color: var(--text-secondary) !important;
         font-weight: 500;
-        transition: all 0.3s ease;
+        padding: var(--space-sm) var(--space-md) !important;
+        border-radius: var(--radius-md);
+        transition: all var(--transition-fast);
+        position: relative;
+        overflow: hidden;
       }
-
+      
+      .nav-link::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--accent-500);
+        opacity: 0;
+        transform: scale(0.8);
+        transition: all var(--transition-fast);
+        border-radius: var(--radius-md);
+      }
+      
+      .nav-link:hover::before {
+        opacity: 0.1;
+        transform: scale(1);
+      }
+      
       .nav-link:hover {
-        color: #ffffff !important;
+        color: var(--text-primary) !important;
         transform: translateY(-1px);
       }
-
+      
+      /* Card Components */
       .card {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        transition: all 0.3s ease;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-xl);
+        transition: all var(--transition-normal);
+        overflow: hidden;
+        position: relative;
       }
-
+      
+      .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--accent-500), transparent);
+        opacity: 0;
+        transition: opacity var(--transition-normal);
+      }
+      
       .card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-xl);
+        border-color: var(--accent-500);
       }
-
+      
+      .card:hover::before {
+        opacity: 1;
+      }
+      
+      /* Button Styles */
+      .btn {
+        font-weight: 600;
+        border-radius: var(--radius-lg);
+        padding: var(--space-sm) var(--space-lg);
+        transition: all var(--transition-fast);
+        position: relative;
+        overflow: hidden;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-sm);
+      }
+      
       .btn-primary {
-        background: linear-gradient(45deg, #ffffff, #f0f0f0);
-        border: none;
-        color: #000000;
-        font-weight: 600;
-        border-radius: 8px;
-        transition: all 0.3s ease;
+        background: linear-gradient(135deg, var(--accent-500), var(--accent-600));
+        color: white;
+        box-shadow: var(--shadow-md);
       }
-
+      
       .btn-primary:hover {
-        background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+        background: linear-gradient(135deg, var(--accent-600), var(--accent-700));
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+        color: white;
       }
-
+      
       .btn-outline-primary {
-        border: 2px solid #ffffff;
-        color: #ffffff;
-        font-weight: 600;
-        border-radius: 8px;
-        transition: all 0.3s ease;
+        background: transparent;
+        border: 2px solid var(--accent-500);
+        color: var(--accent-500);
       }
-
+      
       .btn-outline-primary:hover {
-        background: #ffffff;
-        color: #000000;
-        transform: translateY(-1px);
+        background: var(--accent-500);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
       }
-
+      
+      .btn-ghost {
+        background: transparent;
+        color: var(--text-secondary);
+        border: 1px solid var(--border-primary);
+      }
+      
+      .btn-ghost:hover {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+        border-color: var(--border-secondary);
+      }
+      
+      /* Form Elements */
+      .form-control, .form-select {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-primary);
+        color: var(--text-primary);
+        border-radius: var(--radius-lg);
+        padding: var(--space-md);
+        transition: all var(--transition-fast);
+        font-family: var(--font-family-primary);
+      }
+      
+      .form-control:focus, .form-select:focus {
+        background: var(--bg-secondary);
+        border-color: var(--accent-500);
+        color: var(--text-primary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        outline: none;
+      }
+      
+      .form-control::placeholder {
+        color: var(--text-muted);
+      }
+      
+      /* Alert Components */
       .alert {
-        border-radius: 8px;
+        border-radius: var(--radius-lg);
         border: none;
+        padding: var(--space-lg);
         backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-left: 4px solid;
       }
-
+      
       .alert-success {
-        background: rgba(40, 167, 69, 0.2);
-        color: #ffffff;
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--success-500);
+        border-left-color: var(--success-500);
       }
-
+      
       .alert-danger {
-        background: rgba(220, 53, 69, 0.2);
-        color: #ffffff;
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--error-500);
+        border-left-color: var(--error-500);
       }
-
+      
       .alert-info {
-        background: rgba(23, 162, 184, 0.2);
-        color: #ffffff;
+        background: rgba(59, 130, 246, 0.1);
+        color: var(--accent-500);
+        border-left-color: var(--accent-500);
       }
-
+      
       .alert-warning {
-        background: rgba(255, 193, 7, 0.2);
-        color: #ffffff;
+        background: rgba(245, 158, 11, 0.1);
+        color: var(--warning-500);
+        border-left-color: var(--warning-500);
       }
-
+      
+      /* Hero Section */
       .hero-section {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-        border-radius: 16px;
-        padding: 3rem;
-        margin: 2rem 0;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(59, 130, 246, 0.05) 100%);
+        border-radius: var(--radius-2xl);
+        padding: var(--space-3xl);
+        margin: var(--space-xl) 0;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        position: relative;
+        overflow: hidden;
       }
-
+      
+      .hero-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+        animation: float 6s ease-in-out infinite;
+      }
+      
+      @keyframes float {
+        0%, 100% { transform: translate(0, 0) rotate(0deg); }
+        50% { transform: translate(-20px, -20px) rotate(180deg); }
+      }
+      
+      /* Text Gradient */
       .text-gradient {
-        background: linear-gradient(45deg, #ffffff, #f0f0f0);
+        background: linear-gradient(135deg, var(--accent-500), var(--accent-700));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
       }
-
-      .glass-effect {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+      
+      /* Theme Toggle */
+      .theme-toggle {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-xl);
+        padding: var(--space-sm);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        transition: all var(--transition-fast);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
       }
-
+      
+      .theme-toggle:hover {
+        border-color: var(--accent-500);
+        transform: translateY(-1px);
+      }
+      
+      .theme-toggle-icon {
+        width: 20px;
+        height: 20px;
+        transition: all var(--transition-fast);
+      }
+      
+      /* Table Styles */
       .table {
-        color: #ffffff;
+        color: var(--text-primary);
+        background: transparent;
       }
-
+      
       .table-striped > tbody > tr:nth-of-type(odd) > td {
-        background-color: rgba(255, 255, 255, 0.02);
+        background-color: var(--bg-tertiary);
       }
-
-      .form-control, .form-select {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: #ffffff;
-        border-radius: 8px;
+      
+      .table-hover tbody tr:hover {
+        background-color: var(--bg-tertiary);
       }
-
-      .form-control:focus, .form-select:focus {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.5);
-        color: #ffffff;
-        box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+      
+      /* Loading States */
+      .loading {
+        opacity: 0.6;
+        pointer-events: none;
       }
-
-      .form-control::placeholder {
-        color: rgba(255, 255, 255, 0.6);
+      
+      .spinner {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--border-primary);
+        border-top: 2px solid var(--accent-500);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .hero-section {
+          padding: var(--space-xl);
+          margin: var(--space-md) 0;
+        }
+        
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.75rem; }
+        h3 { font-size: 1.25rem; }
+      }
+      
+      /* Accessibility */
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+      
+      /* Focus Styles */
+      .btn:focus-visible,
+      .form-control:focus-visible,
+      .nav-link:focus-visible {
+        outline: 2px solid var(--accent-500);
+        outline-offset: 2px;
       }
     </style>
   </head>
 
   <body>
-    <!-- Bootstrap Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <!-- Modern Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
       <div class="container">
-        <a class="navbar-brand fw-bold text-gradient" href="<%= root_path %>">
-          Mr Wet Test
+        <a class="navbar-brand" href="<%= root_path %>">
+          <span class="text-gradient">Mr Wet Test</span>
         </a>
         
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <svg class="theme-toggle-icon" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+          </svg>
         </button>
         
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -202,25 +517,33 @@
             <% end %>
           </ul>
           
-          <ul class="navbar-nav">
+          <ul class="navbar-nav align-items-center">
+            <!-- Theme Toggle -->
+            <li class="nav-item me-3">
+              <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <svg class="theme-toggle-icon" id="themeIcon" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                </svg>
+              </button>
+            </li>
+            
             <% if user_signed_in? %>
               <% if current_user.has_role?(:admin) %>
-                <li class="nav-item">
-                  <%= link_to "Admin Dashboard", admin_root_path, class: "nav-link" %>
+                <li class="nav-item me-2">
+                  <%= link_to "Admin", admin_root_path, class: "btn btn-ghost btn-sm" %>
                 </li>
               <% end %>
               <li class="nav-item">
                 <%= link_to "Log Out", destroy_user_session_path, 
                     data: { turbo_method: :delete }, 
-                    class: "nav-link btn btn-outline-primary btn-sm ms-2" %>
+                    class: "btn btn-outline-primary btn-sm" %>
               </li>
             <% else %>
-              <li class="nav-item">
-                <%= link_to "Sign In", new_user_session_path, class: "nav-link" %>
+              <li class="nav-item me-2">
+                <%= link_to "Sign In", new_user_session_path, class: "btn btn-ghost btn-sm" %>
               </li>
               <li class="nav-item">
-                <%= link_to "Sign Up", new_user_registration_path, 
-                    class: "nav-link btn btn-primary btn-sm ms-2" %>
+                <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-primary btn-sm" %>
               </li>
             <% end %>
           </ul>
@@ -252,47 +575,180 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- Custom JavaScript -->
+    <!-- Enhanced JavaScript -->
     <script>
-      // Initialize Bootstrap components
+      // Theme Management System
+      class ThemeManager {
+        constructor() {
+          this.theme = localStorage.getItem('theme') || 'dark'
+          this.themeIcon = document.getElementById('themeIcon')
+          this.themeToggle = document.getElementById('themeToggle')
+          this.init()
+        }
+
+        init() {
+          this.setTheme(this.theme)
+          this.bindEvents()
+        }
+
+        setTheme(theme) {
+          this.theme = theme
+          document.documentElement.setAttribute('data-theme', theme)
+          localStorage.setItem('theme', theme)
+          this.updateIcon()
+        }
+
+        updateIcon() {
+          const sunIcon = `<path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>`
+          
+          const moonIcon = `<path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>`
+
+          if (this.themeIcon) {
+            this.themeIcon.innerHTML = this.theme === 'dark' ? sunIcon : moonIcon
+          }
+        }
+
+        bindEvents() {
+          if (this.themeToggle) {
+            this.themeToggle.addEventListener('click', () => {
+              const newTheme = this.theme === 'dark' ? 'light' : 'dark'
+              this.setTheme(newTheme)
+            })
+          }
+        }
+      }
+
+      // Enhanced UI Interactions
+      class UIManager {
+        constructor() {
+          this.init()
+        }
+
+        init() {
+          this.initializeBootstrapComponents()
+          this.setupSmoothScrolling()
+          this.setupFormLoadingStates()
+          this.setupCardAnimations()
+          this.setupNavbarScroll()
+        }
+
+        initializeBootstrapComponents() {
+          // Initialize tooltips
+          const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+          tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+          })
+
+          // Initialize popovers
+          const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+          popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+          })
+        }
+
+        setupSmoothScrolling() {
+          document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+              e.preventDefault()
+              const target = document.querySelector(this.getAttribute('href'))
+              if (target) {
+                target.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'start'
+                })
+              }
+            })
+          })
+        }
+
+        setupFormLoadingStates() {
+          document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function() {
+              const submitBtn = this.querySelector('input[type="submit"], button[type="submit"]')
+              if (submitBtn && !submitBtn.disabled) {
+                const originalText = submitBtn.innerHTML
+                submitBtn.disabled = true
+                submitBtn.innerHTML = '<span class="spinner me-2"></span>Loading...'
+                
+                // Re-enable after 10 seconds as fallback
+                setTimeout(() => {
+                  if (submitBtn.disabled) {
+                    submitBtn.disabled = false
+                    submitBtn.innerHTML = originalText
+                  }
+                }, 10000)
+              }
+            })
+          })
+        }
+
+        setupCardAnimations() {
+          // Intersection Observer for card animations
+          const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+          }
+
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.style.opacity = '1'
+                entry.target.style.transform = 'translateY(0)'
+              }
+            })
+          }, observerOptions)
+
+          document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0'
+            card.style.transform = 'translateY(20px)'
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease'
+            observer.observe(card)
+          })
+        }
+
+        setupNavbarScroll() {
+          let lastScrollTop = 0
+          const navbar = document.querySelector('.navbar')
+          
+          window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+              // Scrolling down
+              navbar.style.transform = 'translateY(-100%)'
+            } else {
+              // Scrolling up
+              navbar.style.transform = 'translateY(0)'
+            }
+            
+            lastScrollTop = scrollTop
+          })
+        }
+      }
+
+      // Initialize everything when DOM is ready
       document.addEventListener('DOMContentLoaded', function() {
-        // Initialize tooltips
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-          return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
-
-        // Initialize popovers
-        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-          return new bootstrap.Popover(popoverTriggerEl)
-        })
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-          anchor.addEventListener('click', function (e) {
-            e.preventDefault()
-            const target = document.querySelector(this.getAttribute('href'))
-            if (target) {
-              target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-              })
-            }
-          })
-        })
-
-        // Add loading states to forms
-        document.querySelectorAll('form').forEach(form => {
-          form.addEventListener('submit', function() {
-            const submitBtn = this.querySelector('input[type="submit"], button[type="submit"]')
-            if (submitBtn) {
-              submitBtn.disabled = true
-              submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Loading...'
-            }
-          })
-        })
+        new ThemeManager()
+        new UIManager()
       })
+
+      // Performance optimization: Lazy load images
+      if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target
+              img.src = img.dataset.src
+              img.classList.remove('lazy')
+              imageObserver.unobserve(img)
+            }
+          })
+        })
+
+        document.querySelectorAll('img[data-src]').forEach(img => {
+          imageObserver.observe(img)
+        })
+      }
     </script>
   </body>
 </html>

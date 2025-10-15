@@ -4,9 +4,6 @@ Rails.application.routes.draw do
 
   # Devise routes for user authentication.
   devise_for :users
-  
-  # Manual sign out route
-  delete '/users/sign_out', to: 'devise/sessions#destroy', as: :destroy_user_session
 
   # Custom Admin Panel routes
   namespace :admin do
