@@ -1,8 +1,8 @@
 module Instructor
   class QuestionsController < ApplicationController
     before_action :authenticate_user!
-    before_action :ensure_instructor
     before_action :set_question, only: [:show, :edit, :update, :destroy]
+    authorize_resource
 
     def index
       @questions = Question.includes(:test).order(created_at: :desc)
@@ -21,8 +21,12 @@ module Instructor
         )
       end
       
-      # Pagination
-      @questions = @questions.page(params[:page]).per(25)
+      # Pagination - handle case where Kaminari might not be loaded
+      if defined?(Kaminari)
+        @questions = @questions.page(params[:page]).per(25)
+      else
+        @questions = @questions.limit(25).offset((params[:page].to_i - 1) * 25)
+      end
       
       # Get filter options
       @tests = Test.all.order(:title)
@@ -81,10 +85,4 @@ module Instructor
       params.require(:question).permit(:content, :correct_answer, :test_id)
     end
 
-    def ensure_instructor
-      unless current_user.has_role?(:instructor) || current_user.has_role?(:admin)
-        redirect_to root_path, alert: "Access denied. Instructor privileges required."
-      end
-    end
-  end
 end

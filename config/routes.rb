@@ -8,7 +8,12 @@ Rails.application.routes.draw do
   # Custom Admin Panel routes
   namespace :admin do
     root to: 'dashboard#index'
-    resources :users
+    resources :users do
+      member do
+        post :impersonate
+        post :send_reset_password
+      end
+    end
     resources :courses
     resources :tests
     resources :questions

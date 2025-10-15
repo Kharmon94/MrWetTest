@@ -1,9 +1,9 @@
 module Instructor
   class LessonsController < ApplicationController
     before_action :authenticate_user!
-    before_action :ensure_instructor
     before_action :set_course, only: [:index, :new, :create]
     before_action :set_lesson, only: [:show, :edit, :update, :destroy]
+    authorize_resource
 
     def index
       @lessons = @course.lessons.order(:position)
@@ -61,10 +61,5 @@ module Instructor
       params.require(:lesson).permit(:title, :content, :position)
     end
 
-    def ensure_instructor
-      unless current_user.has_role?(:instructor) || current_user.has_role?(:admin)
-        redirect_to root_path, alert: "Access denied. Instructor privileges required."
-      end
-    end
   end
 end

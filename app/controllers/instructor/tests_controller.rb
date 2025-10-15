@@ -1,8 +1,8 @@
 module Instructor
   class TestsController < ApplicationController
     before_action :authenticate_user!
-    before_action :ensure_instructor
     before_action :set_test, only: [:show, :edit, :update, :destroy]
+    authorize_resource
 
     def index
       @tests = Test.all.order(created_at: :desc)
@@ -88,11 +88,6 @@ module Instructor
       )
     end
 
-    def ensure_instructor
-      unless current_user.has_role?(:instructor) || current_user.has_role?(:admin)
-        redirect_to root_path, alert: "Access denied. Instructor privileges required."
-      end
-    end
 
     def calculate_pass_rate(test)
       total_attempts = TestAttempt.where(test: test, submitted: true).count

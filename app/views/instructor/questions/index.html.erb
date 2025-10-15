@@ -223,7 +223,7 @@
         </div>
 
         <!-- Pagination -->
-        <% if @questions.total_pages > 1 %>
+        <% if defined?(Kaminari) && @questions.respond_to?(:total_pages) && @questions.total_pages > 1 %>
           <div class="d-flex justify-content-center mt-4">
             <%= paginate @questions, theme: 'bootstrap5' %>
           </div>

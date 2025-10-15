@@ -1,9 +1,11 @@
 module Instructor
   class DashboardController < ApplicationController
     before_action :authenticate_user!
-    before_action :ensure_instructor
+    authorize_resource class: false
 
     def index
+      authorize! :read, :instructor_dashboard
+      
       @instructor = current_user
       
       # Get instructor's courses
@@ -36,14 +38,6 @@ module Instructor
       @tests.each do |test|
         completed_count = TestAttempt.where(test: test, submitted: true).count
         @test_completions[test.id] = completed_count
-      end
-    end
-
-    private
-
-    def ensure_instructor
-      unless current_user.has_role?(:instructor) || current_user.has_role?(:admin)
-        redirect_to root_path, alert: "Access denied. Instructor privileges required."
       end
     end
   end

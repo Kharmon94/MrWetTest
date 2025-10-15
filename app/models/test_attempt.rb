@@ -12,8 +12,10 @@ class TestAttempt < ApplicationRecord
 
   def calculate_score
     total = test_attempt_questions.count
-    correct = test_attempt_questions.select do |taq|
-      taq.chosen_answer == taq.question.correct_answer
+    return 0 if total == 0
+    
+    correct = test_attempt_questions.includes(:question).select do |taq|
+      taq.question.present? && taq.chosen_answer == taq.question.correct_answer
     end.count
     (correct.to_f / total * 100).round(2)
   end

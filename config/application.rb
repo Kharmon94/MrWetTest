@@ -3,6 +3,8 @@ require "rails/all"
 require "devise"
 require "rolify"
 require "stripe"
+require "cancancan"
+require "kaminari"
 
 module MrWetTest
   class Application < Rails::Application

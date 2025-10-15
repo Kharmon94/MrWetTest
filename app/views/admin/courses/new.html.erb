@@ -1,0 +1,130 @@
+<% content_for :title, "New Course - Admin Panel" %>
+
+<div class="container-fluid py-4">
+  <!-- Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <%= link_to admin_courses_path, class: "btn btn-outline-secondary me-3" do %>
+            <i class="fas fa-arrow-left"></i>
+          <% end %>
+          <div>
+            <h1 class="h3 mb-1 text-primary">
+              <i class="fas fa-plus-circle me-2"></i>
+              Create New Course
+            </h1>
+            <p class="text-muted mb-0">Add a new course to the system</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Course Form -->
+  <div class="card shadow">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">
+        <i class="fas fa-edit me-2"></i>
+        Course Details
+      </h6>
+    </div>
+    <div class="card-body">
+      <%= form_with(model: [:admin, @course], local: true, class: "needs-validation", novalidate: true) do |form| %>
+        <% if @course.errors.any? %>
+          <div class="alert alert-danger">
+            <h4 class="alert-heading">Please fix the following errors:</h4>
+            <ul class="mb-0">
+              <% @course.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="row">
+          <div class="col-md-8">
+            <div class="mb-3">
+              <%= form.label :title, class: "form-label" %>
+              <%= form.text_field :title, class: "form-control", required: true, placeholder: "Enter course title" %>
+              <div class="invalid-feedback">
+                Please provide a course title.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <%= form.label :description, class: "form-label" %>
+              <%= form.text_area :description, class: "form-control", rows: 5, required: true, placeholder: "Enter course description" %>
+              <div class="invalid-feedback">
+                Please provide a course description.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <%= form.label :price, class: "form-label" %>
+              <div class="input-group">
+                <span class="input-group-text">$</span>
+                <%= form.number_field :price, class: "form-control", step: "0.01", min: "0", required: true, placeholder: "0.00" %>
+                <div class="invalid-feedback">
+                  Please provide a valid price.
+                </div>
+              </div>
+              <div class="form-text">Enter 0 for free courses</div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="mb-3">
+              <%= form.label :thumbnail, "Course Thumbnail", class: "form-label" %>
+              <%= form.file_field :thumbnail, class: "form-control", accept: "image/*" %>
+              <div class="form-text">Upload a course thumbnail image</div>
+            </div>
+
+            <div class="card bg-light">
+              <div class="card-header">
+                <h6 class="mb-0">Course Settings</h6>
+              </div>
+              <div class="card-body">
+                <div class="mb-3 form-check form-switch">
+                  <%= form.check_box :time_managed, class: "form-check-input", role: "switch" %>
+                  <%= form.label :time_managed, "Time Managed Course", class: "form-check-label" %>
+                  <div class="form-text">Enable fixed schedule and deadlines</div>
+                </div>
+
+                <div class="mb-3 form-check form-switch">
+                  <%= form.check_box :chapter_assessments_required, class: "form-check-input", role: "switch" %>
+                  <%= form.label :chapter_assessments_required, "Require Chapter Assessments", class: "form-check-label" %>
+                  <div class="form-text">Students must pass chapter tests to proceed</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+          <%= link_to "Cancel", admin_courses_path, class: "btn btn-secondary" %>
+          <%= form.submit "Create Course", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+// Bootstrap form validation
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    var forms = document.getElementsByClassName('needs-validation');
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>

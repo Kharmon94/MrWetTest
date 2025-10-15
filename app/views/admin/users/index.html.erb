@@ -1,67 +1,305 @@
-<% content_for :title, "Manage Users" %>
+<% content_for :title, "Manage Users - Admin Panel" %>
 
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3" style="border-bottom: 1px solid var(--border-primary);">
-  <h1 class="h2" style="color: var(--text-primary);">Manage Users</h1>
-  <div class="btn-toolbar mb-2 mb-md-0">
-    <div class="btn-group me-2">
-      <span class="badge bg-info">Total: <%= @users.count %></span>
+<div class="container-fluid py-4">
+  <!-- Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="h3 mb-1 text-primary">
+            <i class="fas fa-users me-2"></i>
+            Manage Users
+          </h1>
+          <p class="text-muted mb-0">User management and role administration</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                Total Users
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800"><%= @total_users %></div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-users fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-danger shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                Administrators
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800"><%= @admin_users %></div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-crown fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                Instructors
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800"><%= @instructor_users %></div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-chalkboard-teacher fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                Students
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800"><%= @student_users %></div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-graduation-cap fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <%= form_with url: admin_users_path, method: :get, local: true, class: "row g-3" do |form| %>
+        <div class="col-md-4">
+          <%= form.text_field :search, placeholder: "Search by email...", value: params[:search], class: "form-control" %>
+        </div>
+        <div class="col-md-3">
+          <%= form.select :role, options_for_select([["All Roles", ""]] + @available_roles.map { |r| [r.name.humanize, r.name] }, params[:role]), {}, { class: "form-select" } %>
+        </div>
+        <div class="col-md-3">
+          <%= form.submit "Filter", class: "btn btn-primary" %>
+          <%= link_to "Clear", admin_users_path, class: "btn btn-outline-secondary ms-2" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Users Table -->
+  <div class="card shadow">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">
+        <i class="fas fa-list me-2"></i>
+        Users List
+      </h6>
+    </div>
+    <div class="card-body">
+      <% if @users.any? %>
+        <div class="table-responsive">
+          <table class="table table-bordered" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Roles</th>
+                <th>Test Attempts</th>
+                <th>Average Score</th>
+                <th>Total Spent</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @users.each do |user| %>
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="avatar-sm bg-<%= user.has_role?(:admin) ? 'danger' : user.has_role?(:instructor) ? 'info' : 'secondary' %> text-white rounded-circle d-flex align-items-center justify-content-center me-2">
+                        <%= user.email.first.upcase %>
+                      </div>
+                      <div>
+                        <div class="font-weight-bold"><%= user.email %></div>
+                        <small class="text-muted">
+                          ID: <%= user.id %>
+                          <% if user.first_name.present? || user.last_name.present? %>
+                            | <%= [user.first_name, user.last_name].compact.join(' ') %>
+                          <% end %>
+                        </small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <% user.roles.each do |role| %>
+                      <span class="badge bg-<%= role.name == 'admin' ? 'danger' : role.name == 'instructor' ? 'info' : 'success' %> me-1">
+                        <%= role.name.humanize %>
+                      </span>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% attempts = user.test_attempts.where(submitted: true).count %>
+                    <% if attempts > 0 %>
+                      <span class="badge bg-primary"><%= attempts %></span>
+                    <% else %>
+                      <span class="text-muted">0</span>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% avg_score = user.test_attempts.where(submitted: true).average(:score)&.round(1) || 0 %>
+                    <% if avg_score > 0 %>
+                      <span class="font-weight-bold <%= avg_score >= 70 ? 'text-success' : 'text-warning' %>">
+                        <%= avg_score %>%
+                      </span>
+                    <% else %>
+                      <span class="text-muted">N/A</span>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% total_spent = user.payments.where(status: 'succeeded').sum(:amount) %>
+                    <% if total_spent > 0 %>
+                      <span class="text-success font-weight-bold">
+                        $<%= sprintf('%.2f', total_spent) %>
+                      </span>
+                    <% else %>
+                      <span class="text-muted">$0.00</span>
+                    <% end %>
+                  </td>
+                  <td>
+                    <small class="text-muted">
+                      <%= user.created_at.strftime("%m/%d/%Y") %>
+                    </small>
+                  </td>
+                  <td>
+                    <div class="btn-group" role="group">
+                      <%= link_to admin_user_path(user), class: "btn btn-outline-primary btn-sm", title: "View Details" do %>
+                        <i class="fas fa-eye"></i>
+                      <% end %>
+                      <%= link_to edit_admin_user_path(user), class: "btn btn-outline-info btn-sm", title: "Edit User" do %>
+                        <i class="fas fa-edit"></i>
+                      <% end %>
+                      <% unless user == current_user %>
+                        <%= link_to admin_user_path(user), method: :delete, 
+                            data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this user?" }, 
+                            class: "btn btn-outline-danger btn-sm", title: "Delete User" do %>
+                          <i class="fas fa-trash"></i>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Pagination -->
+        <% if defined?(Kaminari) && @users.respond_to?(:total_pages) && @users.total_pages > 1 %>
+          <div class="d-flex justify-content-center mt-4">
+            <%= paginate @users %>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="text-center py-5">
+          <i class="fas fa-users fa-4x text-muted mb-3"></i>
+          <h5 class="text-muted">No users found</h5>
+          <p class="text-muted">
+            <% if params[:search].present? || params[:role].present? %>
+              Try adjusting your search criteria.
+            <% else %>
+              Users will appear here as they register.
+            <% end %>
+          </p>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
 
-<div class="admin-card p-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary); border-radius: var(--radius-lg);">
-  <% if @users.any? %>
-    <div class="table-responsive">
-      <table class="table table-hover" style="color: var(--text-primary);">
-        <thead style="background: var(--bg-tertiary); color: var(--text-primary);">
-          <tr>
-            <th>Email</th>
-            <th>Roles</th>
-            <th>Created</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @users.each do |user| %>
-            <tr style="color: var(--text-primary); border-color: var(--border-primary);">
-              <td style="color: var(--text-primary);"><%= user.email %></td>
-              <td>
-                <% if user.roles.any? %>
-                  <% user.roles.each do |role| %>
-                    <span class="badge bg-<%= role.name == 'admin' ? 'danger' : 'secondary' %>">
-                      <%= role.name.capitalize %>
-                    </span>
-                  <% end %>
-                <% else %>
-                  <span style="color: var(--text-muted);">No roles</span>
-                <% end %>
-              </td>
-              <td style="color: var(--text-primary);"><%= user.created_at.strftime("%B %d, %Y") %></td>
-              <td>
-                <div class="btn-group btn-group-sm">
-                  <%= link_to "View", admin_user_path(user), class: "btn btn-outline-primary btn-sm" %>
-                  <%= link_to "Edit", edit_admin_user_path(user), class: "btn btn-outline-secondary btn-sm" %>
-                  <%= link_to "Delete", admin_user_path(user), 
-                      method: :delete, 
-                      data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
-                      class: "btn btn-outline-danger btn-sm" %>
-                </div>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-    
-    <% if defined?(Kaminari) && @users.respond_to?(:current_page) %>
-      <div class="d-flex justify-content-center mt-4">
-        <%= paginate @users, theme: 'twitter-bootstrap-4' %>
-      </div>
-    <% end %>
-  <% else %>
-    <div class="text-center py-5">
-      <h5 style="color: var(--text-primary);">No users found</h5>
-      <p style="color: var(--text-secondary);">There are no users in the system yet.</p>
-    </div>
-  <% end %>
-</div>
+<style>
+.border-left-primary {
+  border-left: 0.25rem solid #4e73df !important;
+}
+.border-left-danger {
+  border-left: 0.25rem solid #e74a3b !important;
+}
+.border-left-info {
+  border-left: 0.25rem solid #36b9cc !important;
+}
+.border-left-success {
+  border-left: 0.25rem solid #1cc88a !important;
+}
+
+.avatar-sm {
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.875rem;
+}
+
+.text-gray-800 {
+  color: #5a5c69 !important;
+}
+
+.text-gray-300 {
+  color: #dddfeb !important;
+}
+
+.font-weight-bold {
+  font-weight: 700 !important;
+}
+
+.text-xs {
+  font-size: 0.7rem;
+}
+
+.shadow {
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+}
+
+.table th {
+  background-color: #f8f9fc;
+  border-color: #e3e6f0;
+  color: #5a5c69;
+  font-weight: 600;
+}
+
+.table td {
+  border-color: #e3e6f0;
+  vertical-align: middle;
+}
+
+.btn-group .btn {
+  border-radius: 0;
+}
+
+.btn-group .btn:first-child {
+  border-top-left-radius: 0.35rem;
+  border-bottom-left-radius: 0.35rem;
+}
+
+.btn-group .btn:last-child {
+  border-top-right-radius: 0.35rem;
+  border-bottom-right-radius: 0.35rem;
+}
+</style>

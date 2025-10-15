@@ -434,7 +434,6 @@ DEPENDENCIES
   thruster
   turbo-rails
   tzinfo-data
-  warden (~> 1.2.9)
   web-console
 
 BUNDLED WITH

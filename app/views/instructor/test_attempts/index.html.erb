@@ -138,8 +138,12 @@
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
       <h6 class="m-0 font-weight-bold text-primary">Test Attempts</h6>
       <small class="text-muted">
-        Showing <%= @test_attempts.offset + 1 %>-<%= [@test_attempts.offset + @test_attempts.count, @test_attempts.total_count].min %> 
-        of <%= @test_attempts.total_count %> results
+        <% if defined?(Kaminari) && @test_attempts.respond_to?(:total_count) && @test_attempts.respond_to?(:offset) %>
+          Showing <%= @test_attempts.offset + 1 %>-<%= [@test_attempts.offset + @test_attempts.count, @test_attempts.total_count].min %> 
+          of <%= @test_attempts.total_count %> results
+        <% else %>
+          Showing <%= @test_attempts.count %> results
+        <% end %>
       </small>
     </div>
     <div class="card-body">
@@ -231,7 +235,7 @@
         </div>
 
         <!-- Pagination -->
-        <% if @test_attempts.total_pages > 1 %>
+        <% if defined?(Kaminari) && @test_attempts.respond_to?(:total_pages) && @test_attempts.total_pages > 1 %>
           <div class="d-flex justify-content-center mt-4">
             <%= paginate @test_attempts, theme: 'bootstrap5' %>
           </div>
