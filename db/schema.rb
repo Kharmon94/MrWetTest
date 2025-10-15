@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_15_012958) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_15_023603) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -96,6 +96,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_012958) do
     t.decimal "price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "time_managed"
+    t.boolean "chapter_assessments_required"
   end
 
   create_table "lessons", force: :cascade do |t|
@@ -162,6 +164,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_012958) do
     t.datetime "taken_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "honor_statement_accepted"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.text "questions_used"
+    t.integer "retake_number"
     t.index ["test_id"], name: "index_test_attempts_on_test_id"
     t.index ["user_id"], name: "index_test_attempts_on_user_id"
   end
@@ -173,6 +180,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_012958) do
     t.text "instructions"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "assessment_type"
+    t.integer "time_limit"
+    t.boolean "honor_statement_required"
+    t.integer "max_attempts"
+    t.decimal "passing_score"
+    t.integer "question_pool_size"
   end
 
   create_table "users", force: :cascade do |t|

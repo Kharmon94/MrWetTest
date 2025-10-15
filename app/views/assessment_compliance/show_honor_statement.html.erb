@@ -1,0 +1,108 @@
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-10 mx-auto">
+      <!-- Page Header -->
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4">
+        <h1 class="text-gradient h2 mb-3 mb-sm-0">Academic Integrity Honor Statement</h1>
+        <%= link_to "← Back to Procedures", procedures_test_path(@test), class: "btn btn-outline-secondary" %>
+      </div>
+
+      <!-- Assessment Information -->
+      <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+        <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+          <h5 class="mb-0" style="color: var(--text-primary);">
+            <i class="fas fa-info-circle me-2"></i>Assessment Details
+          </h5>
+        </div>
+        <div class="card-body p-4" style="color: var(--text-primary);">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <strong>Assessment:</strong> <%= @test.title %>
+            </div>
+            <div class="col-md-6">
+              <strong>Type:</strong> <%= @test.assessment_type.titleize %>
+            </div>
+            <div class="col-md-6">
+              <strong>Time Limit:</strong> <%= @test.time_limit_display %>
+            </div>
+            <div class="col-md-6">
+              <strong>Passing Score:</strong> <%= @test.passing_score_display %>
+            </div>
+            <% if @test.max_attempts.present? %>
+              <div class="col-md-6">
+                <strong>Max Attempts:</strong> <%= @test.max_attempts %>
+              </div>
+              <div class="col-md-6">
+                <strong>Your Attempt:</strong> <%= @test.user_attempt_count(current_user) + 1 %> of <%= @test.max_attempts %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Honor Statement -->
+      <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+        <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+          <h5 class="mb-0" style="color: var(--text-primary);">
+            <i class="fas fa-handshake me-2"></i>Academic Integrity Honor Statement
+          </h5>
+        </div>
+        <div class="card-body p-4" style="color: var(--text-primary);">
+          <div class="honor-statement-text" style="white-space: pre-line; line-height: 1.6; max-height: 400px; overflow-y: auto; border: 1px solid var(--border-primary); padding: 1.5rem; border-radius: 0.5rem; background: var(--bg-tertiary);">
+            <%= @honor_statement_text %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Acceptance Form -->
+      <%= form_with model: @test_attempt, url: accept_honor_test_path(@test), local: true, class: "needs-validation", novalidate: true do |form| %>
+        <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+          <div class="card-body p-4">
+            <div class="form-check">
+              <%= check_box_tag :honor_statement_accepted, "1", false, 
+                  class: "form-check-input", 
+                  id: "honor_statement_accepted",
+                  required: true %>
+              <label class="form-check-label" for="honor_statement_accepted" style="color: var(--text-primary);">
+                <strong>I have read, understood, and agree to abide by the Academic Integrity Honor Statement above.</strong>
+              </label>
+              <div class="invalid-feedback">
+                You must accept the honor statement to proceed with the assessment.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+          <%= form.submit "I Accept - Start Assessment", 
+                          class: "btn btn-success btn-lg px-4 px-md-5",
+                          data: { 
+                            confirm: "Are you ready to start the assessment? Once started, you cannot access course materials.",
+                            turbo_confirm: "Are you ready to start the assessment? Once started, you cannot access course materials."
+                          } %>
+          <%= link_to "Cancel", test_path(@test), class: "btn btn-outline-secondary btn-lg px-4 px-md-5" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Form validation
+  (function() {
+    'use strict';
+    window.addEventListener('load', function() {
+      var forms = document.getElementsByClassName('needs-validation');
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+</script>

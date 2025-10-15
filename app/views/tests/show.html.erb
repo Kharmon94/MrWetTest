@@ -14,18 +14,44 @@
           <p style="color: var(--text-secondary); margin-bottom: 1.5rem;"><%= @test.description %></p>
           
           <div class="row g-3">
-            <div class="col-sm-6">
+            <div class="col-sm-6 col-md-4">
               <div class="d-flex align-items-center">
                 <i class="fas fa-dollar-sign text-success me-2"></i>
                 <span style="color: var(--text-primary);"><strong>Price:</strong> <%= @test.formatted_price %></span>
               </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6 col-md-4">
               <div class="d-flex align-items-center">
                 <i class="fas fa-question-circle text-primary me-2"></i>
-                <span style="color: var(--text-primary);"><strong>Questions:</strong> <%= @test.questions.count %></span>
+                <span style="color: var(--text-primary);"><strong>Questions:</strong> <%= @test.question_pool_size || @test.questions.count %></span>
               </div>
             </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-clock text-warning me-2"></i>
+                <span style="color: var(--text-primary);"><strong>Time Limit:</strong> <%= @test.time_limit_display %></span>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-graduation-cap text-info me-2"></i>
+                <span style="color: var(--text-primary);"><strong>Type:</strong> <%= @test.assessment_type.titleize %></span>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-percentage text-danger me-2"></i>
+                <span style="color: var(--text-primary);"><strong>Passing Score:</strong> <%= @test.passing_score_display %></span>
+              </div>
+            </div>
+            <% if @test.max_attempts.present? %>
+              <div class="col-sm-6 col-md-4">
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-redo text-secondary me-2"></i>
+                  <span style="color: var(--text-primary);"><strong>Max Attempts:</strong> <%= @test.max_attempts %></span>
+                </div>
+              </div>
+            <% end %>
           </div>
         </div>
       </div>
@@ -58,8 +84,19 @@
       <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
         <% if current_user %>
           <% if current_user.can_access?(@test) %>
-            <%= link_to "Take Test", new_tests_test_attempt_path(test_id: @test.id),
-                class: "btn btn-primary btn-lg px-4 px-md-5" %>
+            <% if @test.can_user_retake?(current_user) %>
+              <% if @test.requires_honor_statement? %>
+                <%= link_to "Start Assessment", procedures_test_path(@test),
+                    class: "btn btn-primary btn-lg px-4 px-md-5" %>
+              <% else %>
+                <%= link_to "Take Test", new_tests_test_attempt_path(test_id: @test.id),
+                    class: "btn btn-primary btn-lg px-4 px-md-5" %>
+              <% end %>
+            <% else %>
+              <button class="btn btn-secondary btn-lg px-4 px-md-5" disabled>
+                Max Attempts Reached (<%= @test.user_attempt_count(current_user) %>/<%= @test.max_attempts %>)
+              </button>
+            <% end %>
           <% elsif @test.free? %>
             <%= link_to "Take Free Test", new_tests_test_attempt_path(test_id: @test.id),
                 class: "btn btn-success btn-lg px-4 px-md-5" %>

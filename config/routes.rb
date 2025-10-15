@@ -20,11 +20,22 @@ Rails.application.routes.draw do
 
   # Test side: test-taking functionality.
   namespace :tests do
-    resources :test_attempts, only: [:index, :new, :create, :edit, :update, :show]
+    resources :test_attempts, only: [:index, :new, :create, :edit, :update, :show] do
+      member do
+        post :abandon, to: 'assessment_compliance#abandon_assessment'
+      end
+    end
   end
 
   # Routes for Test products (available tests).
-  resources :tests, only: [:index, :show], constraints: { id: /\d+/ }
+  resources :tests, only: [:index, :show], constraints: { id: /\d+/ } do
+    # Assessment compliance routes
+    member do
+      get :procedures, to: 'assessment_compliance#show_procedures'
+      get :honor_statement, to: 'assessment_compliance#show_honor_statement'
+      post :accept_honor, to: 'assessment_compliance#accept_honor_statement'
+    end
+  end
 
   # Payment routes
   resources :payments, only: [:index, :show, :new, :create] do
