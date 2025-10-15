@@ -1,0 +1,200 @@
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <!-- Page Header -->
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4">
+        <h1 class="text-gradient h2 mb-3 mb-sm-0">Preferences</h1>
+        <%= link_to "← Back to Settings", settings_root_path, class: "btn btn-outline-secondary" %>
+      </div>
+
+      <%= form_with model: @user, url: settings_preferences_path, method: :patch, local: true, class: "needs-validation", novalidate: true do |form| %>
+        <!-- Theme Preferences -->
+        <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+          <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+            <h5 class="mb-0" style="color: var(--text-primary);">
+              <i class="fas fa-palette me-2"></i>Theme & Display
+            </h5>
+          </div>
+          <div class="card-body p-4">
+            <div class="row g-3">
+              <!-- Theme Selection -->
+              <div class="col-12">
+                <div class="mb-3">
+                  <%= form.label :theme_preference, "Theme Preference", class: "form-label", style: "color: var(--text-primary);" %>
+                  <div class="row g-3">
+                    <div class="col-md-4">
+                      <div class="form-check">
+                        <%= form.radio_button :theme_preference, 'light', 
+                            class: "form-check-input",
+                            id: "theme_light" %>
+                        <%= form.label :theme_preference, "Light Theme", 
+                            class: "form-check-label", 
+                            style: "color: var(--text-primary);",
+                            for: "theme_light" %>
+                        <div class="mt-2">
+                          <div class="theme-preview rounded p-2" style="background: #ffffff; border: 1px solid #e2e8f0; color: #1e293b;">
+                            <div class="small">Light theme preview</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-check">
+                        <%= form.radio_button :theme_preference, 'dark', 
+                            class: "form-check-input",
+                            id: "theme_dark" %>
+                        <%= form.label :theme_preference, "Dark Theme", 
+                            class: "form-check-label", 
+                            style: "color: var(--text-primary);",
+                            for: "theme_dark" %>
+                        <div class="mt-2">
+                          <div class="theme-preview rounded p-2" style="background: #0f172a; border: 1px solid #475569; color: #f8fafc;">
+                            <div class="small">Dark theme preview</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-check">
+                        <%= form.radio_button :theme_preference, 'auto', 
+                            class: "form-check-input",
+                            id: "theme_auto" %>
+                        <%= form.label :theme_preference, "Auto (System)", 
+                            class: "form-check-label", 
+                            style: "color: var(--text-primary);",
+                            for: "theme_auto" %>
+                        <div class="mt-2">
+                          <div class="theme-preview rounded p-2" style="background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary);">
+                            <div class="small">Follows system</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Language & Region -->
+        <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+          <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+            <h5 class="mb-0" style="color: var(--text-primary);">
+              <i class="fas fa-globe me-2"></i>Language & Region
+            </h5>
+          </div>
+          <div class="card-body p-4">
+            <div class="row g-3">
+              <!-- Language Selection -->
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <%= form.label :language, "Language", class: "form-label", style: "color: var(--text-primary);" %>
+                  <%= form.select :language, 
+                      options_for_select([
+                        ['English', 'en'],
+                        ['Spanish', 'es'],
+                        ['French', 'fr'],
+                        ['German', 'de'],
+                        ['Chinese', 'zh'],
+                        ['Japanese', 'ja']
+                      ], @user.language || 'en'),
+                      { prompt: "Select Language" },
+                      { class: "form-select",
+                        style: "background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary);" } %>
+                </div>
+              </div>
+
+              <!-- Timezone Selection -->
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <%= form.label :timezone, "Timezone", class: "form-label", style: "color: var(--text-primary);" %>
+                  <%= form.select :timezone, 
+                      options_for_select([
+                        ['UTC-12:00 Baker Island Time', 'Pacific/Baker_Island'],
+                        ['UTC-11:00 Samoa Standard Time', 'Pacific/Samoa'],
+                        ['UTC-10:00 Hawaii Standard Time', 'Pacific/Honolulu'],
+                        ['UTC-09:00 Alaska Standard Time', 'America/Anchorage'],
+                        ['UTC-08:00 Pacific Standard Time', 'America/Los_Angeles'],
+                        ['UTC-07:00 Mountain Standard Time', 'America/Denver'],
+                        ['UTC-06:00 Central Standard Time', 'America/Chicago'],
+                        ['UTC-05:00 Eastern Standard Time', 'America/New_York'],
+                        ['UTC-04:00 Atlantic Standard Time', 'America/Halifax'],
+                        ['UTC-03:00 Brazil Standard Time', 'America/Sao_Paulo'],
+                        ['UTC+00:00 Greenwich Mean Time', 'Europe/London'],
+                        ['UTC+01:00 Central European Time', 'Europe/Paris'],
+                        ['UTC+02:00 Eastern European Time', 'Europe/Athens'],
+                        ['UTC+03:00 Moscow Time', 'Europe/Moscow'],
+                        ['UTC+04:00 Gulf Standard Time', 'Asia/Dubai'],
+                        ['UTC+05:00 Pakistan Standard Time', 'Asia/Karachi'],
+                        ['UTC+06:00 Bangladesh Standard Time', 'Asia/Dhaka'],
+                        ['UTC+07:00 Indochina Time', 'Asia/Bangkok'],
+                        ['UTC+08:00 China Standard Time', 'Asia/Shanghai'],
+                        ['UTC+09:00 Japan Standard Time', 'Asia/Tokyo'],
+                        ['UTC+10:00 Australian Eastern Time', 'Australia/Sydney'],
+                        ['UTC+11:00 Solomon Islands Time', 'Pacific/Guadalcanal'],
+                        ['UTC+12:00 New Zealand Standard Time', 'Pacific/Auckland']
+                      ], @user.timezone || 'America/New_York'),
+                      { prompt: "Select Timezone" },
+                      { class: "form-select",
+                        style: "background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary);" } %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Display Preferences -->
+        <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+          <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+            <h5 class="mb-0" style="color: var(--text-primary);">
+              <i class="fas fa-desktop me-2"></i>Display Preferences
+            </h5>
+          </div>
+          <div class="card-body p-4">
+            <div class="row g-3">
+              <div class="col-12">
+                <div class="alert alert-info" style="background: var(--bg-tertiary); border-color: var(--border-primary); color: var(--text-primary);">
+                  <i class="fas fa-info-circle me-2"></i>
+                  <strong>Coming Soon:</strong> Additional display options including font size, density, and layout preferences will be available in a future update.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="card" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+          <div class="card-body p-4">
+            <div class="d-flex flex-column flex-sm-row gap-3 justify-content-between">
+              <%= link_to "Cancel", settings_root_path, class: "btn btn-outline-secondary order-2 order-sm-1" %>
+              <%= form.submit "Save Preferences", class: "btn btn-primary order-1 order-sm-2" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+// Theme preview functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const themeRadios = document.querySelectorAll('input[name="user[theme_preference]"]');
+  
+  themeRadios.forEach(radio => {
+    radio.addEventListener('change', function() {
+      // Update the preview styles based on selection
+      const previews = document.querySelectorAll('.theme-preview');
+      previews.forEach(preview => {
+        preview.style.opacity = '0.6';
+      });
+      
+      const selectedPreview = this.parentElement.querySelector('.theme-preview');
+      if (selectedPreview) {
+        selectedPreview.style.opacity = '1';
+      }
+    });
+  });
+});
+</script>

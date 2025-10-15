@@ -40,6 +40,22 @@ Rails.application.routes.draw do
   # Stripe webhooks
   post 'webhooks/stripe', to: 'webhooks#stripe'
 
+  # Settings routes
+  scope '/settings' do
+    root to: 'settings#index', as: 'settings_root'
+    get 'profile', to: 'settings#profile', as: 'settings_profile'
+    patch 'profile', to: 'settings#update_profile'
+    get 'preferences', to: 'settings#preferences', as: 'settings_preferences'
+    patch 'preferences', to: 'settings#update_preferences'
+    get 'security', to: 'settings#security', as: 'settings_security'
+    patch 'security', to: 'settings#update_password'
+    get 'notifications', to: 'settings#notifications', as: 'settings_notifications'
+    patch 'notifications', to: 'settings#update_notifications'
+    get 'account', to: 'settings#account', as: 'settings_account'
+    post 'export_data', to: 'settings#export_data', as: 'settings_export_data'
+    delete 'delete_account', to: 'settings#delete_account', as: 'settings_delete_account'
+  end
+
   # Root path route.
   root to: "home#index"
   

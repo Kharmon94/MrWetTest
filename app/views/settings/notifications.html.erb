@@ -1,0 +1,222 @@
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <!-- Page Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-gradient h2 mb-0">Notification Settings</h1>
+        <%= link_to "← Back to Settings", settings_root_path, class: "btn btn-outline-secondary" %>
+      </div>
+
+      <%= form_with model: @user, url: settings_notifications_path, method: :patch, local: true, class: "needs-validation", novalidate: true do |form| %>
+        <!-- Email Notifications -->
+        <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+          <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+            <h5 class="mb-0" style="color: var(--text-primary);">
+              <i class="fas fa-envelope me-2"></i>Email Notifications
+            </h5>
+          </div>
+          <div class="card-body p-4">
+            <div class="row g-3">
+              <div class="col-12">
+                <div class="d-flex align-items-center justify-content-between p-3 rounded" style="background: var(--bg-tertiary); border: 1px solid var(--border-primary);">
+                  <div>
+                    <h6 class="mb-1" style="color: var(--text-primary);">Enable Email Notifications</h6>
+                    <p class="small mb-0" style="color: var(--text-secondary);">Receive important updates and notifications via email</p>
+                  </div>
+                  <div class="form-check form-switch">
+                    <%= form.check_box :email_notifications, 
+                        class: "form-check-input",
+                        id: "email_notifications",
+                        style: "transform: scale(1.2);" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Email Notification Categories -->
+            <div class="mt-4">
+              <h6 class="mb-3" style="color: var(--text-primary);">Email Categories</h6>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="course_updates" checked disabled>
+                    <label class="form-check-label" for="course_updates" style="color: var(--text-primary);">
+                      Course Updates
+                    </label>
+                    <small class="d-block" style="color: var(--text-muted);">New lessons, announcements</small>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="test_results" checked disabled>
+                    <label class="form-check-label" for="test_results" style="color: var(--text-primary);">
+                      Test Results
+                    </label>
+                    <small class="d-block" style="color: var(--text-muted);">Test completion notifications</small>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="payment_receipts" checked disabled>
+                    <label class="form-check-input" type="checkbox" id="payment_receipts" checked disabled>
+                    <label class="form-check-label" for="payment_receipts" style="color: var(--text-primary);">
+                      Payment Receipts
+                    </label>
+                    <small class="d-block" style="color: var(--text-muted);">Purchase confirmations</small>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="security_alerts" checked disabled>
+                    <label class="form-check-label" for="security_alerts" style="color: var(--text-primary);">
+                      Security Alerts
+                    </label>
+                    <small class="d-block" style="color: var(--text-muted);">Login attempts, password changes</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Push Notifications -->
+        <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+          <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+            <h5 class="mb-0" style="color: var(--text-primary);">
+              <i class="fas fa-mobile-alt me-2"></i>Push Notifications
+            </h5>
+          </div>
+          <div class="card-body p-4">
+            <div class="row g-3">
+              <div class="col-12">
+                <div class="d-flex align-items-center justify-content-between p-3 rounded" style="background: var(--bg-tertiary); border: 1px solid var(--border-primary);">
+                  <div>
+                    <h6 class="mb-1" style="color: var(--text-primary);">Enable Push Notifications</h6>
+                    <p class="small mb-0" style="color: var(--text-secondary);">Receive real-time notifications on your device</p>
+                  </div>
+                  <div class="form-check form-switch">
+                    <%= form.check_box :push_notifications, 
+                        class: "form-check-input",
+                        id: "push_notifications",
+                        style: "transform: scale(1.2);" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Browser Notification Status -->
+            <div class="mt-4">
+              <div class="alert alert-info" style="background: var(--bg-tertiary); border-color: var(--border-primary); color: var(--text-primary);">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Browser Permissions:</strong> 
+                <span id="notification-status">Checking browser notification permissions...</span>
+                <button type="button" class="btn btn-sm btn-outline-primary ms-2" id="request-permission" style="display: none;">
+                  Enable Notifications
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notification Frequency -->
+        <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+          <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+            <h5 class="mb-0" style="color: var(--text-primary);">
+              <i class="fas fa-clock me-2"></i>Notification Frequency
+            </h5>
+          </div>
+          <div class="card-body p-4">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label" style="color: var(--text-primary);">Email Frequency</label>
+                <select class="form-select" style="background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary);" disabled>
+                  <option selected>Immediate</option>
+                  <option>Daily Digest</option>
+                  <option>Weekly Summary</option>
+                </select>
+                <small class="form-text" style="color: var(--text-muted);">Coming soon: Customize email frequency</small>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" style="color: var(--text-primary);">Quiet Hours</label>
+                <select class="form-select" style="background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary);" disabled>
+                  <option selected>Disabled</option>
+                  <option>10 PM - 8 AM</option>
+                  <option>Custom</option>
+                </select>
+                <small class="form-text" style="color: var(--text-muted);">Coming soon: Set quiet hours</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notification History -->
+        <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+          <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+            <h5 class="mb-0" style="color: var(--text-primary);">
+              <i class="fas fa-history me-2"></i>Recent Notifications
+            </h5>
+          </div>
+          <div class="card-body" style="color: var(--text-primary);">
+            <div class="text-center py-4">
+              <i class="fas fa-bell-slash" style="font-size: 3rem; color: var(--text-muted);"></i>
+              <h6 class="mt-3" style="color: var(--text-muted);">No recent notifications</h6>
+              <p class="small" style="color: var(--text-muted);">Your notification history will appear here</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="card" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+          <div class="card-body p-4">
+            <div class="d-flex gap-3 justify-content-between">
+              <%= link_to "Cancel", settings_root_path, class: "btn btn-outline-secondary" %>
+              <%= form.submit "Save Notification Settings", class: "btn btn-primary" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+// Browser notification permission handling
+document.addEventListener('DOMContentLoaded', function() {
+  const statusElement = document.getElementById('notification-status');
+  const requestButton = document.getElementById('request-permission');
+  
+  function updateNotificationStatus() {
+    if ('Notification' in window) {
+      if (Notification.permission === 'granted') {
+        statusElement.textContent = 'Browser notifications are enabled';
+        statusElement.className = 'text-success';
+        requestButton.style.display = 'none';
+      } else if (Notification.permission === 'denied') {
+        statusElement.textContent = 'Browser notifications are blocked';
+        statusElement.className = 'text-danger';
+        requestButton.style.display = 'none';
+      } else {
+        statusElement.textContent = 'Browser notifications are not enabled';
+        statusElement.className = 'text-warning';
+        requestButton.style.display = 'inline-block';
+      }
+    } else {
+      statusElement.textContent = 'Browser notifications are not supported';
+      statusElement.className = 'text-muted';
+      requestButton.style.display = 'none';
+    }
+  }
+  
+  if (requestButton) {
+    requestButton.addEventListener('click', function() {
+      if ('Notification' in window) {
+        Notification.requestPermission().then(function(permission) {
+          updateNotificationStatus();
+        });
+      }
+    });
+  }
+  
+  updateNotificationStatus();
+});
+</script>

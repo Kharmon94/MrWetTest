@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
   <head>
-    <title><%= content_for(:title) || "Mr Wet Test" %></title>
+    <title><%= content_for(:title) || "Sea Pass Pro" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -482,6 +482,234 @@
         outline: 2px solid var(--accent-500);
         outline-offset: 2px;
       }
+
+      /* Enhanced Dropdown Styling */
+      .dropdown-menu {
+        border: 1px solid var(--border-primary);
+        box-shadow: var(--shadow-lg);
+        backdrop-filter: blur(10px);
+        animation: dropdownFadeIn 0.2s ease-out;
+      }
+
+      .dropdown-menu-dark {
+        background: var(--bg-secondary);
+        border-color: var(--border-primary);
+      }
+
+      .dropdown-item {
+        transition: all 0.2s ease;
+        color: var(--text-primary);
+        padding: 0.75rem 1rem;
+      }
+
+      .dropdown-item:hover {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+        transform: translateX(4px);
+      }
+
+      .dropdown-item i {
+        width: 16px;
+        text-align: center;
+      }
+
+      .dropdown-header {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        padding: 0.75rem 1rem 0.5rem;
+      }
+
+      .dropdown-divider {
+        border-color: var(--border-primary);
+        margin: 0.5rem 0;
+      }
+
+      .dropdown-toggle::after {
+        transition: transform 0.2s ease;
+      }
+
+      .dropdown-toggle[aria-expanded="true"]::after {
+        transform: rotate(180deg);
+      }
+
+      /* User Avatar Styling */
+      .user-avatar img {
+        border: 2px solid var(--border-primary);
+        transition: border-color 0.2s ease;
+      }
+
+      .dropdown:hover .user-avatar img {
+        border-color: var(--accent-500);
+      }
+
+      /* Admin Dropdown Special Styling */
+      .nav-link.text-warning {
+        color: #fbbf24 !important;
+      }
+
+      .nav-link.text-warning:hover {
+        color: #f59e0b !important;
+      }
+
+      /* Dropdown Animation */
+      @keyframes dropdownFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Mobile Dropdown Improvements */
+      @media (max-width: 991.98px) {
+        .dropdown-menu {
+          border: none;
+          box-shadow: none;
+          background: var(--bg-tertiary);
+        }
+        
+        .dropdown-item {
+          padding: 1rem;
+          border-bottom: 1px solid var(--border-primary);
+        }
+        
+        .dropdown-item:last-child {
+          border-bottom: none;
+        }
+      }
+
+      /* Mobile Responsiveness Improvements */
+      @media (max-width: 767.98px) {
+        /* Prevent horizontal scroll */
+        body {
+          overflow-x: hidden;
+        }
+        
+        /* Container adjustments */
+        .container-fluid {
+          padding-left: 15px;
+          padding-right: 15px;
+        }
+        
+        /* Navigation improvements */
+        .navbar-brand {
+          font-size: 1.1rem;
+        }
+        
+        .theme-toggle {
+          padding: 0.25rem 0.5rem;
+        }
+        
+        /* Button adjustments */
+        .btn-lg {
+          padding: 0.75rem 1.5rem;
+          font-size: 1rem;
+        }
+        
+        /* Card adjustments */
+        .card {
+          margin-bottom: 1rem;
+        }
+        
+        .card-body {
+          padding: 1rem;
+        }
+        
+        /* Form adjustments */
+        .form-control {
+          font-size: 16px; /* Prevents zoom on iOS */
+        }
+        
+        /* Text adjustments */
+        .display-4 {
+          font-size: 2rem;
+        }
+        
+        .lead {
+          font-size: 1.1rem;
+        }
+        
+        /* Table responsiveness */
+        .table-responsive {
+          border: none;
+        }
+        
+        /* Spacing adjustments */
+        .py-5 {
+          padding-top: 2rem !important;
+          padding-bottom: 2rem !important;
+        }
+        
+        .mb-5 {
+          margin-bottom: 2rem !important;
+        }
+        
+        /* Flex adjustments */
+        .d-flex.gap-3 {
+          gap: 0.75rem !important;
+        }
+        
+        .d-flex.gap-2 {
+          gap: 0.5rem !important;
+        }
+        
+        /* Hero section adjustments */
+        .hero-section {
+          padding: 2rem 0;
+        }
+        
+        /* Grid adjustments */
+        .row.g-4 {
+          --bs-gutter-x: 1rem;
+        }
+        
+        .row.g-3 {
+          --bs-gutter-x: 0.75rem;
+        }
+      }
+
+      @media (max-width: 575.98px) {
+        /* Extra small devices */
+        .container-fluid {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+        
+        .btn {
+          padding: 0.5rem 1rem;
+          font-size: 0.9rem;
+        }
+        
+        .card-body {
+          padding: 0.75rem;
+        }
+        
+        .display-4 {
+          font-size: 1.75rem;
+        }
+        
+        .h1, .h2, .h3 {
+          font-size: 1.5rem;
+        }
+        
+        .lead {
+          font-size: 1rem;
+        }
+        
+        /* Stack buttons vertically on very small screens */
+        .d-flex.gap-3.flex-wrap {
+          flex-direction: column;
+          align-items: center;
+        }
+        
+        .d-flex.gap-3.flex-wrap .btn {
+          width: 100%;
+          max-width: 300px;
+        }
+      }
     </style>
   </head>
 
@@ -490,7 +718,7 @@
     <nav class="navbar navbar-expand-lg fixed-top">
       <div class="container">
         <a class="navbar-brand" href="<%= root_path %>">
-          <span class="text-gradient">Mr Wet Test</span>
+          <span class="text-gradient">Sea Pass Pro</span>
         </a>
         
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -504,16 +732,123 @@
             <li class="nav-item">
               <%= link_to "Home", root_path, class: "nav-link" %>
             </li>
-            <li class="nav-item">
-              <%= link_to "Courses", courses_path, class: "nav-link" %>
+            
+            <!-- Learning Dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-graduation-cap me-1"></i>Learning
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark">
+                <li>
+                  <%= link_to courses_path, class: "dropdown-item" do %>
+                    <i class="fas fa-book me-2"></i>All Courses
+                  <% end %>
+                </li>
+                <% if user_signed_in? && !current_user.has_role?(:admin) %>
+                  <li>
+                    <%= link_to browse_courses_path, class: "dropdown-item" do %>
+                      <i class="fas fa-search me-2"></i>Browse Courses
+                    <% end %>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <%= link_to courses_path, class: "dropdown-item" do %>
+                      <i class="fas fa-user-graduate me-2"></i>My Enrolled Courses
+                    <% end %>
+                  </li>
+                <% end %>
+              </ul>
             </li>
-            <li class="nav-item">
-              <%= link_to "Tests", tests_path, class: "nav-link" %>
+            
+            <!-- Testing Dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-flask me-1"></i>Testing
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark">
+                <li>
+                  <%= link_to tests_path, class: "dropdown-item" do %>
+                    <i class="fas fa-list me-2"></i>Available Tests
+                  <% end %>
+                </li>
+                <% if user_signed_in? %>
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <%= link_to tests_test_attempts_path, class: "dropdown-item" do %>
+                      <i class="fas fa-history me-2"></i>My Test History
+                    <% end %>
+                  </li>
+                <% end %>
+              </ul>
             </li>
+            
             <% if user_signed_in? %>
-              <li class="nav-item">
-                <%= link_to "My Test Attempts", tests_test_attempts_path, class: "nav-link" %>
+              <!-- Account Dropdown -->
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fas fa-user-circle me-1"></i>Account
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                  <li>
+                    <%= link_to payments_path, class: "dropdown-item" do %>
+                      <i class="fas fa-credit-card me-2"></i>Payment History
+                    <% end %>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <%= link_to settings_root_path, class: "dropdown-item" do %>
+                      <i class="fas fa-cog me-2"></i>Settings & Preferences
+                    <% end %>
+                  </li>
+                  <li>
+                    <%= link_to settings_profile_path, class: "dropdown-item" do %>
+                      <i class="fas fa-user me-2"></i>Profile
+                    <% end %>
+                  </li>
+                  <li>
+                    <%= link_to settings_security_path, class: "dropdown-item" do %>
+                      <i class="fas fa-shield-alt me-2"></i>Security
+                    <% end %>
+                  </li>
+                </ul>
               </li>
+              
+              <% if current_user.has_role?(:admin) %>
+                <!-- Admin Dropdown -->
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle text-warning" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-crown me-1"></i>Admin
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-dark">
+                    <li>
+                      <%= link_to admin_root_path, class: "dropdown-item" do %>
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                      <% end %>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                      <%= link_to admin_users_path, class: "dropdown-item" do %>
+                        <i class="fas fa-users me-2"></i>Manage Users
+                      <% end %>
+                    </li>
+                    <li>
+                      <%= link_to admin_courses_path, class: "dropdown-item" do %>
+                        <i class="fas fa-book me-2"></i>Manage Courses
+                      <% end %>
+                    </li>
+                    <li>
+                      <%= link_to admin_tests_path, class: "dropdown-item" do %>
+                        <i class="fas fa-flask me-2"></i>Manage Tests
+                      <% end %>
+                    </li>
+                    <li>
+                      <%= link_to admin_questions_path, class: "dropdown-item" do %>
+                        <i class="fas fa-question-circle me-2"></i>Manage Questions
+                      <% end %>
+                    </li>
+                  </ul>
+                </li>
+              <% end %>
             <% end %>
           </ul>
           
@@ -527,24 +862,55 @@
               </button>
             </li>
             
-            <% if user_signed_in? %>
-              <% unless current_user.has_role?(:admin) %>
-                <li class="nav-item me-2">
-                  <%= link_to "Browse Courses", browse_courses_path, class: "btn btn-ghost btn-sm" %>
-                </li>
-              <% end %>
-              <li class="nav-item me-2">
-                <%= link_to "My Payments", payments_path, class: "btn btn-ghost btn-sm" %>
-              </li>
-              <% if current_user.has_role?(:admin) %>
-                <li class="nav-item me-2">
-                  <%= link_to "Admin", admin_root_path, class: "btn btn-ghost btn-sm" %>
-                </li>
-              <% end %>
-              <li class="nav-item">
-                <%= link_to "Log Out", destroy_user_session_path, 
-                    data: { turbo_method: :delete }, 
-                    class: "btn btn-outline-primary btn-sm" %>
+      <% if user_signed_in? %>
+              <!-- User Menu Dropdown -->
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <div class="user-avatar me-2">
+                    <% if current_user.avatar.attached? %>
+                      <%= image_tag current_user.avatar.variant(resize_to_limit: [32, 32]), 
+                          class: "rounded-circle", 
+                          style: "width: 32px; height: 32px; object-fit: cover;" %>
+                    <% else %>
+                      <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                        <i class="fas fa-user text-primary"></i>
+                      </div>
+                    <% end %>
+                  </div>
+                  <span class="d-none d-lg-inline"><%= current_user.email.split('@').first %></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+                  <li class="dropdown-header">
+                    <div class="fw-semibold"><%= current_user.email %></div>
+                    <small class="text-muted">
+                      <% if current_user.has_role?(:admin) %>
+                        Administrator
+      <% else %>
+                        Student
+                      <% end %>
+                    </small>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <%= link_to settings_root_path, class: "dropdown-item" do %>
+                      <i class="fas fa-cog me-2"></i>Settings
+                    <% end %>
+                  </li>
+                  <li>
+                    <%= link_to settings_profile_path, class: "dropdown-item" do %>
+                      <i class="fas fa-user me-2"></i>Profile
+                    <% end %>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <%= link_to destroy_user_session_path, 
+                        method: :delete, 
+                        data: { turbo_method: :delete },
+                        class: "dropdown-item text-danger" do %>
+                      <i class="fas fa-sign-out-alt me-2"></i>Sign Out
+      <% end %>
+                  </li>
+                </ul>
               </li>
             <% else %>
               <li class="nav-item me-2">
@@ -553,7 +919,7 @@
               <li class="nav-item">
                 <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-primary btn-sm" %>
               </li>
-            <% end %>
+      <% end %>
           </ul>
         </div>
       </div>
@@ -561,23 +927,23 @@
 
     <!-- Main Content -->
     <main style="margin-top: 80px;">
-      <div class="container py-4">
+      <div class="container-fluid px-3 px-md-4 py-4">
         <!-- Flash Messages -->
-        <% if notice.present? %>
+      <% if notice.present? %>
           <div class="alert alert-success alert-dismissible fade show" role="alert">
             <%= notice %>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
           </div>
-        <% end %>
-        <% if alert.present? %>
+      <% end %>
+      <% if alert.present? %>
           <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <%= alert %>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
           </div>
-        <% end %>
+      <% end %>
         
-        <%= yield %>
-      </div>
+      <%= yield %>
+    </div>
     </main>
 
     <!-- Bootstrap JS -->

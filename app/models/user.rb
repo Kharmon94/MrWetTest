@@ -13,6 +13,11 @@ class User < ApplicationRecord
   # Stripe customer ID for payment processing
   attribute :stripe_customer_id, :string
 
+  # User preferences
+  validates :theme_preference, inclusion: { in: %w[light dark auto], allow_blank: true }
+  validates :timezone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name), allow_blank: true }
+  validates :language, inclusion: { in: %w[en es fr de zh ja], allow_blank: true }
+
   # Instance methods for payment functionality
   def stripe_customer
     return nil unless stripe_customer_id.present?

@@ -1,0 +1,229 @@
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <!-- Page Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-gradient h2 mb-0">Account Management</h1>
+        <%= link_to "← Back to Settings", settings_root_path, class: "btn btn-outline-secondary" %>
+      </div>
+
+      <!-- Account Information -->
+      <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+        <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+          <h5 class="mb-0" style="color: var(--text-primary);">
+            <i class="fas fa-user-circle me-2"></i>Account Information
+          </h5>
+        </div>
+        <div class="card-body" style="color: var(--text-primary);">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="d-flex align-items-center">
+                <div class="me-3">
+                  <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                    <i class="fas fa-envelope text-primary"></i>
+                  </div>
+                </div>
+                <div>
+                  <h6 class="mb-1" style="color: var(--text-primary);">Email Address</h6>
+                  <p class="mb-0 small" style="color: var(--text-secondary);"><%= @user.email %></p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="d-flex align-items-center">
+                <div class="me-3">
+                  <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                    <i class="fas fa-calendar-alt text-success"></i>
+                  </div>
+                </div>
+                <div>
+                  <h6 class="mb-1" style="color: var(--text-primary);">Member Since</h6>
+                  <p class="mb-0 small" style="color: var(--text-secondary);"><%= @user.created_at.strftime("%B %d, %Y") %></p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="d-flex align-items-center">
+                <div class="me-3">
+                  <div class="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                    <i class="fas fa-graduation-cap text-info"></i>
+                  </div>
+                </div>
+                <div>
+                  <h6 class="mb-1" style="color: var(--text-primary);">Account Type</h6>
+                  <p class="mb-0 small" style="color: var(--text-secondary);">
+                    <% if @user.has_role?(:admin) %>
+                      <span class="badge bg-danger">Administrator</span>
+                    <% else %>
+                      <span class="badge bg-secondary">Standard User</span>
+                    <% end %>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="d-flex align-items-center">
+                <div class="me-3">
+                  <div class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                    <i class="fas fa-clock text-warning"></i>
+                  </div>
+                </div>
+                <div>
+                  <h6 class="mb-1" style="color: var(--text-primary);">Last Active</h6>
+                  <p class="mb-0 small" style="color: var(--text-secondary);">
+                    <%= @user.current_sign_in_at ? time_ago_in_words(@user.current_sign_in_at) + " ago" : "Never" %>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Export -->
+      <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+        <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+          <h5 class="mb-0" style="color: var(--text-primary);">
+            <i class="fas fa-download me-2"></i>Data Export
+          </h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <h6 class="mb-1" style="color: var(--text-primary);">Export Your Data</h6>
+              <p class="small mb-0" style="color: var(--text-secondary);">
+                Download a copy of your account data, including courses, test results, and payment history
+              </p>
+            </div>
+            <%= link_to settings_export_data_path, method: :post, class: "btn btn-outline-primary" do %>
+              <i class="fas fa-download me-2"></i>Request Export
+            <% end %>
+          </div>
+          <div class="alert alert-info mt-3" style="background: var(--bg-tertiary); border-color: var(--border-primary); color: var(--text-primary);">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Note:</strong> Data export requests are processed manually and may take up to 7 business days to complete. You will receive an email with download instructions when ready.
+          </div>
+        </div>
+      </div>
+
+      <!-- Privacy Settings -->
+      <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+        <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+          <h5 class="mb-0" style="color: var(--text-primary);">
+            <i class="fas fa-user-secret me-2"></i>Privacy Settings
+          </h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="d-flex align-items-center justify-content-between p-3 rounded" style="background: var(--bg-tertiary); border: 1px solid var(--border-primary);">
+                <div>
+                  <h6 class="mb-1" style="color: var(--text-primary);">Profile Visibility</h6>
+                  <p class="small mb-0" style="color: var(--text-secondary);">Make your profile visible to other users</p>
+                </div>
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="profile_visibility" checked disabled style="transform: scale(1.2);">
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="d-flex align-items-center justify-content-between p-3 rounded" style="background: var(--bg-tertiary); border: 1px solid var(--border-primary);">
+                <div>
+                  <h6 class="mb-1" style="color: var(--text-primary);">Activity Tracking</h6>
+                  <p class="small mb-0" style="color: var(--text-secondary);">Allow tracking of learning progress and achievements</p>
+                </div>
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="activity_tracking" checked disabled style="transform: scale(1.2);">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="alert alert-info mt-3" style="background: var(--bg-tertiary); border-color: var(--border-primary); color: var(--text-primary);">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Coming Soon:</strong> Advanced privacy controls will be available in a future update.
+          </div>
+        </div>
+      </div>
+
+      <!-- Account Actions -->
+      <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+        <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+          <h5 class="mb-0" style="color: var(--text-primary);">
+            <i class="fas fa-cog me-2"></i>Account Actions
+          </h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="d-grid">
+                <%= link_to payments_path, class: "btn btn-outline-primary" do %>
+                  <i class="fas fa-credit-card me-2"></i>View Payment History
+                <% end %>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-grid">
+                <%= link_to tests_test_attempts_path, class: "btn btn-outline-info" do %>
+                  <i class="fas fa-flask me-2"></i>View Test History
+                <% end %>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-grid">
+                <%= link_to courses_path, class: "btn btn-outline-success" do %>
+                  <i class="fas fa-graduation-cap me-2"></i>My Courses
+                <% end %>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-grid">
+                <%= link_to settings_security_path, class: "btn btn-outline-warning" do %>
+                  <i class="fas fa-shield-alt me-2"></i>Security Settings
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Danger Zone -->
+      <div class="card border-danger" style="background: var(--bg-secondary); border: 1px solid #dc3545 !important;">
+        <div class="card-header bg-danger text-white">
+          <h5 class="mb-0">
+            <i class="fas fa-exclamation-triangle me-2"></i>Danger Zone
+          </h5>
+        </div>
+        <div class="card-body p-4" style="color: var(--text-primary);">
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h6 class="mb-1" style="color: var(--text-primary);">Delete Account</h6>
+                  <p class="small mb-0" style="color: var(--text-secondary);">
+                    Permanently delete your account and all associated data. This action cannot be undone.
+                  </p>
+                </div>
+                <%= link_to settings_delete_account_path, 
+                    method: :delete,
+                    class: "btn btn-danger",
+                    data: { 
+                      turbo_method: :delete,
+                      turbo_confirm: "Are you absolutely sure? This will permanently delete your account and all data. This action cannot be undone." 
+                    } do %>
+                  <i class="fas fa-trash me-2"></i>Delete Account
+                <% end %>
+              </div>
+            </div>
+          </div>
+          <div class="alert alert-danger mt-3">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>Warning:</strong> Account deletion is permanent and irreversible. All your courses, test results, payment history, and personal data will be permanently removed.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

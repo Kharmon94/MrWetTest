@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
   <head>
-    <title><%= content_for(:title) || "Admin - Mr Wet Test" %></title>
+           <title><%= content_for(:title) || "Admin - Sea Pass Pro" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -146,6 +146,65 @@
         -webkit-text-fill-color: transparent;
         background-clip: text;
       }
+
+      /* Mobile Responsiveness for Admin */
+      @media (max-width: 767.98px) {
+        .admin-sidebar {
+          position: fixed;
+          top: 0;
+          left: -280px;
+          height: 100vh;
+          z-index: 1000;
+          transition: left 0.3s ease;
+          width: 280px;
+        }
+        
+        .admin-sidebar.show {
+          left: 0;
+        }
+        
+        .admin-content {
+          margin-left: 0;
+          padding: 1rem;
+        }
+        
+        .admin-stats-card {
+          margin-bottom: 1rem;
+        }
+        
+        .admin-nav-link {
+          padding: 1rem;
+          font-size: 1.1rem;
+        }
+        
+        .table-responsive {
+          font-size: 0.9rem;
+        }
+        
+        .btn-group-sm .btn {
+          padding: 0.25rem 0.5rem;
+          font-size: 0.8rem;
+        }
+      }
+
+      @media (max-width: 575.98px) {
+        .admin-stats-number {
+          font-size: 1.5rem;
+        }
+        
+        .card-body {
+          padding: 1rem;
+        }
+        
+        .table-responsive {
+          font-size: 0.8rem;
+        }
+        
+        .btn-group-sm .btn {
+          padding: 0.2rem 0.4rem;
+          font-size: 0.75rem;
+        }
+      }
     </style>
   </head>
 
@@ -153,13 +212,13 @@
     <div class="container-fluid">
       <div class="row">
         <!-- Admin Sidebar -->
-        <nav class="col-md-3 col-lg-2 d-md-block admin-sidebar collapse">
+        <nav class="col-md-3 col-lg-2 d-md-block admin-sidebar collapse" id="adminSidebar">
           <div class="position-sticky pt-3">
             <div class="text-center mb-4">
               <h4 class="text-white">
                 <%= link_to "Admin Panel", admin_root_path, class: "text-white text-decoration-none" %>
               </h4>
-              <small class="text-muted">Mr Wet Test</small>
+              <small class="text-muted">Sea Pass Pro</small>
             </div>
             
             <ul class="nav flex-column">
@@ -202,6 +261,10 @@
 
         <!-- Admin Content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 admin-content">
+          <!-- Mobile Menu Toggle -->
+          <button class="btn btn-outline-secondary d-md-none mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#adminSidebar" aria-controls="adminSidebar" aria-expanded="false">
+            <i class="fas fa-bars me-2"></i>Admin Menu
+          </button>
           <div class="pt-3 pb-2 mb-3">
             <!-- Flash Messages -->
             <% if notice.present? %>

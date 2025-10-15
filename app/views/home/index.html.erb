@@ -1,20 +1,23 @@
 <!-- Hero Section -->
 <div class="hero-section text-center position-relative">
-  <div class="position-relative z-3">
-    <h1 class="display-4 fw-bold text-gradient mb-4">Welcome to Mr Wet Test</h1>
-    <p class="lead mb-5" style="color: var(--text-secondary); max-width: 600px; margin-left: auto; margin-right: auto;">
-      Your premier destination for comprehensive course testing and assessment. 
-      Experience modern learning with our cutting-edge platform.
-    </p>
-    <div class="d-flex gap-3 justify-content-center flex-wrap">
-      <%= link_to "Explore Courses", courses_path, class: "btn btn-primary btn-lg px-5 py-3" %>
-      <%= link_to "Take Tests", tests_path, class: "btn btn-outline-primary btn-lg px-5 py-3" %>
+  <div class="container">
+    <div class="position-relative z-3">
+      <h1 class="display-4 fw-bold text-gradient mb-4">Welcome to Sea Pass Pro</h1>
+      <p class="lead mb-4 mb-md-5" style="color: var(--text-secondary);">
+        Your premier destination for maritime education and certification. 
+        Experience professional learning with our cutting-edge platform.
+      </p>
+      <div class="d-flex gap-3 justify-content-center flex-wrap">
+        <%= link_to "Explore Courses", courses_path, class: "btn btn-primary btn-lg px-4 px-md-5 py-3" %>
+        <%= link_to "Take Tests", tests_path, class: "btn btn-outline-primary btn-lg px-4 px-md-5 py-3" %>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- Features Section -->
-<div class="row g-4 mt-5">
+<div class="container">
+  <div class="row g-4 mt-4 mt-md-5">
   <div class="col-lg-4 col-md-6">
     <div class="card h-100" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
       <div class="card-body text-center p-5" style="color: var(--text-primary);">
@@ -106,5 +109,6 @@
         <p style="color: var(--text-secondary); margin-bottom: 0;">Success Rate</p>
       </div>
     </div>
+  </div>
   </div>
 </div>
