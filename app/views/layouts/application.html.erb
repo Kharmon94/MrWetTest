@@ -813,6 +813,43 @@
                 </ul>
               </li>
               
+              <% if current_user.has_role?(:instructor) || current_user.has_role?(:admin) %>
+                <!-- Instructor Dropdown -->
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle text-info" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-chalkboard-teacher me-1"></i>Instructor
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-dark">
+                    <li>
+                      <%= link_to instructor_root_path, class: "dropdown-item" do %>
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                      <% end %>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                      <%= link_to instructor_courses_path, class: "dropdown-item" do %>
+                        <i class="fas fa-book me-2"></i>Manage Courses
+                      <% end %>
+                    </li>
+                    <li>
+                      <%= link_to instructor_tests_path, class: "dropdown-item" do %>
+                        <i class="fas fa-clipboard-list me-2"></i>Manage Tests
+                      <% end %>
+                    </li>
+                    <li>
+                      <%= link_to instructor_questions_path, class: "dropdown-item" do %>
+                        <i class="fas fa-question-circle me-2"></i>Question Bank
+                      <% end %>
+                    </li>
+                    <li>
+                      <%= link_to instructor_test_attempts_path, class: "dropdown-item" do %>
+                        <i class="fas fa-chart-line me-2"></i>Student Progress
+                      <% end %>
+                    </li>
+                  </ul>
+                </li>
+              <% end %>
+              
               <% if current_user.has_role?(:admin) %>
                 <!-- Admin Dropdown -->
                 <li class="nav-item dropdown">

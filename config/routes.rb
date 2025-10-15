@@ -14,6 +14,16 @@ Rails.application.routes.draw do
     resources :questions
   end
 
+  # Instructor Panel routes
+  namespace :instructor do
+    root to: 'dashboard#index'
+    resources :courses
+    resources :tests
+    resources :questions
+    resources :test_attempts, only: [:index, :show]
+    resources :lessons
+  end
+
   # Courses routes
   get 'courses/browse', to: 'courses#browse', as: :browse_courses
   resources :courses

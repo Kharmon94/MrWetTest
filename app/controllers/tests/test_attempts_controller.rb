@@ -16,13 +16,27 @@ module Tests
 
     # POST /tests/test_attempts
     def create
-      unless params[:honor_statement] == '1'
+      @test = Test.find(params[:test_id])
+      
+      # Check honor statement requirement
+      if @test.requires_honor_statement? && params[:honor_statement] != '1'
         flash[:alert] = "You must agree to the honor statement to proceed."
         redirect_to new_tests_test_attempt_path(test_id: params[:test_id]) and return
       end
 
-      @test = Test.find(params[:test_id])
-      @test_attempt = current_user.test_attempts.create(test: @test, taken_at: Time.current, submitted: false)
+      @test_attempt = current_user.test_attempts.build(test: @test, taken_at: Time.current, submitted: false)
+      
+      # Set required fields based on test requirements
+      if @test.requires_honor_statement?
+        @test_attempt.honor_statement_accepted = true
+      else
+        @test_attempt.honor_statement_accepted = false
+      end
+      
+      unless @test_attempt.save
+        flash[:alert] = "Failed to create test attempt: #{@test_attempt.errors.full_messages.join(', ')}"
+        redirect_to new_tests_test_attempt_path(test_id: params[:test_id]) and return
+      end
 
       # Define the number of questions for the test (example: 10)
       question_count = 10

@@ -3,16 +3,25 @@
 puts "🌊 Starting Sea Pass Pro seed process..."
 puts "➡️ Clearing old data..."
 
-# Clear existing data in proper order to avoid foreign key constraints
-TestAttemptQuestion.delete_all
-TestAttempt.delete_all
-Question.delete_all
-Test.delete_all
-Lesson.delete_all
-Course.delete_all
-User.delete_all
-Role.delete_all
-Payment.delete_all
+# Clear existing data using destroy_all to handle foreign key constraints properly
+puts "   Clearing test attempt questions..."
+TestAttemptQuestion.destroy_all
+puts "   Clearing test attempts..."
+TestAttempt.destroy_all
+puts "   Clearing payments..."
+Payment.destroy_all
+puts "   Clearing questions..."
+Question.destroy_all
+puts "   Clearing tests..."
+Test.destroy_all
+puts "   Clearing lessons..."
+Lesson.destroy_all
+puts "   Clearing courses..."
+Course.destroy_all
+puts "   Clearing users..."
+User.destroy_all
+puts "   Clearing roles..."
+Role.destroy_all
 
 puts "➡️ Creating roles..."
 admin_role = Role.create!(name: "admin")
@@ -27,7 +36,6 @@ admin = User.create!(
   theme_preference: "dark",
   email_notifications: true,
   push_notifications: true,
-  timezone: "Etc/UTC",
   language: "en"
 )
 admin.add_role(:admin)
@@ -39,7 +47,6 @@ instructor = User.create!(
   theme_preference: "light",
   email_notifications: true,
   push_notifications: false,
-  timezone: "America/New_York",
   language: "en"
 )
 instructor.add_role(:instructor)
@@ -53,7 +60,6 @@ students = []
     theme_preference: ["light", "dark", "auto"][i],
     email_notifications: [true, false, true][i],
     push_notifications: [false, true, true][i],
-    timezone: ["America/New_York", "Europe/London", "Asia/Tokyo"][i],
     language: ["en", "en", "ja"][i]
   )
   student.add_role(:student)
@@ -415,42 +421,6 @@ students.each_with_index do |student, student_index|
       )
     end
     
-    # Chapter 2 - Failed, then passed
-    attempt2 = TestAttempt.create!(
-      user: student,
-      test: chapter_tests[1],
-      submitted: true,
-      taken_at: 2.days.ago,
-      score: 65.0,
-      honor_statement_accepted: false,
-      start_time: 2.days.ago,
-      end_time: 2.days.ago + 30.minutes,
-      retake_number: 1
-    )
-    
-    # Retake - Passed
-    attempt3 = TestAttempt.create!(
-      user: student,
-      test: chapter_tests[1],
-      submitted: true,
-      taken_at: 1.day.ago,
-      score: 75.0,
-      honor_statement_accepted: false,
-      start_time: 1.day.ago,
-      end_time: 1.day.ago + 28.minutes,
-      retake_number: 2
-    )
-    
-    # Create questions for these attempts
-    [attempt2, attempt3].each do |attempt|
-      chapter_tests[1].questions.sample(10).each do |question|
-        attempt.test_attempt_questions.create!(
-          question: question,
-          chosen_answer: question.correct_answer
-        )
-      end
-    end
-    
   elsif student_index == 1
     # Student 2: Completed all chapters and final
     chapter_tests.each_with_index do |test, index|
@@ -522,7 +492,7 @@ Payment.create!(
   user: students[1],
   payable: navigation_test,
   amount: 99.99,
-  currency: "USD",
+  currency: "usd",
   status: "succeeded",
   payment_method: "card",
   stripe_payment_intent_id: "pi_test_123456789"
@@ -532,7 +502,7 @@ Payment.create!(
   user: students[2],
   payable: navigation_course,
   amount: 199.99,
-  currency: "USD",
+  currency: "usd",
   status: "succeeded",
   payment_method: "card",
   stripe_payment_intent_id: "pi_test_987654321"

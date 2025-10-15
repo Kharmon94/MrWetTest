@@ -1,0 +1,272 @@
+<% content_for :title, "Create New Test - Sea Pass Pro" %>
+
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <!-- Header -->
+      <div class="d-flex align-items-center mb-4">
+        <%= link_to instructor_tests_path, class: "btn btn-outline-secondary me-3" do %>
+          <i class="fas fa-arrow-left"></i>
+        <% end %>
+        <div>
+          <h1 class="h3 mb-1 text-primary">
+            <i class="fas fa-plus me-2"></i>
+            Create New Test
+          </h1>
+          <p class="text-muted mb-0">Build comprehensive assessments and certifications</p>
+        </div>
+      </div>
+
+      <!-- Test Form -->
+      <div class="card shadow">
+        <div class="card-body">
+          <%= form_with model: @test, url: instructor_tests_path, local: true, class: "needs-validation", novalidate: true do |form| %>
+            <% if @test.errors.any? %>
+              <div class="alert alert-danger">
+                <h6>Please fix the following errors:</h6>
+                <ul class="mb-0">
+                  <% @test.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <!-- Basic Information -->
+            <div class="row mb-4">
+              <div class="col-12">
+                <h5 class="text-primary mb-3">
+                  <i class="fas fa-info-circle me-2"></i>
+                  Basic Information
+                </h5>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-12">
+                <%= form.label :title, "Test Title", class: "form-label" %>
+                <%= form.text_field :title, 
+                    class: "form-control #{'is-invalid' if @test.errors[:title].any?}",
+                    placeholder: "e.g., Maritime Safety Certification Test",
+                    required: true %>
+                <div class="invalid-feedback">
+                  Please provide a test title.
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-12">
+                <%= form.label :description, "Test Description", class: "form-label" %>
+                <%= form.text_area :description, 
+                    class: "form-control #{'is-invalid' if @test.errors[:description].any?}",
+                    rows: 3,
+                    placeholder: "Describe what this test covers and its purpose...",
+                    required: true %>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-12">
+                <%= form.label :instructions, "Test Instructions", class: "form-label" %>
+                <%= form.text_area :instructions, 
+                    class: "form-control #{'is-invalid' if @test.errors[:instructions].any?}",
+                    rows: 4,
+                    placeholder: "Provide clear instructions for students taking this test..." %>
+                <div class="form-text">
+                  These instructions will be shown to students before they begin the test.
+                </div>
+              </div>
+            </div>
+
+            <!-- Assessment Settings -->
+            <hr class="my-4">
+            <div class="row mb-4">
+              <div class="col-12">
+                <h5 class="text-primary mb-3">
+                  <i class="fas fa-cogs me-2"></i>
+                  Assessment Settings
+                </h5>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <%= form.label :assessment_type, "Assessment Type", class: "form-label" %>
+                <%= form.select :assessment_type, 
+                    options_for_select([
+                      ['Final Assessment', 'final'],
+                      ['Chapter Assessment', 'chapter'],
+                      ['Practice Test', 'practice'],
+                      ['Certification Test', 'certification']
+                    ], @test.assessment_type),
+                    { prompt: "Select assessment type..." },
+                    { class: "form-select #{'is-invalid' if @test.errors[:assessment_type].any?}", required: true } %>
+                <div class="form-text">
+                  Choose the type of assessment this represents.
+                </div>
+              </div>
+              <div class="col-md-6">
+                <%= form.label :price, "Test Price (USD)", class: "form-label" %>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <%= form.number_field :price, 
+                      class: "form-control #{'is-invalid' if @test.errors[:price].any?}",
+                      step: 0.01,
+                      min: 0,
+                      placeholder: "0.00",
+                      required: true %>
+                </div>
+                <div class="form-text">
+                  Set to 0 for a free test.
+                </div>
+              </div>
+            </div>
+
+            <!-- Time and Attempts -->
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <%= form.label :time_limit, "Time Limit (minutes)", class: "form-label" %>
+                <%= form.number_field :time_limit, 
+                    class: "form-control #{'is-invalid' if @test.errors[:time_limit].any?}",
+                    min: 1,
+                    placeholder: "60" %>
+                <div class="form-text">
+                  Leave blank for no time limit.
+                </div>
+              </div>
+              <div class="col-md-4">
+                <%= form.label :max_attempts, "Max Attempts", class: "form-label" %>
+                <%= form.number_field :max_attempts, 
+                    class: "form-control #{'is-invalid' if @test.errors[:max_attempts].any?}",
+                    min: 1,
+                    placeholder: "3" %>
+                <div class="form-text">
+                  Leave blank for unlimited attempts.
+                </div>
+              </div>
+              <div class="col-md-4">
+                <%= form.label :passing_score, "Passing Score (%)", class: "form-label" %>
+                <%= form.number_field :passing_score, 
+                    class: "form-control #{'is-invalid' if @test.errors[:passing_score].any?}",
+                    min: 0,
+                    max: 100,
+                    placeholder: "70" %>
+                <div class="form-text">
+                  Minimum score to pass.
+                </div>
+              </div>
+            </div>
+
+            <!-- Compliance Settings -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <%= form.label :question_pool_size, "Questions per Attempt", class: "form-label" %>
+                <%= form.number_field :question_pool_size, 
+                    class: "form-control #{'is-invalid' if @test.errors[:question_pool_size].any?}",
+                    min: 1,
+                    placeholder: "10" %>
+                <div class="form-text">
+                  Number of questions students will see per attempt.
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check form-switch mt-4">
+                  <%= form.check_box :honor_statement_required, 
+                      class: "form-check-input #{'is-invalid' if @test.errors[:honor_statement_required].any?}" %>
+                  <%= form.label :honor_statement_required, "Require Honor Statement", class: "form-check-label" %>
+                </div>
+                <div class="form-text">
+                  Students must accept academic integrity statement.
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <hr class="my-4">
+            <div class="d-flex justify-content-between">
+              <%= link_to instructor_tests_path, class: "btn btn-outline-secondary" do %>
+                <i class="fas fa-times me-1"></i> Cancel
+              <% end %>
+              <%= form.submit "Create Test", class: "btn btn-primary" do %>
+                <i class="fas fa-save me-1"></i> Create Test
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Help Section -->
+      <div class="card shadow mt-4">
+        <div class="card-header bg-light">
+          <h6 class="mb-0 text-primary">
+            <i class="fas fa-lightbulb me-2"></i>
+            Test Creation Guidelines
+          </h6>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <h6>Assessment Types</h6>
+              <ul class="list-unstyled">
+                <li><strong>Final Assessment:</strong> End-of-course comprehensive test</li>
+                <li><strong>Chapter Assessment:</strong> Topic-specific evaluation</li>
+                <li><strong>Practice Test:</strong> Non-graded preparation tool</li>
+                <li><strong>Certification Test:</strong> Professional certification exam</li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <h6>Compliance Features</h6>
+              <ul class="list-unstyled">
+                <li><i class="fas fa-check text-success me-2"></i> Honor statement for integrity</li>
+                <li><i class="fas fa-check text-success me-2"></i> Time limits for security</li>
+                <li><i class="fas fa-check text-success me-2"></i> Attempt limits prevent abuse</li>
+                <li><i class="fas fa-check text-success me-2"></i> Question pools ensure variety</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.shadow {
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #4e73df;
+  box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+.btn-primary {
+  background-color: #4e73df;
+  border-color: #4e73df;
+}
+
+.btn-primary:hover {
+  background-color: #2e59d9;
+  border-color: #2e59d9;
+}
+</style>
+
+<script>
+// Bootstrap form validation
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    var forms = document.getElementsByClassName('needs-validation');
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>

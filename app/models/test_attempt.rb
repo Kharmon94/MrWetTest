@@ -4,11 +4,11 @@ class TestAttempt < ApplicationRecord
   has_many :test_attempt_questions, dependent: :destroy
 
   validates :retake_number, numericality: { greater_than_or_equal_to: 1 }
-  validates :honor_statement_accepted, inclusion: { in: [true, false] }
+  validates :honor_statement_accepted, inclusion: { in: [true, false] }, allow_nil: true
   
   before_create :set_retake_number
   before_create :set_start_time
-  after_create :generate_questions_for_attempt
+  # after_create :generate_questions_for_attempt  # Commented out to allow manual question generation
 
   def calculate_score
     total = test_attempt_questions.count
@@ -32,6 +32,12 @@ class TestAttempt < ApplicationRecord
     elapsed_minutes = (Time.current - start_time) / 60
     remaining = test.time_limit - elapsed_minutes
     [remaining, 0].max
+  end
+  
+  def duration_in_minutes
+    return 0 unless start_time.present?
+    end_time = self.end_time || taken_at
+    ((end_time - start_time) / 60).round
   end
   
   def time_expired?
