@@ -134,8 +134,7 @@
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
       <h6 class="m-0 font-weight-bold text-primary">Questions</h6>
       <small class="text-muted">
-        Showing <%= @questions.offset + 1 %>-<%= [@questions.offset + @questions.count, @questions.total_count].min %> 
-        of <%= @questions.total_count %> questions
+        Showing <%= @questions.count %> questions
       </small>
     </div>
     <div class="card-body">
@@ -156,7 +155,7 @@
                 <tr>
                   <td>
                     <span class="badge bg-light text-dark">
-                      <%= @questions.offset + index + 1 %>
+                      <%= index + 1 %>
                     </span>
                   </td>
                   <td>
@@ -225,7 +224,7 @@
         <!-- Pagination -->
         <% if defined?(Kaminari) && @questions.respond_to?(:total_pages) && @questions.total_pages > 1 %>
           <div class="d-flex justify-content-center mt-4">
-            <%= paginate @questions, theme: 'bootstrap5' %>
+            <%= paginate @questions %>
           </div>
         <% end %>
       <% else %>

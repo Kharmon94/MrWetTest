@@ -84,5 +84,5 @@ module Instructor
     def question_params
       params.require(:question).permit(:content, :correct_answer, :test_id)
     end
-
+  end
 end
