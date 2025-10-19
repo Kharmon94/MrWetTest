@@ -1,19 +1,23 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  user: one
-  stripe_payment_intent_id: MyString
-  amount: 9.99
-  currency: MyString
-  status: MyString
-  payment_method: MyString
-  metadata: MyText
+  user: student
+  payable_type: "Course"
+  payable_id: 1
+  stripe_payment_intent_id: "pi_fixture_123456"
+  amount: 299.99
+  currency: "usd"
+  status: "succeeded"
+  payment_method: "card"
+  metadata: "{\"course_id\": 1}"
 
 two:
-  user: two
-  stripe_payment_intent_id: MyString
-  amount: 9.99
-  currency: MyString
-  status: MyString
-  payment_method: MyString
-  metadata: MyText
+  user: admin
+  payable_type: "Course"
+  payable_id: 2
+  stripe_payment_intent_id: "pi_test_789012"
+  amount: 199.99
+  currency: "usd"
+  status: "pending"
+  payment_method: "card"
+  metadata: "{\"course_id\": 2}"

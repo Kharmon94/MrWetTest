@@ -1,0 +1,198 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <!-- Page Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 class="h3 mb-0">Test Management</h1>
+          <p class="text-muted mb-0">Manage all tests and assessments</p>
+        </div>
+        <%= link_to new_admin_test_path, class: "btn btn-primary" do %>
+          <i class="fas fa-plus me-2"></i>New Test
+        <% end %>
+      </div>
+
+      <!-- Statistics Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h4 class="card-title"><%= Test.count %></h4>
+                  <p class="card-text">Total Tests</p>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-clipboard-list fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h4 class="card-title"><%= TestAttempt.count %></h4>
+                  <p class="card-text">Total Attempts</p>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-chart-line fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h4 class="card-title">
+                    <%= TestAttempt.average(:score)&.round(1) || 0 %>%
+                  </h4>
+                  <p class="card-text">Average Score</p>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-percentage fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h4 class="card-title">
+                    <%= TestAttempt.where('score >= ?', 70).count %>
+                  </h4>
+                  <p class="card-text">Passed Tests</p>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-check-circle fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tests Table -->
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">All Tests</h5>
+        </div>
+        <div class="card-body">
+          <% if @tests.any? %>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Questions</th>
+                    <th>Time Limit</th>
+                    <th>Passing Score</th>
+                    <th>Attempts</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @tests.each do |test| %>
+                    <tr>
+                      <td>
+                        <strong><%= test.title %></strong>
+                        <% if test.description.present? %>
+                          <br><small class="text-muted"><%= truncate(test.description, length: 50) %></small>
+                        <% end %>
+                      </td>
+                      <td>
+                        <span class="badge bg-<%= case test.assessment_type
+                                                    when 'final' then 'primary'
+                                                    when 'chapter' then 'info'
+                                                    when 'practice' then 'success'
+                                                    when 'certification' then 'warning'
+                                                    else 'secondary'
+                                                  end %>">
+                          <%= test.assessment_type&.titleize || 'Standard' %>
+                        </span>
+                      </td>
+                      <td>
+                        <span class="badge bg-light text-dark">
+                          <%= test.questions.count %>
+                        </span>
+                      </td>
+                      <td>
+                        <% if test.time_limit.present? %>
+                          <%= test.time_limit_display %>
+                        <% else %>
+                          <span class="text-muted">No limit</span>
+                        <% end %>
+                      </td>
+                      <td>
+                        <% if test.passing_score.present? %>
+                          <%= test.passing_score_display %>
+                        <% else %>
+                          <span class="text-muted">Not set</span>
+                        <% end %>
+                      </td>
+                      <td>
+                        <span class="badge bg-light text-dark">
+                          <%= test.test_attempts.count %>
+                        </span>
+                      </td>
+                      <td>
+                        <small class="text-muted">
+                          <%= time_ago_in_words(test.created_at) %> ago
+                        </small>
+                      </td>
+                      <td>
+                        <div class="btn-group btn-group-sm" role="group">
+                          <%= link_to admin_test_path(test), class: "btn btn-outline-primary", title: "View" do %>
+                            <i class="fas fa-eye"></i>
+                          <% end %>
+                          <%= link_to edit_admin_test_path(test), class: "btn btn-outline-secondary", title: "Edit" do %>
+                            <i class="fas fa-edit"></i>
+                          <% end %>
+                          <%= link_to admin_test_path(test), method: :delete, 
+                                      class: "btn btn-outline-danger", 
+                                      title: "Delete",
+                                      data: { confirm: "Are you sure?" } do %>
+                            <i class="fas fa-trash"></i>
+                          <% end %>
+                        </div>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pagination -->
+            <% if defined?(Kaminari) && @tests.respond_to?(:total_pages) && @tests.total_pages > 1 %>
+              <div class="d-flex justify-content-center mt-4">
+                <%= paginate @tests %>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="text-center py-5">
+              <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+              <h4 class="text-muted">No Tests Found</h4>
+              <p class="text-muted">Get started by creating your first test.</p>
+              <%= link_to new_admin_test_path, class: "btn btn-primary" do %>
+                <i class="fas fa-plus me-2"></i>Create Test
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

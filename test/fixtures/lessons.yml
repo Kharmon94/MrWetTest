@@ -1,13 +1,25 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  title: MyString
-  content: MyText
+  title: "Safety Equipment and Procedures"
+  content: "Learn about essential safety equipment and emergency procedures on board vessels"
   position: 1
   course: one
 
 two:
-  title: MyString
-  content: MyText
+  title: "Navigation Basics"
+  content: "Introduction to fundamental navigation principles and techniques"
+  position: 2
+  course: one
+
+three:
+  title: "Chart Reading Fundamentals"
+  content: "Understanding nautical charts and their symbols"
   position: 1
+  course: two
+
+four:
+  title: "Advanced Chartwork"
+  content: "Complex chartwork techniques for professional navigation"
+  position: 2
   course: two

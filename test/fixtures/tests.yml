@@ -1,13 +1,27 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  title: MyString
-  description: MyText
-  price: 9.99
-  instructions: MyText
+  title: "Maritime Safety Test"
+  description: "Comprehensive test covering maritime safety protocols and procedures"
+  instructions: "Answer all questions carefully. This test has a 60-minute time limit."
+  assessment_type: "chapter"
+  time_limit: 60
+  passing_score: 75
+  max_attempts: 3
+  honor_statement_required: true
+  question_pool_size: 20
+  course: one
+  lesson: one
 
 two:
-  title: MyString
-  description: MyText
-  price: 9.99
-  instructions: MyText
+  title: "Navigation Fundamentals Test"
+  description: "Test covering basic navigation principles and techniques"
+  instructions: "Complete all questions within the time limit. Good luck!"
+  assessment_type: "final"
+  time_limit: 90
+  passing_score: 80
+  max_attempts: 2
+  honor_statement_required: true
+  question_pool_size: 30
+  course: one
+  lesson: two

@@ -1,0 +1,149 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <!-- Page Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 class="h3 mb-0">Edit Test</h1>
+          <p class="text-muted mb-0">Update test settings and details</p>
+        </div>
+        <div>
+          <%= link_to admin_test_path(@test), class: "btn btn-outline-primary me-2" do %>
+            <i class="fas fa-eye me-2"></i>View Test
+          <% end %>
+          <%= link_to admin_tests_path, class: "btn btn-secondary" do %>
+            <i class="fas fa-arrow-left me-2"></i>Back to Tests
+          <% end %>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Test Details</h5>
+            </div>
+            <div class="card-body">
+              <%= form_with model: [:admin, @test], local: true, class: "needs-validation", novalidate: true do |form| %>
+                <% if @test.errors.any? %>
+                  <div class="alert alert-danger">
+                    <h6>Please fix the following errors:</h6>
+                    <ul class="mb-0">
+                      <% @test.errors.full_messages.each do |message| %>
+                        <li><%= message %></li>
+                      <% end %>
+                    </ul>
+                  </div>
+                <% end %>
+
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="mb-3">
+                      <%= form.label :title, class: "form-label" do %>
+                        Test Title <span class="text-danger">*</span>
+                      <% end %>
+                      <%= form.text_field :title, class: "form-control", required: true, placeholder: "Enter test title" %>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="mb-3">
+                      <%= form.label :assessment_type, class: "form-label" do %>
+                        Assessment Type <span class="text-danger">*</span>
+                      <% end %>
+                      <%= form.select :assessment_type, 
+                                      options_for_select([
+                                        ['Final Assessment', 'final'],
+                                        ['Chapter Assessment', 'chapter'],
+                                        ['Practice Test', 'practice'],
+                                        ['Certification Exam', 'certification'],
+                                        ['Standard Test', 'standard']
+                                      ], @test.assessment_type),
+                                      { prompt: "Select type" },
+                                      { class: "form-select", required: true } %>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <%= form.label :description, class: "form-label" %>
+                  <%= form.text_area :description, class: "form-control", rows: 3, placeholder: "Enter test description (optional)" %>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="mb-3">
+                      <%= form.label :time_limit, class: "form-label" %>
+                      <%= form.number_field :time_limit, class: "form-control", min: 1, placeholder: "Minutes" %>
+                      <div class="form-text">Time limit in minutes (leave blank for no limit)</div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="mb-3">
+                      <%= form.label :passing_score, class: "form-label" %>
+                      <%= form.number_field :passing_score, class: "form-control", min: 0, max: 100, placeholder: "70" %>
+                      <div class="form-text">Minimum score to pass (0-100)</div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="mb-3">
+                      <%= form.label :max_attempts, class: "form-label" %>
+                      <%= form.number_field :max_attempts, class: "form-control", min: 1, placeholder: "3" %>
+                      <div class="form-text">Maximum attempts allowed (leave blank for unlimited)</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <%= form.label :question_pool_size, class: "form-label" %>
+                      <%= form.number_field :question_pool_size, class: "form-control", min: 1, placeholder: "50" %>
+                      <div class="form-text">Total questions in the pool</div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <div class="form-check">
+                        <%= form.check_box :honor_statement_required, class: "form-check-input" %>
+                        <%= form.label :honor_statement_required, "Require Honor Statement", class: "form-check-label" %>
+                        <div class="form-text">Students must accept honor statement before taking test</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                  <%= link_to admin_test_path(@test), class: "btn btn-secondary" do %>
+                    <i class="fas fa-times me-2"></i>Cancel
+                  <% end %>
+                  <%= form.submit "Update Test", class: "btn btn-primary" do %>
+                    <i class="fas fa-save me-2"></i>Update Test
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Bootstrap form validation
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    var forms = document.getElementsByClassName('needs-validation');
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>

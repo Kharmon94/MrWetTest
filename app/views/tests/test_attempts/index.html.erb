@@ -3,7 +3,7 @@
     <div class="col-lg-10 mx-auto">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="text-gradient h3 mb-0">My Test Attempts</h1>
-        <%= link_to "← Back to Tests", tests_path, class: "btn btn-outline-secondary" %>
+        <%= link_to "← Back to Courses", courses_path, class: "btn btn-outline-secondary" %>
       </div>
 
       <% if @test_attempts.any? %>
@@ -71,7 +71,7 @@
           <h4 style="color: var(--text-muted); margin-bottom: 1rem;">No Test Attempts Yet</h4>
           <p style="color: var(--text-muted); margin-bottom: 1.5rem;">You haven't taken any tests yet. Browse our available tests to get started!</p>
           <div class="d-flex gap-3 justify-content-center">
-            <%= link_to "Browse Tests", tests_path, class: "btn btn-primary" %>
+            <%= link_to "Browse Courses", courses_path, class: "btn btn-primary" %>
           </div>
         </div>
       <% end %>

@@ -99,7 +99,9 @@
         </p>
         <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center align-items-center">
           <%= link_to "Browse All Courses", browse_courses_path, class: "btn btn-primary w-100 w-sm-auto" %>
-          <%= link_to "View Tests", tests_path, class: "btn btn-outline-primary w-100 w-sm-auto" %>
+          <% if user_signed_in? %>
+            <%= link_to "My Progress", tests_test_attempts_path, class: "btn btn-outline-primary w-100 w-sm-auto" %>
+          <% end %>
         </div>
       <% end %>
     <% else %>

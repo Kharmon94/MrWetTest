@@ -88,7 +88,9 @@
           <p style="color: var(--text-muted); margin-bottom: 1.5rem;">You haven't made any payments yet. Browse our courses and tests to get started!</p>
         <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center align-items-center">
           <%= link_to "Browse Courses", courses_path, class: "btn btn-primary w-100 w-sm-auto" %>
-          <%= link_to "Browse Tests", tests_path, class: "btn btn-outline-primary w-100 w-sm-auto" %>
+          <% if user_signed_in? %>
+            <%= link_to "My Progress", tests_test_attempts_path, class: "btn btn-outline-primary w-100 w-sm-auto" %>
+          <% end %>
         </div>
         </div>
       <% end %>

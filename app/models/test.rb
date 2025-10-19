@@ -1,34 +1,20 @@
 class Test < ApplicationRecord
+  belongs_to :course
+  belongs_to :lesson, optional: true
   has_many :questions, dependent: :destroy
   has_many :test_attempts, dependent: :destroy
   has_many :payments, as: :payable, dependent: :destroy
 
   validates :title, :description, :instructions, presence: true
-  validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :assessment_type, inclusion: { in: %w[final chapter practice] }
   validates :time_limit, numericality: { greater_than: 0 }, allow_nil: true
   validates :max_attempts, numericality: { greater_than: 0 }, allow_nil: true
   validates :passing_score, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }, allow_nil: true
   validates :question_pool_size, numericality: { greater_than: 0 }, allow_nil: true
   
-  # Payment-related methods
-  def free?
-    price.blank? || price == 0
-  end
-  
-  def paid?
-    !free?
-  end
-  
-  def formatted_price
-    return "Free" if free?
-    "USD $#{sprintf('%.2f', price)}"
-  end
-  
-  def stripe_price_id
-    # This would be set when creating a Stripe product/price
-    # For now, we'll generate it dynamically
-    "price_test_#{id}_#{created_at.to_i}"
+  # Test helper methods
+  def lesson_specific?
+    lesson.present?
   end
 
   # Compliance and Academic Integrity Methods

@@ -26,7 +26,6 @@ Role.destroy_all
 puts "➡️ Creating roles..."
 admin_role = Role.create!(name: "admin")
 student_role = Role.create!(name: "student")
-instructor_role = Role.create!(name: "instructor")
 
 puts "➡️ Seeding users..."
 # Admin user
@@ -40,16 +39,6 @@ admin = User.create!(
 )
 admin.add_role(:admin)
 
-# Instructor user
-instructor = User.create!(
-  email: "instructor@seapasspro.com", 
-  password: "password123",
-  theme_preference: "light",
-  email_notifications: true,
-  push_notifications: false,
-  language: "en"
-)
-instructor.add_role(:instructor)
 
 # Sample students
 students = []
@@ -134,9 +123,10 @@ puts "➡️ Seeding tests with compliance features..."
 chapter_tests = []
 5.times do |i|
   test = Test.create!(
+    course: maritime_course,
+    lesson: maritime_course.lessons.find_by(title: maritime_lessons[i][:title]),
     title: "Chapter #{i+1} Assessment - #{maritime_lessons[i][:title]}",
     description: "Assessment for #{maritime_lessons[i][:title]} covering key learning objectives and safety procedures.",
-    price: 0.00,
     instructions: "Complete all questions within the time limit. This assessment is required before proceeding to the next chapter.",
     assessment_type: "chapter",
     time_limit: 30,
@@ -216,9 +206,9 @@ end
 
 # Final Assessment for Maritime Course
 maritime_final = Test.create!(
+  course: maritime_course,
   title: "Maritime Safety Fundamentals - Final Assessment",
   description: "Comprehensive final assessment covering all maritime safety topics. Must be passed to complete the course.",
-  price: 0.00,
   instructions: "This is a final assessment. You must complete all chapter assessments before taking this test. Honor statement required.",
   assessment_type: "final",
   time_limit: 120,
@@ -299,9 +289,9 @@ end
 
 # Navigation Systems Test
 navigation_test = Test.create!(
+  course: navigation_course,
   title: "Electronic Navigation Systems Certification",
   description: "Certification test for electronic navigation systems including GPS, radar, and ECDIS.",
-  price: 99.99,
   instructions: "This certification test requires honor statement acceptance. Complete all questions within the time limit.",
   assessment_type: "final",
   time_limit: 90,
@@ -369,9 +359,9 @@ end
 
 # Practice Test
 practice_test = Test.create!(
+  course: maritime_course,
   title: "Maritime Safety Practice Test",
   description: "Practice test for maritime safety fundamentals. No honor statement required.",
-  price: 0.00,
   instructions: "This is a practice test. Use it to prepare for the final assessment.",
   assessment_type: "practice",
   time_limit: 60,
@@ -513,14 +503,13 @@ puts "📊 Summary:"
 puts "   👥 Users: #{User.count} (#{User.joins(:roles).where(roles: {name: 'admin'}).count} admin, #{User.joins(:roles).where(roles: {name: 'student'}).count} students)"
 puts "   📚 Courses: #{Course.count} (#{Course.where(time_managed: true).count} time-managed)"
 puts "   📖 Lessons: #{Lesson.count}"
-puts "   📝 Tests: #{Test.count} (#{Test.where(assessment_type: 'final').count} final, #{Test.where(assessment_type: 'chapter').count} chapter)"
+puts "   📝 Tests: #{Test.count} (#{Test.where(assessment_type: 'final').count} final, #{Test.where(assessment_type: 'chapter').count} chapter, #{Test.where(assessment_type: 'practice').count} practice)"
 puts "   ❓ Questions: #{Question.count}"
 puts "   🎯 Attempts: #{TestAttempt.count}"
 puts "   💳 Payments: #{Payment.count}"
 puts ""
 puts "🔑 Login credentials:"
 puts "   Admin: admin@seapasspro.com / password123"
-puts "   Instructor: instructor@seapasspro.com / password123"
 puts "   Students: student1@seapasspro.com / password123 (has partial progress)"
 puts "           student2@seapasspro.com / password123 (completed course)"
 puts "           student3@seapasspro.com / password123 (practice only)"

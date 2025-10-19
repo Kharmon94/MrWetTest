@@ -1,5 +1,6 @@
 class Lesson < ApplicationRecord
   belongs_to :course
+  has_many :tests, dependent: :nullify
 
   validates :title, presence: true
   validates :content, presence: true

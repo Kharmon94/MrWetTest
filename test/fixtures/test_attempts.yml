@@ -1,15 +1,34 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  user: one
+  user: student
   test: one
-  score: 9.99
-  submitted: false
+  score: 85
+  submitted: true
   taken_at: 2025-03-16 22:42:34
+  honor_statement_accepted: true
+  start_time: 2025-03-16 22:42:34
+  end_time: 2025-03-16 23:42:34
+  retake_number: 1
 
 two:
-  user: two
+  user: student
   test: two
-  score: 9.99
+  score: 60
+  submitted: true
+  taken_at: 2025-03-16 22:42:34
+  honor_statement_accepted: true
+  start_time: 2025-03-16 22:42:34
+  end_time: 2025-03-16 23:42:34
+  retake_number: 1
+
+three:
+  user: admin
+  test: one
+  score: nil
   submitted: false
   taken_at: 2025-03-16 22:42:34
+  honor_statement_accepted: false
+  start_time: 2025-03-16 22:42:34
+  end_time: nil
+  retake_number: 1

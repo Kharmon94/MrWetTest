@@ -1,11 +1,15 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  title: MyString
-  description: MyText
-  price: 9.99
+  title: "Maritime Safety Fundamentals"
+  description: "Comprehensive maritime safety training covering international regulations and emergency procedures"
+  price: 299.99
+  time_managed: true
+  chapter_assessments_required: true
 
 two:
-  title: MyString
-  description: MyText
-  price: 9.99
+  title: "Navigation and Chartwork"
+  description: "Advanced navigation techniques and chart reading for maritime professionals"
+  price: 199.99
+  time_managed: false
+  chapter_assessments_required: false

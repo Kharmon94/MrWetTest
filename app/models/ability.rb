@@ -18,41 +18,6 @@ class Ability
       return
     end
 
-    # Instructor permissions
-    if user.has_role?(:instructor)
-      # Instructor dashboard and general access
-      can :read, :instructor_dashboard
-      
-      # Course management
-      can [:read, :index], Course
-      can [:create, :update, :edit, :destroy], Course
-      can [:show, :new, :create, :edit, :update, :destroy], Course
-      
-      # Test management
-      can [:read, :index], Test
-      can [:create, :update, :edit, :destroy], Test
-      can [:show, :new, :create, :edit, :update, :destroy], Test
-      
-      # Question management
-      can [:read, :index], Question
-      can [:create, :update, :edit, :destroy], Question
-      can [:show, :new, :create, :edit, :update, :destroy], Question
-      
-      # Lesson management
-      can [:read, :index], Lesson
-      can [:create, :update, :edit, :destroy], Lesson
-      can [:show, :new, :create, :edit, :update, :destroy], Lesson
-      
-      # Student progress monitoring
-      can [:read, :index], TestAttempt
-      can :show, TestAttempt
-      
-      # User management (limited)
-      can [:read, :index], User
-      can :show, User
-      
-      return
-    end
 
     # Student/Regular user permissions
     if user.has_role?(:student) || user.roles.empty?
@@ -61,9 +26,13 @@ class Ability
       can :browse, Course
       can :show, Course
       
-      # Test access
-      can :read, Test
-      can :show, Test
+      # Test access - only for enrolled courses
+      can :read, Test do |test|
+        user.has_purchased?(test.course)
+      end
+      can :show, Test do |test|
+        user.has_purchased?(test.course)
+      end
       
       # Test attempt management
       can :create, TestAttempt

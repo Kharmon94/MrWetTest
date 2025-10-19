@@ -1,11 +1,16 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  content: MyText
-  correct_answer: MyString
-  course: one
+  content: "What is the primary purpose of a life jacket?"
+  correct_answer: "To keep a person afloat in water"
+  test: one
 
 two:
-  content: MyText
-  correct_answer: MyString
-  course: two
+  content: "Which of the following is NOT a required piece of safety equipment on a commercial vessel?"
+  correct_answer: "Personal laptop computer"
+  test: one
+
+three:
+  content: "What does the acronym SOLAS stand for?"
+  correct_answer: "Safety of Life at Sea"
+  test: two

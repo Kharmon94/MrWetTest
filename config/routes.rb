@@ -19,19 +19,12 @@ Rails.application.routes.draw do
     resources :questions
   end
 
-  # Instructor Panel routes
-  namespace :instructor do
-    root to: 'dashboard#index'
-    resources :courses
-    resources :tests
-    resources :questions
-    resources :test_attempts, only: [:index, :show]
-    resources :lessons
-  end
 
   # Courses routes
   get 'courses/browse', to: 'courses#browse', as: :browse_courses
-  resources :courses
+  resources :courses do
+    resources :tests, only: [:index, :show]
+  end
 
   # Test side: test-taking functionality.
   namespace :tests do
@@ -42,8 +35,8 @@ Rails.application.routes.draw do
     end
   end
 
-  # Routes for Test products (available tests).
-  resources :tests, only: [:index, :show], constraints: { id: /\d+/ } do
+  # Assessment compliance routes for course tests
+  resources :tests, only: [], constraints: { id: /\d+/ } do
     # Assessment compliance routes
     member do
       get :procedures, to: 'assessment_compliance#show_procedures'

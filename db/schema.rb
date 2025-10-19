@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_15_023603) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_19_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -176,7 +176,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_023603) do
   create_table "tests", force: :cascade do |t|
     t.string "title"
     t.text "description"
-    t.decimal "price"
     t.text "instructions"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -186,6 +185,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_023603) do
     t.integer "max_attempts"
     t.decimal "passing_score"
     t.integer "question_pool_size"
+    t.bigint "course_id", null: false
+    t.bigint "lesson_id"
+    t.index ["course_id"], name: "index_tests_on_course_id"
+    t.index ["lesson_id"], name: "index_tests_on_lesson_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -226,4 +229,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_023603) do
   add_foreign_key "test_attempt_questions", "test_attempts"
   add_foreign_key "test_attempts", "tests"
   add_foreign_key "test_attempts", "users"
+  add_foreign_key "tests", "courses"
+  add_foreign_key "tests", "lessons"
 end

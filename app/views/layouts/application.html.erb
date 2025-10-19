@@ -760,27 +760,6 @@
               </ul>
             </li>
             
-            <!-- Testing Dropdown -->
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-flask me-1"></i>Testing
-              </a>
-              <ul class="dropdown-menu dropdown-menu-dark">
-                <li>
-                  <%= link_to tests_path, class: "dropdown-item" do %>
-                    <i class="fas fa-list me-2"></i>Available Tests
-                  <% end %>
-                </li>
-                <% if user_signed_in? %>
-                  <li><hr class="dropdown-divider"></li>
-                  <li>
-                    <%= link_to tests_test_attempts_path, class: "dropdown-item" do %>
-                      <i class="fas fa-history me-2"></i>My Test History
-                    <% end %>
-                  </li>
-                <% end %>
-              </ul>
-            </li>
             
             <% if user_signed_in? %>
               <!-- Account Dropdown -->
@@ -813,42 +792,6 @@
                 </ul>
               </li>
               
-              <% if current_user.has_role?(:instructor) || current_user.has_role?(:admin) %>
-                <!-- Instructor Dropdown -->
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle text-info" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-chalkboard-teacher me-1"></i>Instructor
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-dark">
-                    <li>
-                      <%= link_to instructor_root_path, class: "dropdown-item" do %>
-                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
-                      <% end %>
-                    </li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                      <%= link_to instructor_courses_path, class: "dropdown-item" do %>
-                        <i class="fas fa-book me-2"></i>Manage Courses
-                      <% end %>
-                    </li>
-                    <li>
-                      <%= link_to instructor_tests_path, class: "dropdown-item" do %>
-                        <i class="fas fa-clipboard-list me-2"></i>Manage Tests
-                      <% end %>
-                    </li>
-                    <li>
-                      <%= link_to instructor_questions_path, class: "dropdown-item" do %>
-                        <i class="fas fa-question-circle me-2"></i>Question Bank
-                      <% end %>
-                    </li>
-                    <li>
-                      <%= link_to instructor_test_attempts_path, class: "dropdown-item" do %>
-                        <i class="fas fa-chart-line me-2"></i>Student Progress
-                      <% end %>
-                    </li>
-                  </ul>
-                </li>
-              <% end %>
               
               <% if current_user.has_role?(:admin) %>
                 <!-- Admin Dropdown -->
@@ -881,6 +824,11 @@
                     <li>
                       <%= link_to admin_questions_path, class: "dropdown-item" do %>
                         <i class="fas fa-question-circle me-2"></i>Manage Questions
+                      <% end %>
+                    </li>
+                    <li>
+                      <%= link_to admin_test_attempts_path, class: "dropdown-item" do %>
+                        <i class="fas fa-chart-line me-2"></i>Student Progress
                       <% end %>
                     </li>
                   </ul>
@@ -940,12 +888,11 @@
                   </li>
                   <li><hr class="dropdown-divider"></li>
                   <li>
-                    <%= link_to destroy_user_session_path, 
-                        method: :delete, 
-                        data: { turbo_method: :delete },
-                        class: "dropdown-item text-danger" do %>
-                      <i class="fas fa-sign-out-alt me-2"></i>Sign Out
-      <% end %>
+                    <%= form_with url: destroy_user_session_path, method: :delete, local: true, class: "d-inline w-100" do |form| %>
+                      <button type="submit" class="dropdown-item text-danger border-0 bg-transparent w-100 text-start" style="cursor: pointer; padding: 0.5rem 1rem;">
+                        <i class="fas fa-sign-out-alt me-2"></i>Sign Out
+                      </button>
+                    <% end %>
                   </li>
                 </ul>
               </li>
@@ -991,6 +938,25 @@
     
     <!-- Enhanced JavaScript -->
     <script>
+      // Initialize Bootstrap dropdowns
+      document.addEventListener('DOMContentLoaded', function() {
+        // Initialize all dropdowns
+        var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+        var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+          return new bootstrap.Dropdown(dropdownToggleEl);
+        });
+        
+        // Prevent dropdown from closing when clicking inside
+        document.querySelectorAll('.dropdown-menu').forEach(function(dropdown) {
+          dropdown.addEventListener('click', function(e) {
+            // Don't prevent default for form submissions
+            if (e.target.type !== 'submit') {
+              e.stopPropagation();
+            }
+          });
+        });
+      });
+
       // Stripe Configuration
       <% if Rails.application.config.stripe_publishable_key.present? %>
         const stripe = Stripe('<%= Rails.application.config.stripe_publishable_key %>');
