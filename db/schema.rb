@@ -132,6 +132,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_19_000002) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "test_id", null: false
+    t.string "question_type", default: "short_answer"
+    t.text "options"
+    t.integer "max_length", default: 500
+    t.index ["question_type"], name: "index_questions_on_question_type"
     t.index ["test_id"], name: "index_questions_on_test_id"
   end
 

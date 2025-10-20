@@ -101,7 +101,11 @@ class AssessmentComplianceService
 
     def log_assessment_event(event_type, test_attempt, additional_data = {})
       # Log compliance events for audit trail
-      Rails.logger.info "Assessment Event: #{event_type} - User: #{test_attempt.user.email}, Test: #{test_attempt.test.title}, Time: #{Time.current}"
+      if test_attempt
+        Rails.logger.info "Assessment Event: #{event_type} - User: #{test_attempt.user.email}, Test: #{test_attempt.test.title}, Time: #{Time.current}"
+      else
+        Rails.logger.info "Assessment Event: #{event_type} - Time: #{Time.current}"
+      end
       Rails.logger.info "Additional Data: #{additional_data.to_json}" if additional_data.any?
     end
 

@@ -51,6 +51,16 @@ class Admin::QuestionsController < Admin::BaseController
   end
 
   def question_params
-    params.require(:question).permit(:test_id, :question_text, :option_a, :option_b, :option_c, :option_d, :correct_answer)
+    permitted_params = params.require(:question).permit(:test_id, :content, :correct_answer, :question_type, :max_length, options: [])
+    
+    # Handle multiple choice options
+    if permitted_params[:options].present?
+      permitted_params[:options] = permitted_params[:options].reject(&:blank?)
+    end
+    
+    # Set default question type if not provided
+    permitted_params[:question_type] ||= 'short_answer'
+    
+    permitted_params
   end
 end

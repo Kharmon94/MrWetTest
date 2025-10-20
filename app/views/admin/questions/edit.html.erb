@@ -1,0 +1,157 @@
+<div class="container py-4">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Edit Question</h1>
+        <%= link_to admin_question_path(@question), class: "btn btn-outline-secondary" do %>
+          <i class="fas fa-arrow-left me-2"></i>Back to Question
+        <% end %>
+      </div>
+
+      <%= form_with model: [:admin, @question], local: true, class: "card" do |form| %>
+        <div class="card-body">
+          <% if @question.errors.any? %>
+            <div class="alert alert-danger">
+              <h4><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h4>
+              <ul class="mb-0">
+                <% @question.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <%= form.label :test_id, "Test", class: "form-label" %>
+                <%= form.select :test_id, @tests.map { |t| [t.title, t.id] }, { prompt: "Select a test" }, { class: "form-select" } %>
+              </div>
+            </div>
+            
+            <div class="col-md-6">
+              <div class="mb-3">
+                <%= form.label :question_type, "Question Type", class: "form-label" %>
+                <%= form.select :question_type, Question::QUESTION_TYPES.map { |k, v| [v, k] }, { selected: @question.question_type }, { class: "form-select", id: "question_type_select" } %>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <%= form.label :content, "Question Content", class: "form-label" %>
+            <%= form.text_area :content, class: "form-control", rows: 3, placeholder: "Enter the question text..." %>
+          </div>
+
+          <!-- Multiple Choice Options -->
+          <div id="multiple_choice_options" class="mb-3" style="display: none;">
+            <label class="form-label">Multiple Choice Options</label>
+            <div id="options_container">
+              <% existing_options = @question.multiple_choice_options %>
+              <% letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'] %>
+              <% (existing_options.any? ? existing_options : ['', '', '', '']).each_with_index do |option, index| %>
+                <div class="input-group mb-2">
+                  <span class="input-group-text"><%= letters[index] %></span>
+                  <%= text_field_tag "question[options][]", option, class: "form-control", placeholder: "Option #{letters[index]}" %>
+                  <% if index >= 4 %>
+                    <button type="button" class="btn btn-outline-danger remove-option">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+            <button type="button" id="add_option" class="btn btn-sm btn-outline-primary">
+              <i class="fas fa-plus me-1"></i>Add Option
+            </button>
+          </div>
+
+          <!-- Text Length Limit -->
+          <div id="text_length_limit" class="mb-3" style="display: none;">
+            <div class="row">
+              <div class="col-md-6">
+                <%= form.label :max_length, "Maximum Length (characters)", class: "form-label" %>
+                <%= form.number_field :max_length, class: "form-control", placeholder: "e.g., 100 for short answer, 1000 for long form" %>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <%= form.label :correct_answer, "Found Answer", class: "form-label" %>
+            <%= form.text_field :correct_answer, class: "form-control", placeholder: "Enter the correct answer..." %>
+          </div>
+
+          <div class="d-flex gap-2">
+            <%= form.submit "Update Question", class: "btn btn-primary" %>
+            <%= link_to "Cancel", admin_question_path(@question), class: "btn btn-secondary" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const questionTypeSelect = document.getElementById('question_type_select');
+    const multipleChoiceOptions = document.getElementById('multiple_choice_options');
+    const textLengthLimit = document.getElementById('text_length_limit');
+    const optionsContainer = document.getElementById('options_container');
+    const addOptionButton = document.getElementById('add_option');
+
+    function toggleFields() {
+      const selectedType = questionTypeSelect.value;
+      
+      // Hide all conditional fields
+      multipleChoiceOptions.style.display = 'none';
+      textLengthLimit.style.display = 'none';
+      
+      // Show relevant fields based on question type
+      if (selectedType === 'multiple_choice') {
+        multipleChoiceOptions.style.display = 'block';
+      } else if (selectedType === 'short_answer' || selectedType === 'long_form') {
+        textLengthLimit.style.display = 'block';
+      }
+    }
+
+    // Add option functionality
+    let optionCount = document.querySelectorAll('#options_container .input-group').length;
+    
+    addOptionButton.addEventListener('click', function() {
+      const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+      const letter = letters[optionCount] || String.fromCharCode(65 + optionCount);
+      
+      const newOption = document.createElement('div');
+      newOption.className = 'input-group mb-2';
+      newOption.innerHTML = `
+        <span class="input-group-text">${letter}</span>
+        <input type="text" name="question[options][]" class="form-control" placeholder="Option ${letter}">
+        <button type="button" class="btn btn-outline-danger remove-option">
+          <i class="fas fa-trash"></i>
+        </button>
+      `;
+      
+      optionsContainer.appendChild(newOption);
+      optionCount++;
+      
+      // Add remove functionality
+      newOption.querySelector('.remove-option').addEventListener('click', function() {
+        newOption.remove();
+        optionCount--;
+      });
+    });
+
+    // Remove option functionality for existing options
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('remove-option')) {
+        e.target.closest('.input-group').remove();
+        optionCount--;
+      }
+    });
+
+    // Initial toggle
+    toggleFields();
+    
+    // Toggle on change
+    questionTypeSelect.addEventListener('change', toggleFields);
+  });
+</script>

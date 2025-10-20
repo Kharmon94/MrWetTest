@@ -68,6 +68,37 @@ class Course < ApplicationRecord
     user_has_completed_all_chapters?(user)
   end
   
+  def user_progress(user)
+    return { progress: 0, last_lesson: nil, completed_lessons: 0 } unless user
+    
+    # For now, we'll implement a simple progress tracking
+    # In a real app, you might track lesson views or completions
+    total_lessons = lessons.count
+    return { progress: 0, last_lesson: nil, completed_lessons: 0 } if total_lessons == 0
+    
+    # Simple implementation: assume user has started if they have any test attempts
+    has_started = user.test_attempts.joins(:test).where(tests: { course: self }).exists?
+    
+    if has_started
+      # Find the last lesson they might have accessed
+      last_lesson = lessons.order(:position).first
+      completed_lessons = 1 # Assume they've completed at least the first lesson
+      progress = (completed_lessons.to_f / total_lessons * 100).round
+    else
+      last_lesson = nil
+      completed_lessons = 0
+      progress = 0
+    end
+    
+    {
+      progress: progress,
+      last_lesson: last_lesson,
+      completed_lessons: completed_lessons,
+      total_lessons: total_lessons,
+      has_started: has_started
+    }
+  end
+  
   def chapter_completion_status(user)
     return {} unless requires_chapter_assessments?
     
@@ -82,19 +113,88 @@ class Course < ApplicationRecord
         
         status[chapter_number] = {
           completed: latest_attempt&.submitted? || false,
+          passed: latest_attempt&.passed? || false,
           score: latest_attempt&.score || 0,
-          attempts: attempts.count
+          attempts: attempts.count,
+          lesson_id: lesson.id,
+          test_id: lesson_test.id
         }
       else
         status[chapter_number] = {
           completed: false,
+          passed: false,
           score: 0,
-          attempts: 0
+          attempts: 0,
+          lesson_id: lesson.id,
+          test_id: nil
         }
       end
     end
     
     status
+  end
+  
+  def user_chapter_progress(user)
+    return { completed: 0, total: 0, progress_percentage: 0 } unless requires_chapter_assessments?
+    
+    total_chapters = lessons.count
+    completed_chapters = 0
+    
+    lessons.each do |lesson|
+      lesson_test = tests.find_by(lesson: lesson, assessment_type: 'chapter')
+      next unless lesson_test
+      
+      if user_has_passed_chapter_assessment?(user, lesson_test)
+        completed_chapters += 1
+      end
+    end
+    
+    progress_percentage = total_chapters > 0 ? (completed_chapters.to_f / total_chapters * 100).round : 0
+    
+    {
+      completed: completed_chapters,
+      total: total_chapters,
+      progress_percentage: progress_percentage
+    }
+  end
+  
+  def next_required_chapter_assessment(user)
+    return nil unless requires_chapter_assessments?
+    
+    lessons.order(:position).each do |lesson|
+      lesson_test = tests.find_by(lesson: lesson, assessment_type: 'chapter')
+      next unless lesson_test
+      
+      unless user_has_passed_chapter_assessment?(user, lesson_test)
+        return lesson_test
+      end
+    end
+    
+    nil
+  end
+  
+  def user_needs_chapter_review?(user, lesson)
+    return false unless requires_chapter_assessments?
+    
+    lesson_test = tests.find_by(lesson: lesson, assessment_type: 'chapter')
+    return false unless lesson_test
+    
+    # Check if user has failed the chapter assessment and needs to review
+    latest_attempt = user.test_attempts.where(test: lesson_test).order(created_at: :desc).first
+    return false unless latest_attempt
+    
+    latest_attempt.submitted? && !latest_attempt.passed?
+  end
+  
+  def user_can_retake_chapter_assessment?(user, lesson)
+    return false unless requires_chapter_assessments?
+    
+    lesson_test = tests.find_by(lesson: lesson, assessment_type: 'chapter')
+    return false unless lesson_test
+    
+    # User can retake if they've completed the chapter review after failing
+    # For now, we'll allow retakes if they haven't passed yet
+    !user_has_passed_chapter_assessment?(user, lesson_test)
   end
 
   def user_completion_status(user)

@@ -1,0 +1,192 @@
+<% content_for :title, "#{@lesson.title} - #{@course.title}" %>
+
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <!-- Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+              <li class="breadcrumb-item">
+                <%= link_to "Courses", courses_path, class: "text-decoration-none" %>
+              </li>
+              <li class="breadcrumb-item">
+                <%= link_to @course.title, course_path(@course), class: "text-decoration-none" %>
+              </li>
+              <li class="breadcrumb-item">
+                <%= link_to "Lessons", course_lessons_path(@course), class: "text-decoration-none" %>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page"><%= @lesson.title %></li>
+            </ol>
+          </nav>
+          <h1 class="h2 mb-0"><%= @lesson.title %></h1>
+          <p class="text-muted mb-0">Lesson <%= @lesson.position || 'N/A' %> of <%= @course.lessons.count %></p>
+        </div>
+        
+        <div class="d-flex gap-2">
+          <%= link_to course_lessons_path(@course), class: "btn btn-outline-secondary" do %>
+            <i class="fas fa-list me-2"></i>All Lessons
+          <% end %>
+          <% if current_user.has_role?(:admin) %>
+            <%= link_to edit_admin_lesson_path(@lesson), class: "btn btn-outline-primary" do %>
+              <i class="fas fa-edit me-2"></i>Edit Lesson
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Lesson Content -->
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-body">
+              <div class="lesson-content">
+                <%= simple_format(@lesson.content, {}, wrapper_tag: "div") %>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lesson Tests -->
+          <% if @lesson_tests.any? %>
+            <div class="card mt-4">
+              <div class="card-header">
+                <h5 class="mb-0">
+                  <i class="fas fa-clipboard-check me-2"></i>Lesson Tests
+                </h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <% @lesson_tests.each do |test| %>
+                    <div class="col-md-6 mb-3">
+                      <div class="card border">
+                        <div class="card-body">
+                          <h6 class="card-title"><%= test.title %></h6>
+                          <p class="card-text text-muted small mb-2">
+                            <%= truncate(test.description, length: 80) %>
+                          </p>
+                          <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                              <i class="fas fa-clock me-1"></i>
+                              <%= test.time_limit ? "#{test.time_limit} minutes" : "No time limit" %>
+                            </small>
+                            <%= link_to "Take Test", course_test_path(@course, test), 
+                                class: "btn btn-primary btn-sm" %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+          <!-- Lesson Navigation -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h6 class="mb-0">
+                <i class="fas fa-compass me-2"></i>Lesson Navigation
+              </h6>
+            </div>
+            <div class="card-body">
+              <% if @previous_lesson %>
+                <%= link_to course_lesson_path(@course, @previous_lesson), 
+                    class: "btn btn-outline-secondary w-100 mb-2" do %>
+                  <i class="fas fa-arrow-left me-2"></i>
+                  Previous: <%= truncate(@previous_lesson.title, length: 30) %>
+                <% end %>
+              <% end %>
+              
+              <% if @next_lesson %>
+                <%= link_to course_lesson_path(@course, @next_lesson), 
+                    class: "btn btn-primary w-100" do %>
+                  Next: <%= truncate(@next_lesson.title, length: 30) %>
+                  <i class="fas fa-arrow-right ms-2"></i>
+                <% end %>
+              <% else %>
+                <%= link_to course_tests_path(@course), 
+                    class: "btn btn-success w-100" do %>
+                  <i class="fas fa-graduation-cap me-2"></i>
+                  Take Final Tests
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+
+          <!-- Course Progress -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h6 class="mb-0">
+                <i class="fas fa-chart-line me-2"></i>Course Progress
+              </h6>
+            </div>
+            <div class="card-body">
+              <div class="progress mb-2" style="height: 8px;">
+                <div class="progress-bar" role="progressbar" 
+                     style="width: <%= (@lesson.position || 1) * 100 / @course.lessons.count %>%">
+                </div>
+              </div>
+              <small class="text-muted">
+                Lesson <%= @lesson.position || 1 %> of <%= @course.lessons.count %>
+              </small>
+            </div>
+          </div>
+
+          <!-- Course Info -->
+          <div class="card">
+            <div class="card-header">
+              <h6 class="mb-0">
+                <i class="fas fa-info-circle me-2"></i>Course Information
+              </h6>
+            </div>
+            <div class="card-body">
+              <p class="card-text mb-2">
+                <strong>Course:</strong><br>
+                <%= link_to @course.title, course_path(@course), 
+                    class: "text-decoration-none" %>
+              </p>
+              <p class="card-text mb-2">
+                <strong>Total Lessons:</strong><br>
+                <%= @course.lessons.count %>
+              </p>
+              <p class="card-text mb-0">
+                <strong>Total Tests:</strong><br>
+                <%= @course.tests.count %>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.lesson-content {
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+.lesson-content p {
+  margin-bottom: 1.5rem;
+}
+
+.lesson-content h1, .lesson-content h2, .lesson-content h3 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.lesson-content ul, .lesson-content ol {
+  margin-bottom: 1.5rem;
+  padding-left: 2rem;
+}
+
+.lesson-content li {
+  margin-bottom: 0.5rem;
+}
+</style>

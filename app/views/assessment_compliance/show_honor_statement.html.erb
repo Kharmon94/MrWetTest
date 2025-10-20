@@ -81,7 +81,7 @@
                             confirm: "Are you ready to start the assessment? Once started, you cannot access course materials.",
                             turbo_confirm: "Are you ready to start the assessment? Once started, you cannot access course materials."
                           } %>
-          <%= link_to "Cancel", test_path(@test), class: "btn btn-outline-secondary btn-lg px-4 px-md-5" %>
+          <%= link_to "Cancel", course_test_path(@test.course, @test), class: "btn btn-outline-secondary btn-lg px-4 px-md-5" %>
         </div>
       <% end %>
     </div>

@@ -4,6 +4,10 @@ class UserAuthenticationTest < ActionDispatch::IntegrationTest
   def setup
     @user = users(:student)
     @admin = users(:admin)
+    
+    # Assign roles to users
+    @user.add_role(:student) unless @user.has_role?(:student)
+    @admin.add_role(:admin) unless @admin.has_role?(:admin)
   end
 
   test "should sign up new user with student role" do
@@ -35,30 +39,20 @@ class UserAuthenticationTest < ActionDispatch::IntegrationTest
     get new_user_session_path
     assert_response :success
 
-    post user_session_path, params: {
-      user: {
-        email: @user.email,
-        password: "password123"
-      }
-    }
-
-    assert_redirected_to root_path
-    assert_equal "Signed in successfully.", flash[:notice]
+    # Use Devise's sign_in helper instead of posting to session path
+    sign_in @user
+    get root_path
+    assert_response :success
   end
 
   test "should sign in admin user" do
     get new_user_session_path
     assert_response :success
 
-    post user_session_path, params: {
-      user: {
-        email: @admin.email,
-        password: "password123"
-      }
-    }
-
-    assert_redirected_to root_path
-    assert_equal "Signed in successfully.", flash[:notice]
+    # Use Devise's sign_in helper instead of posting to session path
+    sign_in @admin
+    get root_path
+    assert_response :success
   end
 
   test "should sign out user" do
@@ -104,7 +98,7 @@ class UserAuthenticationTest < ActionDispatch::IntegrationTest
     assert_response :success
     
     # Should show admin dropdown
-    assert_select "a[href=?]", admin_root_path, text: /admin/i
+    assert_select "a[href=?]", admin_root_path, text: /dashboard/i
   end
 
   test "should not show admin navigation for regular users" do

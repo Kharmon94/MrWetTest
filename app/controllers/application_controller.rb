@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
   include CanCan::ControllerAdditions
+  include AssessmentIsolation
+  include SecurityCompliance
   
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern

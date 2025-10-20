@@ -60,34 +60,96 @@
         </div>
       <% end %>
 
+      <!-- Course Progress & Action Buttons -->
+      <% if current_user&.can_access?(@course) && @course.lessons.any? %>
+        <% progress_data = @course.user_progress(current_user) %>
+        <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+          <div class="card-body text-center">
+            <% if progress_data[:has_started] %>
+              <h5 class="mb-3" style="color: var(--text-primary);">Continue Your Learning</h5>
+              <div class="mb-3">
+                <div class="progress" style="height: 8px;">
+                  <div class="progress-bar" role="progressbar" 
+                       style="width: <%= progress_data[:progress] %>%">
+                  </div>
+                </div>
+                <small class="text-muted">
+                  <%= progress_data[:completed_lessons] %> of <%= progress_data[:total_lessons] %> lessons completed
+                </small>
+              </div>
+            <% else %>
+              <h5 class="mb-3" style="color: var(--text-primary);">Ready to Start Learning?</h5>
+            <% end %>
+            
+            <div class="d-flex justify-content-center gap-3">
+              <% if progress_data[:has_started] && progress_data[:last_lesson] %>
+                <%= link_to course_lesson_path(@course, progress_data[:last_lesson]), class: "btn btn-primary btn-lg px-4" do %>
+                  <i class="fas fa-play me-2"></i>Continue Course
+                <% end %>
+              <% else %>
+                <% first_lesson = @course.lessons.order(:position).first %>
+                <% if first_lesson %>
+                  <%= link_to course_lesson_path(@course, first_lesson), class: "btn btn-primary btn-lg px-4" do %>
+                    <i class="fas fa-play me-2"></i>Begin Course
+                  <% end %>
+                <% end %>
+              <% end %>
+              
+              <%= link_to course_lessons_path(@course), class: "btn btn-outline-primary btn-lg px-4" do %>
+                <i class="fas fa-list me-2"></i>View All Lessons
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
       <!-- Lessons Section -->
       <% if @course.lessons.any? %>
         <div class="card" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
-          <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+          <div class="card-header d-flex justify-content-between align-items-center" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
             <h5 class="mb-0" style="color: var(--text-primary);">
               <i class="fas fa-list me-2"></i>Course Lessons
             </h5>
+            <% if current_user&.can_access?(@course) %>
+              <%= link_to course_lessons_path(@course), class: "btn btn-sm btn-outline-primary" do %>
+                View All <i class="fas fa-arrow-right ms-1"></i>
+              <% end %>
+            <% end %>
           </div>
           <div class="card-body p-0">
             <div class="list-group list-group-flush">
-              <% @course.lessons.order(:position).each do |lesson| %>
+              <% @course.lessons.order(:position).limit(3).each do |lesson| %>
                 <div class="list-group-item" style="background: var(--bg-secondary); border-color: var(--border-primary); color: var(--text-primary);">
                   <div class="d-flex align-items-start">
                     <div class="me-3">
                       <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" 
                            style="width: 40px; height: 40px;">
-                        <i class="fas fa-play text-primary"></i>
+                        <span class="text-primary fw-bold"><%= lesson.position || '?' %></span>
                       </div>
                     </div>
                     <div class="flex-grow-1">
-                      <h6 class="mb-2" style="color: var(--text-primary);"><%= lesson.title %></h6>
+                      <h6 class="mb-2" style="color: var(--text-primary);">
+                        <% if current_user&.can_access?(@course) %>
+                          <%= link_to lesson.title, course_lesson_path(@course, lesson), 
+                              class: "text-decoration-none", style: "color: var(--text-primary);" %>
+                        <% else %>
+                          <%= lesson.title %>
+                        <% end %>
+                      </h6>
                       <p class="mb-0 small" style="color: var(--text-secondary);">
                         <%= truncate(lesson.content, length: 150) %>
                       </p>
+                      <% if lesson.tests.any? %>
+                        <small class="text-info mt-1 d-block">
+                          <i class="fas fa-clipboard-check me-1"></i>
+                          <%= pluralize(lesson.tests.count, 'test') %>
+                        </small>
+                      <% end %>
                     </div>
                     <% if current_user&.can_access?(@course) %>
                       <div class="ms-3">
-                        <span class="badge bg-success">Available</span>
+                        <%= link_to "Start", course_lesson_path(@course, lesson), 
+                            class: "btn btn-sm btn-primary" %>
                       </div>
                     <% else %>
                       <div class="ms-3">
@@ -95,6 +157,17 @@
                       </div>
                     <% end %>
                   </div>
+                </div>
+              <% end %>
+              <% if @course.lessons.count > 3 %>
+                <div class="list-group-item text-center" style="background: var(--bg-secondary); border-color: var(--border-primary);">
+                  <small class="text-muted">
+                    And <%= @course.lessons.count - 3 %> more lessons...
+                    <% if current_user&.can_access?(@course) %>
+                      <%= link_to "View all lessons", course_lessons_path(@course), 
+                          class: "text-decoration-none ms-1" %>
+                    <% end %>
+                  </small>
                 </div>
               <% end %>
             </div>
@@ -114,9 +187,9 @@
       <% if current_user&.can_access?(@course) && @course.tests.any? %>
         <div class="card mt-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
           <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
-            <h5 class="mb-0" style="color: var(--text-primary);">
+            <h3 class="mb-0" style="color: var(--text-primary);">
               <i class="fas fa-clipboard-check me-2"></i>Course Tests
-            </h5>
+            </h3>
           </div>
           <div class="card-body p-4">
             <div class="row g-3">

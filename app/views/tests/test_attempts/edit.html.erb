@@ -1,16 +1,181 @@
-<h1>Answer Test: <%= @test_attempt.test.title %></h1>
-<p>Please answer all questions. Once submitted, your answers cannot be changed.</p>
-<%= form_with model: @test_attempt, url: tests_test_attempt_path(@test_attempt), method: :patch do |form| %>
-  <ul>
-    <% @test_attempt.test_attempt_questions.each do |taq| %>
-      <li>
-        <strong>Question:</strong> <%= taq.question.content %><br>
-        <%= label_tag "test_attempt_questions[#{taq.id}]", "Your Answer:" %>
-        <%= text_field_tag "test_attempt_questions[#{taq.id}]", taq.chosen_answer %>
-      </li>
-    <% end %>
-  </ul>
-  <div>
-    <%= form.submit "Submit Test" %>
+<div class="container py-5 test-attempt-container">
+  <div class="row">
+    <div class="col-lg-10 mx-auto">
+      <!-- Header Section -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 class="text-gradient h2 mb-2">Taking Assessment: <%= @test_attempt.test.title %></h1>
+          <p class="text-muted mb-0" style="color: var(--text-secondary);">
+            <i class="fas fa-clock me-2"></i>
+            Please answer all questions carefully. Once submitted, your answers cannot be changed.
+          </p>
+        </div>
+        <div class="text-end">
+          <% if @test_attempt.test.time_limit.present? %>
+            <div class="alert alert-info mb-0" style="background: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">
+              <i class="fas fa-stopwatch me-2"></i>
+              <span id="time-remaining">Time Remaining: <%= @test_attempt.time_remaining&.round || 'Unlimited' %> minutes</span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Assessment Instructions -->
+      <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+        <div class="card-body p-4" style="color: var(--text-primary);">
+          <h5 class="mb-3">
+            <i class="fas fa-info-circle text-primary me-2"></i>
+            Important Instructions
+          </h5>
+          <ul class="mb-0" style="color: var(--text-secondary);">
+            <li>Answer all questions to the best of your ability</li>
+            <li>Once you submit your answers, they cannot be changed</li>
+            <li>Do not navigate away from this page during the assessment</li>
+            <li>Use the "Save Progress" button to save your answers periodically</li>
+            <li>Click "Submit Test" only when you are ready to finalize your assessment</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Assessment Form -->
+      <%= form_with model: @test_attempt, url: tests_test_attempt_path(@test_attempt), method: :patch, local: true, id: "assessment-form" do |form| %>
+        <div class="card test-attempt-questions" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+          <div class="card-body p-4">
+            <% if @test_attempt.test_attempt_questions.any? %>
+              <% @test_attempt.test_attempt_questions.each_with_index do |taq, index| %>
+              <div class="mb-5 p-4 rounded" style="background: var(--bg-tertiary); border: 1px solid var(--border-primary);">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h6 class="mb-0" style="color: var(--text-primary);">
+                    Question <%= index + 1 %> of <%= @test_attempt.test_attempt_questions.count %>
+                  </h6>
+                  <span class="badge bg-info" style="background: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border-primary);">
+                    <%= taq.question.question_type_display %>
+                  </span>
+                </div>
+                
+                <p class="mb-4" style="color: var(--text-secondary); line-height: 1.6;">
+                  <%= taq.question.content %>
+                </p>
+                
+                <div class="form-group">
+                  <%= label_tag "test_attempt_questions[#{taq.id}]", "Your Answer:", class: "form-label fw-semibold", style: "color: var(--text-primary);" %>
+                  
+                  <% case taq.question.question_type %>
+                  <% when 'multiple_choice' %>
+                    <% if taq.question.multiple_choice_options.any? %>
+                      <div class="multiple-choice-options">
+                        <% taq.question.multiple_choice_options.each do |option| %>
+                          <div class="form-check mb-2">
+                            <%= radio_button_tag "test_attempt_questions[#{taq.id}]", option, taq.chosen_answer == option,
+                                class: "form-check-input", 
+                                style: "background: var(--bg-primary); border-color: var(--border-primary);" %>
+                            <%= label_tag "test_attempt_questions_#{taq.id}_#{option}", option, 
+                                class: "form-check-label", 
+                                style: "color: var(--text-primary);" %>
+                          </div>
+                        <% end %>
+                      </div>
+                    <% else %>
+                      <div class="alert alert-warning">
+                        <small>This multiple choice question has no options configured.</small>
+                      </div>
+                    <% end %>
+                    
+                  <% when 'true_false' %>
+                    <div class="true-false-options">
+                      <div class="form-check mb-2">
+                        <%= radio_button_tag "test_attempt_questions[#{taq.id}]", "True", taq.chosen_answer == "True",
+                            class: "form-check-input", 
+                            style: "background: var(--bg-primary); border-color: var(--border-primary);" %>
+                        <%= label_tag "test_attempt_questions_#{taq.id}_True", "True", 
+                            class: "form-check-label", 
+                            style: "color: var(--text-primary);" %>
+                      </div>
+                      <div class="form-check mb-2">
+                        <%= radio_button_tag "test_attempt_questions[#{taq.id}]", "False", taq.chosen_answer == "False",
+                            class: "form-check-input", 
+                            style: "background: var(--bg-primary); border-color: var(--border-primary);" %>
+                        <%= label_tag "test_attempt_questions_#{taq.id}_False", "False", 
+                            class: "form-check-label", 
+                            style: "color: var(--text-primary);" %>
+                      </div>
+                    </div>
+                    
+                  <% else %>
+                    <!-- Short Answer and Long Form -->
+                    <%= text_area_tag "test_attempt_questions[#{taq.id}]", taq.chosen_answer, 
+                        class: "form-control", 
+                        rows: taq.question.text_area_rows,
+                        maxlength: taq.question.max_length,
+                        style: "background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary);",
+                        placeholder: taq.question.text_input_placeholder %>
+                    <% if taq.question.max_length.present? %>
+                      <small class="text-muted mt-1 d-block">
+                        Maximum <%= taq.question.max_length %> characters
+                      </small>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+              <% end %>
+            <% else %>
+              <div class="alert alert-warning">
+                <strong>No Questions Found!</strong> 
+                This test attempt has no questions associated with it. Please contact support.
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex gap-3 justify-content-center mt-4">
+          <%= form.submit "Save Progress", name: "save", class: "btn btn-outline-primary btn-lg px-4" %>
+          <%= form.submit "Submit Test", name: "Submit", class: "btn btn-primary btn-lg px-4", 
+              data: { confirm: "Are you sure you want to submit your test? You cannot change your answers after submission." } %>
+        </div>
+      <% end %>
+
+      <!-- Abandon Assessment Option -->
+      <div class="text-center mt-4">
+        <%= link_to "Abandon Assessment", abandon_tests_test_attempt_path(@test_attempt), 
+            method: :post,
+            class: "btn btn-outline-danger btn-sm",
+            data: { confirm: "Are you sure you want to abandon this assessment? This will end your current attempt." } %>
+      </div>
+    </div>
   </div>
-<% end %>
+</div>
+
+<script>
+  // Auto-submit when time expires
+  <% if @test_attempt.test.time_limit.present? %>
+    let timeRemaining = <%= @test_attempt.time_remaining&.round || 0 %>;
+    
+    if (timeRemaining > 0) {
+      const timer = setInterval(() => {
+        timeRemaining--;
+        const timeDisplay = document.getElementById('time-remaining');
+        if (timeDisplay) {
+          timeDisplay.textContent = `Time Remaining: ${timeRemaining} minutes`;
+        }
+        
+        if (timeRemaining <= 0) {
+          clearInterval(timer);
+          alert('Time has expired! Your test will be automatically submitted.');
+          document.getElementById('assessment-form').submit();
+        }
+      }, 60000); // Update every minute
+    }
+  <% end %>
+
+  // Warn before leaving page
+  window.addEventListener('beforeunload', function(e) {
+    e.preventDefault();
+    e.returnValue = 'Are you sure you want to leave? Your progress may be lost.';
+  });
+
+  // Remove warning when form is submitted
+  document.getElementById('assessment-form').addEventListener('submit', function() {
+    window.removeEventListener('beforeunload', arguments.callee);
+  });
+</script>

@@ -37,7 +37,7 @@
                             <% end %>
                           </div>
                           <div>
-                            <h6 class="mb-0"><%= payment.payable.title %></h6>
+                            <h6 class="mb-0"><%= payment.payable&.title || "Unknown Item" %></h6>
                             <small style="color: var(--text-muted);"><%= payment.payable_type_display %></small>
                           </div>
                         </div>

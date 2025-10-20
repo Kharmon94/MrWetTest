@@ -13,6 +13,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  # Automatically assign student role to new users
+  after_create :assign_default_role
+
   # Stripe customer ID for payment processing
   attribute :stripe_customer_id, :string
 
@@ -68,5 +71,11 @@ class User < ApplicationRecord
     
     # Combine purchased and free courses, removing duplicates
     Course.where(id: (successful_payment_courses.pluck(:id) + free_courses.pluck(:id)).uniq)
+  end
+
+  private
+
+  def assign_default_role
+    add_role(:student) if roles.empty?
   end
 end

@@ -17,42 +17,34 @@ class AssessmentComplianceController < ApplicationController
   end
 
   def accept_honor_statement
-    @test_attempt = current_user.test_attempts.build(test_attempt_params)
-    
     unless params[:honor_statement_accepted] == '1'
       flash[:alert] = "You must accept the honor statement to proceed with the assessment."
       render :show_honor_statement
       return
     end
 
-    @test_attempt.honor_statement_accepted = true
+    # Log the honor statement acceptance
+    Rails.logger.info "Honor Statement Accepted - User: #{current_user.email}, Test: #{@test.title}, Time: #{Time.current}"
     
-    if @test_attempt.save
-      # Log the assessment start event
-      AssessmentComplianceService.log_assessment_event(:assessment_started, @test_attempt)
-      
-      # Enforce security measures for final assessments
-      AssessmentComplianceService.enforce_security_measures(@test_attempt)
-      
-      redirect_to tests_test_attempt_path(@test_attempt), 
-                  notice: "Assessment started successfully. Good luck!"
-    else
-      flash[:alert] = "There was an error starting the assessment."
-      render :show_honor_statement
-    end
+    # Store honor statement acceptance in session
+    session["honor_statement_accepted_#{@test.id}"] = true
+    
+    redirect_to new_tests_test_attempt_path(test_id: @test.id), 
+                notice: "Honor statement accepted. You can now start the assessment."
   end
 
   def abandon_assessment
-    @test_attempt = current_user.test_attempts.find(params[:test_attempt_id])
+    @test_attempt = current_user.test_attempts.find(params[:id])
+    @test = @test_attempt.test
     
-    if @test_attempt.update(abandoned: true, end_time: Time.current)
+    if @test_attempt.update(end_time: Time.current)
       AssessmentComplianceService.log_assessment_event(:assessment_abandoned, @test_attempt, {
         reason: params[:reason],
         time_elapsed: @test_attempt.duration_minutes
       })
       
       flash[:notice] = "Assessment abandoned. You may retake it if attempts remain."
-      redirect_to test_path(@test)
+      redirect_to tests_test_attempt_path(@test_attempt)
     else
       flash[:alert] = "Error abandoning assessment."
       redirect_to tests_test_attempt_path(@test_attempt)
@@ -62,12 +54,12 @@ class AssessmentComplianceController < ApplicationController
   private
 
   def set_test
-    @test = Test.find(params[:test_id])
+    @test = Test.find(params[:id] || params[:test_id])
   end
 
   def check_access
-    unless current_user.can_access?(@test)
-      redirect_to tests_path, alert: "You do not have access to this assessment."
+    unless current_user.can_access?(@test.course)
+      redirect_to course_path(@test.course), alert: "You do not have access to this assessment."
     end
   end
 

@@ -15,22 +15,25 @@ Rails.application.routes.draw do
       end
     end
     resources :courses
+    resources :lessons
     resources :tests
     resources :questions
+    resources :test_attempts
   end
 
 
   # Courses routes
   get 'courses/browse', to: 'courses#browse', as: :browse_courses
   resources :courses do
-    resources :tests, only: [:index, :show]
+    resources :lessons, only: [:index, :show]
+    resources :tests, only: [:index, :show], controller: 'courses/tests'
   end
 
   # Test side: test-taking functionality.
   namespace :tests do
     resources :test_attempts, only: [:index, :new, :create, :edit, :update, :show] do
       member do
-        post :abandon, to: 'assessment_compliance#abandon_assessment'
+        post :abandon
       end
     end
   end

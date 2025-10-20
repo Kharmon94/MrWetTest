@@ -1,6 +1,8 @@
 # app/controllers/courses_controller.rb
 class CoursesController < ApplicationController
   before_action :set_course, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :ensure_admin!, only: [:new, :create, :edit, :update, :destroy]
 
   # GET /courses
   def index
@@ -23,19 +25,15 @@ class CoursesController < ApplicationController
 
   # GET /courses/browse
   def browse
-    if user_signed_in? && !current_user.has_role?(:admin)
-      @courses = Course.all
-      @show_all_courses = true
-      render :index
-    else
-      redirect_to courses_path
-    end
+    @courses = Course.all
+    @show_all_courses = true
+    render :index
   end
 
   # GET /courses/:id
   def show
-    # Optionally, you could load associated lessons here:
-    # @lessons = @course.lessons.order(:position)
+    @lessons = @course.lessons.order(:position)
+    @progress_data = @course.user_progress(current_user) if current_user
   end
 
   # GET /courses/new
@@ -75,9 +73,17 @@ class CoursesController < ApplicationController
 
   def set_course
     @course = Course.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to root_path, alert: "Course not found."
   end
 
   def course_params
     params.require(:course).permit(:title, :description, :price)
+  end
+
+  def ensure_admin!
+    unless current_user&.has_role?(:admin)
+      redirect_to root_path, alert: "You are not authorized to access this page."
+    end
   end
 end

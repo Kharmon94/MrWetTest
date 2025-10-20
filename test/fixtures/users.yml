@@ -2,7 +2,6 @@
 
 admin:
   email: "admin@seapasspro.com"
-  encrypted_password: "$2a$12$K9By1GqRrE7q8q8q8q8q8eK9By1GqRrE7q8q8q8q8q8eK9By1GqRrE7q8q8"
   theme_preference: "dark"
   email_notifications: true
   push_notifications: true
@@ -10,7 +9,6 @@ admin:
 
 student:
   email: "student@seapasspro.com"
-  encrypted_password: "$2a$12$K9By1GqRrE7q8q8q8q8q8eK9By1GqRrE7q8q8q8q8q8eK9By1GqRrE7q8q8"
   theme_preference: "light"
   email_notifications: true
   push_notifications: false

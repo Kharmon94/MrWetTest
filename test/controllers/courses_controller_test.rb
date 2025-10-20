@@ -5,6 +5,10 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
     @course = courses(:one)
     @user = users(:student)
     @admin = users(:admin)
+    
+    # Assign roles to users
+    @user.add_role(:student) unless @user.has_role?(:student)
+    @admin.add_role(:admin) unless @admin.has_role?(:admin)
   end
 
   test "should get index" do

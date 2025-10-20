@@ -8,7 +8,7 @@ class TestAttempt < ApplicationRecord
   
   before_create :set_retake_number
   before_create :set_start_time
-  # after_create :generate_questions_for_attempt  # Commented out to allow manual question generation
+  after_create :generate_questions_for_attempt
 
   def calculate_score
     total = test_attempt_questions.count
@@ -48,10 +48,28 @@ class TestAttempt < ApplicationRecord
   end
   
   def submit!
+    # Lock all answers before submission (compliance requirement)
+    lock_all_answers!
+    
     self.end_time = Time.current
     self.score = calculate_score
     self.submitted = true
     save!
+    
+    # Log submission event for compliance tracking
+    AssessmentComplianceService.log_assessment_event(:assessment_submitted, self, {
+      score: self.score,
+      duration_minutes: duration_minutes,
+      questions_answered: test_attempt_questions.where.not(chosen_answer: nil).count,
+      total_questions: test_attempt_questions.count
+    })
+  end
+  
+  def lock_all_answers!
+    # Ensure all answers are locked and cannot be modified after submission
+    test_attempt_questions.each do |taq|
+      taq.update_column(:locked, true) if taq.respond_to?(:locked)
+    end
   end
   
   def can_be_submitted?
@@ -88,12 +106,30 @@ class TestAttempt < ApplicationRecord
     # Generate random questions based on compliance rules
     question_ids = test.generate_random_questions_for_attempt(user, previous_attempt_ids)
     
+    # Ensure we have at least one question
+    if question_ids.empty?
+      Rails.logger.warn "No questions generated for test attempt #{id}. Test #{test.id} has #{test.questions.count} questions."
+      return
+    end
+    
     # Store the questions used for this attempt
     update_column(:questions_used, question_ids.to_json)
     
     # Create TestAttemptQuestion records
     question_ids.each do |question_id|
-      test_attempt_questions.create!(question_id: question_id)
+      # Verify the question exists before creating the association
+      if Question.exists?(question_id)
+        test_attempt_questions.create!(question_id: question_id)
+      else
+        Rails.logger.warn "Question #{question_id} does not exist for test attempt #{id}"
+      end
     end
+    
+    # Log assessment event for compliance tracking
+    AssessmentComplianceService.log_assessment_event(:questions_generated, self, {
+      question_count: question_ids.count,
+      is_retake: previous_attempt_ids.any?,
+      repeated_questions: previous_attempt_ids.any? ? question_ids.count - (question_ids.count - previous_attempt_ids.count) : 0
+    })
   end
 end

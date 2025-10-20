@@ -6,6 +6,10 @@ class Courses::TestsControllerTest < ActionDispatch::IntegrationTest
     @test = tests(:one)
     @user = users(:student)
     @admin = users(:admin)
+    
+    # Assign roles
+    @user.add_role(:student)
+    @admin.add_role(:admin)
   end
 
   test "should get index for course tests" do

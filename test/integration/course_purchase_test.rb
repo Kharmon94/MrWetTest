@@ -5,6 +5,10 @@ class CoursePurchaseTest < ActionDispatch::IntegrationTest
     @course = courses(:one)
     @user = users(:student)
     @admin = users(:admin)
+    
+    # Assign roles to users
+    @user.add_role(:student) unless @user.has_role?(:student)
+    @admin.add_role(:admin) unless @admin.has_role?(:admin)
   end
 
   test "guest should browse courses without purchasing" do
@@ -75,7 +79,7 @@ class CoursePurchaseTest < ActionDispatch::IntegrationTest
     assert_response :success
     
     # Should show purchase/enroll button
-    assert_select "a[href=?]", new_payment_path, text: /enroll|purchase/i
+    assert_select "a[href*='payments/new']", text: /purchase/i
   end
 
   test "should not show purchase button for enrolled users" do
@@ -147,11 +151,22 @@ class CoursePurchaseTest < ActionDispatch::IntegrationTest
     get payments_path
     assert_response :success
     assert_select "table" # Should show payments table
-    assert_select "td", text: @course.title
+    assert_select "h6", text: @course.title
   end
 
   test "should show empty state for users with no payments" do
-    sign_in @user
+    # Create a new user with no payments
+    new_user = User.create!(
+      email: "newuser@test.com",
+      password: "password123",
+      theme_preference: "light",
+      email_notifications: true,
+      push_notifications: false,
+      language: "en"
+    )
+    new_user.add_role(:student)
+    
+    sign_in new_user
 
     get payments_path
     assert_response :success
