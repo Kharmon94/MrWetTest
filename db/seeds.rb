@@ -166,33 +166,45 @@ chapter_tests = []
     
     # Add options for multiple choice questions
     if question_type == "multiple_choice"
-      question_attributes[:options] = case i
+      option_sets = case i
       when 0
-        [["STCW Convention", "MARPOL", "SOLAS", "COLREGS"][j % 4],
-         ["IMO", "UN", "ICAO", "WHO"][j % 4],
-         ["16 years", "18 years", "21 years", "25 years"][j % 4],
-         ["Safety of Life at Sea", "Standard of Living at Sea", "Safety of Life and Sea", "Standard of Life and Sea"][j % 4]]
+        [
+          ["STCW Convention", "MARPOL", "SOLAS", "COLREGS"],
+          ["IMO", "UN", "ICAO", "WHO"],
+          ["16 years", "18 years", "21 years", "25 years"],
+          ["Safety of Life at Sea", "Standard of Living at Sea", "Safety of Life and Sea", "Standard of Life and Sea"]
+        ]
       when 1
-        [["Sound alarm and fight fire", "Evacuate immediately", "Call for help", "Use fire extinguisher"][j % 4],
-         ["Continuous blast of whistle", "Three short blasts", "One long blast", "Two long blasts"][j % 4],
-         ["Proceed to assigned station", "Stay in cabin", "Go to bridge", "Gather personal items"][j % 4],
-         ["Use emergency frequencies", "Use regular radio", "Send email", "Use satellite phone"][j % 4]]
+        [
+          ["Sound alarm and fight fire", "Evacuate immediately", "Call for help", "Use fire extinguisher"],
+          ["Continuous blast of whistle", "Three short blasts", "One long blast", "Two long blasts"],
+          ["Proceed to assigned station", "Stay in cabin", "Go to bridge", "Gather personal items"],
+          ["Use emergency frequencies", "Use regular radio", "Send email", "Use satellite phone"]
+        ]
       when 2
-        [["Put arms through armholes and fasten", "Wear over head", "Tie around waist", "Carry in hand"][j % 4],
-         ["In cold water conditions", "In warm water", "Only in Arctic", "Never"][j % 4],
-         ["Monthly", "Weekly", "Daily", "Yearly"][j % 4],
-         ["Search and rescue transponder", "Emergency position indicator", "Life jacket", "Fire extinguisher"][j % 4]]
+        [
+          ["Put arms through armholes and fasten", "Wear over head", "Tie around waist", "Carry in hand"],
+          ["In cold water conditions", "In warm water", "Only in Arctic", "Never"],
+          ["Monthly", "Weekly", "Daily", "Yearly"],
+          ["Search and rescue transponder", "Emergency position indicator", "Life jacket", "Fire extinguisher"]
+        ]
       when 3
-        [["Keep to starboard in narrow channels", "Keep to port", "Stay in center", "Pass on either side"][j % 4],
-         ["Monitor continuously", "Use occasionally", "Only at night", "Only in fog"][j % 4],
-         ["Team coordination", "Individual decisions", "Captain only", "Pilot only"][j % 4],
-         ["As specified in COLREGS", "As convenient", "Only at night", "Only in fog"][j % 4]]
+        [
+          ["Keep to starboard in narrow channels", "Keep to port", "Stay in center", "Pass on either side"],
+          ["Monitor continuously", "Use occasionally", "Only at night", "Only in fog"],
+          ["Team coordination", "Individual decisions", "Captain only", "Pilot only"],
+          ["As specified in COLREGS", "As convenient", "Only at night", "Only in fog"]
+        ]
       when 4
-        [["According to segregation table", "Alphabetically", "By weight", "By color"][j % 4],
-         ["Securely lashed", "Loosely tied", "Not secured", "Only in containers"][j % 4],
-         ["Using stability calculations", "By eye", "By weight only", "Not calculated"][j % 4],
-         ["Follow IMDG guidelines", "Use common sense", "Ask crew", "Not regulated"][j % 4]]
+        [
+          ["According to segregation table", "Alphabetically", "By weight", "By color"],
+          ["Securely lashed", "Loosely tied", "Not secured", "Only in containers"],
+          ["Using stability calculations", "By eye", "By weight only", "Not calculated"],
+          ["Follow IMDG guidelines", "Use common sense", "Ask crew", "Not regulated"]
+        ]
       end
+      
+      question_attributes[:options] = option_sets[j % 4]
       question_attributes[:correct_answer] = question_attributes[:options].first
     elsif question_type == "true_false"
       question_attributes[:correct_answer] = ["True", "False"][j % 2]
@@ -259,33 +271,45 @@ maritime_final = Test.create!(
   
   # Add options for multiple choice questions
   if question_type == "multiple_choice"
-    question_attributes[:options] = case i % 5
+    option_sets = case i % 5
     when 0
-      [["Training standards", "Ship construction", "Cargo handling", "Navigation rules"][i % 4],
-       ["Chapter II-2", "Chapter I", "Chapter III", "Chapter V"][i % 4],
-       ["Oil pollution", "Air pollution", "Noise pollution", "Light pollution"][i % 4],
-       ["Master", "Chief Officer", "Engineer", "Pilot"][i % 4]]
+      [
+        ["Training standards", "Ship construction", "Cargo handling", "Navigation rules"],
+        ["Chapter II-2", "Chapter I", "Chapter III", "Chapter V"],
+        ["Oil pollution", "Air pollution", "Noise pollution", "Light pollution"],
+        ["Master", "Chief Officer", "Engineer", "Pilot"]
+      ]
     when 1
-      [["Sound alarm", "Evacuate", "Call for help", "Use extinguisher"][i % 4],
-       ["Continuous blast", "Three blasts", "One blast", "No signal"][i % 4],
-       ["Check muster list", "Stay in cabin", "Go to bridge", "Gather belongings"][i % 4],
-       ["Use emergency frequencies", "Use regular radio", "Send email", "Use satellite"][i % 4]]
+      [
+        ["Sound alarm", "Evacuate", "Call for help", "Use extinguisher"],
+        ["Continuous blast", "Three blasts", "One blast", "No signal"],
+        ["Check muster list", "Stay in cabin", "Go to bridge", "Gather belongings"],
+        ["Use emergency frequencies", "Use regular radio", "Send email", "Use satellite"]
+      ]
     when 2
-      [["One per person", "Two per person", "One per cabin", "As needed"][i % 4],
-       ["Cold water areas", "Warm water", "Tropical waters", "All waters"][i % 4],
-       ["Remove safety pin", "Press button", "Pull cord", "Turn switch"][i % 4],
-       ["5 nautical miles", "10 nautical miles", "3 nautical miles", "Unlimited"][i % 4]]
+      [
+        ["One per person", "Two per person", "One per cabin", "As needed"],
+        ["Cold water areas", "Warm water", "Tropical waters", "All waters"],
+        ["Remove safety pin", "Press button", "Pull cord", "Turn switch"],
+        ["5 nautical miles", "10 nautical miles", "3 nautical miles", "Unlimited"]
+      ]
     when 3
-      [["Maintain course and speed", "Change course", "Stop engines", "Reverse course"][i % 4],
-       ["Monitor continuously", "Use occasionally", "Only at night", "Only in fog"][i % 4],
-       ["Team coordination", "Individual decisions", "Captain only", "Pilot only"][i % 4],
-       ["From sunset to sunrise", "24 hours", "Only at night", "Only in fog"][i % 4]]
+      [
+        ["Maintain course and speed", "Change course", "Stop engines", "Reverse course"],
+        ["Monitor continuously", "Use occasionally", "Only at night", "Only in fog"],
+        ["Team coordination", "Individual decisions", "Captain only", "Pilot only"],
+        ["From sunset to sunrise", "24 hours", "Only at night", "Only in fog"]
+      ]
     when 4
-      [["By segregation table", "Alphabetically", "By weight", "By color"][i % 4],
-       ["50% of cargo weight", "100% of cargo weight", "25% of cargo weight", "Not specified"][i % 4],
-       ["KM minus KG", "KG minus KM", "KM plus KG", "KG plus KM"][i % 4],
-       ["9 classes", "7 classes", "5 classes", "3 classes"][i % 4]]
+      [
+        ["By segregation table", "Alphabetically", "By weight", "By color"],
+        ["50% of cargo weight", "100% of cargo weight", "25% of cargo weight", "Not specified"],
+        ["KM minus KG", "KG minus KM", "KM plus KG", "KG plus KM"],
+        ["9 classes", "7 classes", "5 classes", "3 classes"]
+      ]
     end
+    
+    question_attributes[:options] = option_sets[i % 4]
     question_attributes[:correct_answer] = question_attributes[:options].first
   elsif question_type == "true_false"
     question_attributes[:correct_answer] = ["True", "False"][i % 2]
@@ -347,28 +371,38 @@ navigation_test = Test.create!(
   
   # Add options for multiple choice questions
   if question_type == "multiple_choice"
-    question_attributes[:options] = case i % 4
+    option_sets = case i % 4
     when 0
-      [["3-5 meters", "10-15 meters", "1-2 meters", "20-30 meters"][i % 4],
-       ["4 satellites", "3 satellites", "5 satellites", "6 satellites"][i % 4],
-       ["Improve accuracy", "Reduce cost", "Increase speed", "Save power"][i % 4],
-       ["Every second", "Every minute", "Every 5 seconds", "Continuous"][i % 4]]
+      [
+        ["3-5 meters", "10-15 meters", "1-2 meters", "20-30 meters"],
+        ["4 satellites", "3 satellites", "5 satellites", "6 satellites"],
+        ["Improve accuracy", "Reduce cost", "Increase speed", "Save power"],
+        ["Every second", "Every minute", "Every 5 seconds", "Continuous"]
+      ]
     when 1
-      [["Electronic Chart Display", "Electronic Chart System", "Electronic Chart Device", "Electronic Chart Display and Information System"][i % 4],
-       ["Weekly", "Monthly", "Daily", "Real-time"][i % 4],
-       ["Chart data", "Weather data", "Traffic data", "Depth data"][i % 4],
-       ["Immediately", "After delay", "Manually", "Never"][i % 4]]
+      [
+        ["Electronic Chart Display", "Electronic Chart System", "Electronic Chart Device", "Electronic Chart Display and Information System"],
+        ["Weekly", "Monthly", "Daily", "Real-time"],
+        ["Chart data", "Weather data", "Traffic data", "Depth data"],
+        ["Immediately", "After delay", "Manually", "Never"]
+      ]
     when 2
-      [["0.1 nautical miles", "0.5 nautical miles", "1.0 nautical miles", "2.0 nautical miles"][i % 4],
-       ["Auto tune", "Manual tune", "Fixed tune", "No tuning"][i % 4],
-       ["Weather", "Sun", "Moon", "Stars"][i % 4],
-       ["Size and shape", "Color only", "Speed only", "Distance only"][i % 4]]
+      [
+        ["0.1 nautical miles", "0.5 nautical miles", "1.0 nautical miles", "2.0 nautical miles"],
+        ["Auto tune", "Manual tune", "Fixed tune", "No tuning"],
+        ["Weather", "Sun", "Moon", "Stars"],
+        ["Size and shape", "Color only", "Speed only", "Distance only"]
+      ]
     when 3
-      [["Vessel identification", "Weather reporting", "Depth sounding", "Speed measurement"][i % 4],
-       ["Every 3 seconds", "Every minute", "Every 5 seconds", "Continuous"][i % 4],
-       ["Position and course", "Weather only", "Depth only", "Speed only"][i % 4],
-       ["Immediately", "After delay", "Manually", "Never"][i % 4]]
+      [
+        ["Vessel identification", "Weather reporting", "Depth sounding", "Speed measurement"],
+        ["Every 3 seconds", "Every minute", "Every 5 seconds", "Continuous"],
+        ["Position and course", "Weather only", "Depth only", "Speed only"],
+        ["Immediately", "After delay", "Manually", "Never"]
+      ]
     end
+    
+    question_attributes[:options] = option_sets[i % 4]
     question_attributes[:correct_answer] = question_attributes[:options].first
   elsif question_type == "true_false"
     question_attributes[:correct_answer] = ["True", "False"][i % 2]
@@ -419,12 +453,14 @@ practice_test = Test.create!(
   }
   
   # Add options for multiple choice questions
-  question_attributes[:options] = [
-    ["Equipment", "Training", "Regulations", "All of the above"][i % 4],
-    ["Training", "Equipment", "Procedures", "All of the above"][i % 4],
-    ["Regulations", "Training", "Equipment", "All of the above"][i % 4],
-    ["All of the above", "Equipment only", "Training only", "Regulations only"][i % 4]
+  option_sets = [
+    ["Equipment", "Training", "Regulations", "All of the above"],
+    ["Training", "Equipment", "Procedures", "All of the above"],
+    ["Regulations", "Training", "Equipment", "All of the above"],
+    ["All of the above", "Equipment only", "Training only", "Regulations only"]
   ]
+  
+  question_attributes[:options] = option_sets[i % 4]
   question_attributes[:correct_answer] = "All of the above"
   
   Question.create!(question_attributes)

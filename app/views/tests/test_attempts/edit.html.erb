@@ -1,3 +1,24 @@
+<style>
+  .test-attempt-container .form-check-input {
+    background-color: var(--bg-primary);
+    border-color: var(--border-primary);
+  }
+  
+  .test-attempt-container .form-check-input:checked {
+    background-color: var(--accent-500);
+    border-color: var(--accent-500);
+  }
+  
+  .test-attempt-container .form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+    border-color: var(--accent-500);
+  }
+  
+  .test-attempt-container .form-check-label:hover {
+    color: var(--accent-500);
+  }
+</style>
+
 <div class="container py-5 test-attempt-container">
   <div class="row">
     <div class="col-lg-10 mx-auto">
@@ -48,9 +69,6 @@
                   <h6 class="mb-0" style="color: var(--text-primary);">
                     Question <%= index + 1 %> of <%= @test_attempt.test_attempt_questions.count %>
                   </h6>
-                  <span class="badge bg-info" style="background: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border-primary);">
-                    <%= taq.question.question_type_display %>
-                  </span>
                 </div>
                 
                 <p class="mb-4" style="color: var(--text-secondary); line-height: 1.6;">
@@ -64,11 +82,10 @@
                     <% taq.question.multiple_choice_options.each do |option| %>
                       <div class="form-check mb-2">
                         <%= radio_button_tag "test_attempt_questions[#{taq.id}]", option, taq.chosen_answer == option,
-                            class: "form-check-input", 
-                            style: "background: var(--bg-primary); border-color: var(--border-primary);" %>
+                            class: "form-check-input" %>
                         <%= label_tag "test_attempt_questions_#{taq.id}_#{option}", option, 
                             class: "form-check-label", 
-                            style: "color: var(--text-primary);" %>
+                            style: "color: var(--text-primary); cursor: pointer;" %>
                       </div>
                     <% end %>
                   </div>
@@ -87,8 +104,9 @@
         <!-- Action Buttons -->
         <div class="d-flex gap-3 justify-content-center mt-4">
           <%= form.submit "Save Progress", name: "save", class: "btn btn-outline-primary btn-lg px-4" %>
-          <%= form.submit "Submit Test", name: "Submit", class: "btn btn-primary btn-lg px-4", 
-              data: { confirm: "Are you sure you want to submit your test? You cannot change your answers after submission." } %>
+          <button type="button" class="btn btn-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#submitConfirmationModal">
+            Submit Test
+          </button>
         </div>
       <% end %>
 
@@ -134,5 +152,93 @@
   // Remove warning when form is submitted
   document.getElementById('assessment-form').addEventListener('submit', function() {
     window.removeEventListener('beforeunload', arguments.callee);
+  });
+</script>
+
+<!-- Submit Confirmation Modal -->
+<div class="modal fade" id="submitConfirmationModal" tabindex="-1" aria-labelledby="submitConfirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+      <div class="modal-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+        <h5 class="modal-title" id="submitConfirmationModalLabel" style="color: var(--text-primary);">
+          <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+          Confirm Test Submission
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+      </div>
+      <div class="modal-body" style="color: var(--text-primary);">
+        <div class="alert alert-warning mb-3" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3);">
+          <i class="fas fa-exclamation-circle me-2"></i>
+          <strong>Important:</strong> Once you submit your test, you cannot change your answers.
+        </div>
+        
+        <p class="mb-3">Are you sure you want to submit your test for grading?</p>
+        
+        <div class="row text-center">
+          <div class="col-4">
+            <div class="p-2 rounded" style="background: var(--bg-tertiary); border: 1px solid var(--border-primary);">
+              <div class="fw-bold" style="color: var(--text-primary);"><%= @test_attempt.test_attempt_questions.count %></div>
+              <small style="color: var(--text-secondary);">Questions</small>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="p-2 rounded" style="background: var(--bg-tertiary); border: 1px solid var(--border-primary);">
+              <div class="fw-bold" style="color: var(--text-primary);" id="answered-count">0</div>
+              <small style="color: var(--text-secondary);">Answered</small>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="p-2 rounded" style="background: var(--bg-tertiary); border: 1px solid var(--border-primary);">
+              <div class="fw-bold" style="color: var(--text-primary);" id="remaining-count"><%= @test_attempt.test_attempt_questions.count %></div>
+              <small style="color: var(--text-secondary);">Remaining</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="background: var(--bg-tertiary); border-top: 1px solid var(--border-primary);">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          <i class="fas fa-times me-2"></i>Cancel
+        </button>
+        <button type="button" class="btn btn-primary" id="confirmSubmitBtn">
+          <i class="fas fa-check me-2"></i>Yes, Submit Test
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Count answered questions
+  function updateAnswerCounts() {
+    const radioButtons = document.querySelectorAll('input[type="radio"]');
+    const answeredCount = document.querySelectorAll('input[type="radio"]:checked').length;
+    const totalQuestions = <%= @test_attempt.test_attempt_questions.count %>;
+    
+    document.getElementById('answered-count').textContent = answeredCount;
+    document.getElementById('remaining-count').textContent = totalQuestions - answeredCount;
+  }
+  
+  // Update counts when modal is shown
+  document.getElementById('submitConfirmationModal').addEventListener('show.bs.modal', function() {
+    updateAnswerCounts();
+  });
+  
+  // Update counts when radio buttons are clicked
+  document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+    radio.addEventListener('change', updateAnswerCounts);
+  });
+  
+  // Handle form submission
+  document.getElementById('confirmSubmitBtn').addEventListener('click', function() {
+    // Create a hidden submit button with the correct name
+    const form = document.getElementById('assessment-form');
+    const submitBtn = document.createElement('input');
+    submitBtn.type = 'hidden';
+    submitBtn.name = 'Submit';
+    submitBtn.value = 'Submit Test';
+    form.appendChild(submitBtn);
+    
+    // Submit the form
+    form.submit();
   });
 </script>

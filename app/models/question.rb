@@ -12,24 +12,27 @@ class Question < ApplicationRecord
 
   before_validation :set_question_type
 
-  private
-
-  def set_question_type
-    self.question_type = 'multiple_choice'
-  end
-
-  def correct_answer_must_be_in_options
-    return unless options.present? && correct_answer.present?
-    
-    unless multiple_choice_options.include?(correct_answer)
-      errors.add(:correct_answer, 'must be one of the provided options')
-    end
-  end
-
   # Question type constants
   QUESTION_TYPES = {
     'multiple_choice' => 'Multiple Choice'
   }.freeze
+  
+  # Question type helper methods
+  def multiple_choice?
+    question_type == 'multiple_choice'
+  end
+
+  def multiple_choice_options
+    return [] unless multiple_choice? && options.present?
+    options.is_a?(Array) ? options : JSON.parse(options)
+  end
+
+  def validate_answer_format(answer)
+    return true if answer.blank?
+    
+    # For multiple choice, answer should be one of the options
+    multiple_choice_options.include?(answer)
+  end
   
   # Enhanced feedback methods for compliance
   def provide_feedback(chosen_answer)
@@ -95,25 +98,18 @@ class Question < ApplicationRecord
     else 'Hard'
     end
   end
-  
-  # Question type helper methods
-  def multiple_choice?
-    question_type == 'multiple_choice'
+
+  private
+
+  def set_question_type
+    self.question_type = 'multiple_choice'
   end
 
-  def question_type_display
-    QUESTION_TYPES[question_type] || 'Unknown'
-  end
-
-  def multiple_choice_options
-    return [] unless multiple_choice? && options.present?
-    options.is_a?(Array) ? options : JSON.parse(options)
-  end
-
-  def validate_answer_format(answer)
-    return true if answer.blank?
+  def correct_answer_must_be_in_options
+    return unless options.present? && correct_answer.present?
     
-    # For multiple choice, answer should be one of the options
-    multiple_choice_options.include?(answer)
+    unless multiple_choice_options.include?(correct_answer)
+      errors.add(:correct_answer, 'must be one of the provided options')
+    end
   end
 end

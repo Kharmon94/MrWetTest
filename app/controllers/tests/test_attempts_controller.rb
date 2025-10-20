@@ -98,7 +98,7 @@ class Tests::TestAttemptsController < ApplicationController
       end
     end
 
-    if params[:commit] == 'Submit'
+    if params[:Submit]
       # Final validation before submission
       unless @test_attempt.can_be_submitted?
         flash[:alert] = "Cannot submit test. Please ensure you have accepted the honor statement and time has not expired."

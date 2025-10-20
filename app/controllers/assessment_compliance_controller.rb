@@ -29,8 +29,35 @@ class AssessmentComplianceController < ApplicationController
     # Store honor statement acceptance in session
     session["honor_statement_accepted_#{@test.id}"] = true
     
-    redirect_to new_tests_test_attempt_path(test_id: @test.id), 
-                notice: "Honor statement accepted. You can now start the assessment."
+    # Check if user is enrolled in the course
+    unless current_user.has_role?(:admin) || current_user.has_purchased?(@test.course)
+      redirect_to course_path(@test.course), alert: "You must be enrolled in this course to take its tests." and return
+    end
+    
+    # Check max attempts
+    unless @test.can_user_retake?(current_user)
+      redirect_to course_test_path(@test.course, @test), alert: "You have reached the maximum number of attempts for this test." and return
+    end
+
+    # Create test attempt directly
+    @test_attempt = current_user.test_attempts.build(
+      test: @test, 
+      submitted: false,
+      retake_number: 1,
+      start_time: Time.current,
+      honor_statement_accepted: true
+    )
+    
+    if @test_attempt.save
+      # Clear honor statement acceptance flag
+      session.delete("honor_statement_accepted_#{@test.id}")
+      redirect_to edit_tests_test_attempt_path(@test_attempt), 
+                  notice: "Honor statement accepted. Assessment started."
+    else
+      Rails.logger.error "Failed to create test attempt: #{@test_attempt.errors.full_messages.join(', ')}"
+      redirect_to new_tests_test_attempt_path(test_id: @test.id), 
+                  alert: "Failed to start assessment: #{@test_attempt.errors.full_messages.join(', ')}"
+    end
   end
 
   def abandon_assessment
