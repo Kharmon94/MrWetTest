@@ -94,6 +94,19 @@ class Test < ApplicationRecord
     end
   end
   
+  def calculate_pass_rate
+    total_attempts = test_attempts.where(submitted: true).count
+    return 0 if total_attempts == 0
+    
+    passed_attempts = test_attempts.where(submitted: true).select { |ta| ta.passed? }.count
+    (passed_attempts.to_f / total_attempts * 100).round(1)
+  end
+  
+  def calculate_average_score
+    average = test_attempts.where(submitted: true).average(:score)
+    average ? average.round(1) : 0
+  end
+
   def generate_weighted_questions_for_attempt(user, previous_attempt_ids = [])
     # Enhanced method for weighted question selection based on difficulty and learning objectives
     validate_question_pool_compliance! if final_assessment?

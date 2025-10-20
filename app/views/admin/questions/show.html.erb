@@ -27,16 +27,6 @@
             </div>
           </div>
 
-          <div class="row mb-3">
-            <div class="col-sm-3">
-              <strong>Question Type:</strong>
-            </div>
-            <div class="col-sm-9">
-              <span class="badge bg-info">
-                <%= @question.question_type_display %>
-              </span>
-            </div>
-          </div>
 
           <div class="row mb-3">
             <div class="col-sm-3">
@@ -58,34 +48,21 @@
             </div>
           </div>
 
-          <% if @question.multiple_choice? && @question.multiple_choice_options.any? %>
-            <div class="row mb-3">
-              <div class="col-sm-3">
-                <strong>Multiple Choice Options:</strong>
-              </div>
-              <div class="col-sm-9">
-                <div class="p-3 bg-light rounded">
-                  <% @question.multiple_choice_options.each_with_index do |option, index| %>
-                    <div class="mb-2">
-                      <span class="badge bg-secondary me-2"><%= ('A'.ord + index).chr %></span>
-                      <%= option %>
-                    </div>
-                  <% end %>
-                </div>
+          <div class="row mb-3">
+            <div class="col-sm-3">
+              <strong>Multiple Choice Options:</strong>
+            </div>
+            <div class="col-sm-9">
+              <div class="p-3 bg-light rounded">
+                <% @question.multiple_choice_options.each_with_index do |option, index| %>
+                  <div class="mb-2">
+                    <span class="badge bg-secondary me-2"><%= ('A'.ord + index).chr %></span>
+                    <%= option %>
+                  </div>
+                <% end %>
               </div>
             </div>
-          <% end %>
-
-          <% if @question.short_answer? || @question.long_form? %>
-            <div class="row mb-3">
-              <div class="col-sm-3">
-                <strong>Maximum Length:</strong>
-              </div>
-              <div class="col-sm-9">
-                <%= @question.max_length || 'Not specified' %> characters
-              </div>
-            </div>
-          <% end %>
+          </div>
 
           <div class="row mb-3">
             <div class="col-sm-3">
@@ -139,14 +116,12 @@
             </span>
           </div>
 
-          <% if @question.multiple_choice? %>
-            <div class="mb-3">
-              <strong>Number of Options:</strong>
-              <span class="badge bg-info ms-2">
-                <%= @question.multiple_choice_options.count %>
-              </span>
-            </div>
-          <% end %>
+          <div class="mb-3">
+            <strong>Number of Options:</strong>
+            <span class="badge bg-info ms-2">
+              <%= @question.multiple_choice_options.count %>
+            </span>
+          </div>
         </div>
       </div>
 

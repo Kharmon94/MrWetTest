@@ -60,7 +60,7 @@
           
           <div class="d-flex gap-3 justify-content-center">
             <% if current_user.can_access?(@course) %>
-              <%= link_to "Take Test", new_tests_test_attempt_path(test_id: @test.id), class: "btn btn-primary btn-lg" %>
+              <%= link_to "Start Test", procedures_test_path(@test), class: "btn btn-primary btn-lg" %>
             <% else %>
               <div class="alert alert-warning text-center w-100">
                 <i class="fas fa-lock me-2"></i>

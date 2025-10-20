@@ -200,7 +200,7 @@
                     </p>
 
                     <!-- Show multiple choice options if applicable -->
-                    <% if taq.question.multiple_choice? && taq.question.multiple_choice_options.any? %>
+                    <% if taq.question.multiple_choice_options.any? %>
                       <div class="mb-3">
                         <small class="fw-semibold" style="color: var(--text-muted);">Available Options:</small>
                         <div class="p-2 rounded mt-1" style="background: var(--bg-tertiary); border: 1px solid var(--border-primary);">
@@ -274,7 +274,7 @@
 
       <!-- Action Buttons -->
       <div class="d-flex gap-3 justify-content-center mt-5">
-        <%= link_to "Take Test Again", new_tests_test_attempt_path(test_id: @test_attempt.test.id), 
+        <%= link_to "Take Test Again", procedures_test_path(@test_attempt.test), 
             class: "btn btn-outline-primary btn-lg" %>
         <%= link_to "View All Tests", courses_path, class: "btn btn-primary btn-lg" %>
       </div>

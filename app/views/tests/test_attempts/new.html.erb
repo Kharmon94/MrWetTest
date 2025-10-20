@@ -1,18 +1,63 @@
-<h1>Start Test: <%= @test.title %></h1>
-<p><%= @test.instructions %></p>
-<p>Please read and accept the honor statement before beginning:</p>
-<blockquote>
-  "I do not have any other web browsers open on the computer being used for the exam.
-  I will not use any communication device to seek or receive information to assist me with answering the questions contained in this test.
-  I affirm that I will not give or receive any unauthorized help on this exam and that all work will be my own."
-</blockquote>
-<%= form_with url: tests_test_attempts_path, method: :post do |form| %>
-  <%= hidden_field_tag :test_id, @test.id %>
-  <div>
-    <%= form.check_box :honor_statement, {}, '1', '0' %>
-    <%= form.label :honor_statement, "I agree to the honor statement" %>
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <!-- Test Instructions -->
+      <div class="card mb-4" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+        <div class="card-header" style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+          <h5 class="mb-0" style="color: var(--text-primary);">
+            <i class="fas fa-info-circle me-2"></i>Test Instructions
+          </h5>
+        </div>
+        <div class="card-body p-4" style="color: var(--text-primary);">
+          <h3 class="mb-3" style="color: var(--text-primary);"><%= @test.title %></h3>
+          
+          <% if @test.description.present? %>
+            <p class="mb-3" style="color: var(--text-secondary);"><%= @test.description %></p>
+          <% end %>
+          
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-clock text-primary me-2"></i>
+                <strong>Time Limit:</strong> <%= @test.time_limit_display %>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-target text-success me-2"></i>
+                <strong>Passing Score:</strong> <%= @test.passing_score_display %>
+              </div>
+            </div>
+            <% if @test.max_attempts.present? %>
+              <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-redo text-warning me-2"></i>
+                  <strong>Max Attempts:</strong> <%= @test.max_attempts %>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-user text-info me-2"></i>
+                  <strong>Your Attempt:</strong> <%= @test.user_attempt_count(current_user) + 1 %> of <%= @test.max_attempts %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+        <%= link_to "Start Assessment", tests_test_attempts_path, 
+                    method: :post, 
+                    params: { test_id: @test.id },
+                    class: "btn btn-success btn-lg px-4 px-md-5",
+                    data: { 
+                      confirm: "Are you ready to start the assessment? Once started, you cannot access course materials.",
+                      turbo_confirm: "Are you ready to start the assessment? Once started, you cannot access course materials."
+                    } %>
+        <%= link_to "Cancel", course_test_path(@test.course, @test), class: "btn btn-outline-secondary btn-lg px-4 px-md-5" %>
+      </div>
+    </div>
   </div>
-  <div>
-    <%= form.submit "Start Test" %>
-  </div>
-<% end %>
+</div>

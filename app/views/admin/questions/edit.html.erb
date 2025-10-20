@@ -21,21 +21,12 @@
             </div>
           <% end %>
 
-          <div class="row">
-            <div class="col-md-6">
-              <div class="mb-3">
-                <%= form.label :test_id, "Test", class: "form-label" %>
-                <%= form.select :test_id, @tests.map { |t| [t.title, t.id] }, { prompt: "Select a test" }, { class: "form-select" } %>
-              </div>
-            </div>
-            
-            <div class="col-md-6">
-              <div class="mb-3">
-                <%= form.label :question_type, "Question Type", class: "form-label" %>
-                <%= form.select :question_type, Question::QUESTION_TYPES.map { |k, v| [v, k] }, { selected: @question.question_type }, { class: "form-select", id: "question_type_select" } %>
-              </div>
-            </div>
+          <div class="mb-3">
+            <%= form.label :test_id, "Test", class: "form-label" %>
+            <%= form.select :test_id, @tests.map { |t| [t.title, t.id] }, { prompt: "Select a test" }, { class: "form-select" } %>
           </div>
+          
+          <%= form.hidden_field :question_type, value: 'multiple_choice' %>
 
           <div class="mb-3">
             <%= form.label :content, "Question Content", class: "form-label" %>
@@ -43,7 +34,7 @@
           </div>
 
           <!-- Multiple Choice Options -->
-          <div id="multiple_choice_options" class="mb-3" style="display: none;">
+          <div class="mb-3">
             <label class="form-label">Multiple Choice Options</label>
             <div id="options_container">
               <% existing_options = @question.multiple_choice_options %>
@@ -65,16 +56,6 @@
             </button>
           </div>
 
-          <!-- Text Length Limit -->
-          <div id="text_length_limit" class="mb-3" style="display: none;">
-            <div class="row">
-              <div class="col-md-6">
-                <%= form.label :max_length, "Maximum Length (characters)", class: "form-label" %>
-                <%= form.number_field :max_length, class: "form-control", placeholder: "e.g., 100 for short answer, 1000 for long form" %>
-              </div>
-            </div>
-          </div>
-
           <div class="mb-3">
             <%= form.label :correct_answer, "Found Answer", class: "form-label" %>
             <%= form.text_field :correct_answer, class: "form-control", placeholder: "Enter the correct answer..." %>
@@ -92,26 +73,8 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const questionTypeSelect = document.getElementById('question_type_select');
-    const multipleChoiceOptions = document.getElementById('multiple_choice_options');
-    const textLengthLimit = document.getElementById('text_length_limit');
     const optionsContainer = document.getElementById('options_container');
     const addOptionButton = document.getElementById('add_option');
-
-    function toggleFields() {
-      const selectedType = questionTypeSelect.value;
-      
-      // Hide all conditional fields
-      multipleChoiceOptions.style.display = 'none';
-      textLengthLimit.style.display = 'none';
-      
-      // Show relevant fields based on question type
-      if (selectedType === 'multiple_choice') {
-        multipleChoiceOptions.style.display = 'block';
-      } else if (selectedType === 'short_answer' || selectedType === 'long_form') {
-        textLengthLimit.style.display = 'block';
-      }
-    }
 
     // Add option functionality
     let optionCount = document.querySelectorAll('#options_container .input-group').length;
@@ -147,11 +110,5 @@
         optionCount--;
       }
     });
-
-    // Initial toggle
-    toggleFields();
-    
-    // Toggle on change
-    questionTypeSelect.addEventListener('change', toggleFields);
   });
 </script>

@@ -14,7 +14,6 @@
             <tr>
               <th>ID</th>
               <th>Question Content</th>
-              <th>Type</th>
               <th>Test</th>
               <th>Correct Answer</th>
               <th>Created</th>
@@ -29,11 +28,6 @@
                   <div class="text-truncate" style="max-width: 300px;" title="<%= question.content %>">
                     <%= truncate(question.content, length: 100) %>
                   </div>
-                </td>
-                <td>
-                  <span class="badge bg-info">
-                    <%= question.question_type_display %>
-                  </span>
                 </td>
                 <td>
                   <%= link_to question.test.title, admin_test_path(question.test), class: "text-decoration-none" %>

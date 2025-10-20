@@ -142,69 +142,19 @@ chapter_tests = []
     question_number = j + 1
     
     # Determine question type based on position (mix of types)
-    question_type = case j % 4
-    when 0 then "multiple_choice"
-    when 1 then "short_answer"
-    when 2 then "true_false"
-    when 3 then "long_form"
-    end
+    question_type = "multiple_choice"  # Only multiple choice questions
     
     content = case i
     when 0 # Maritime Law
-      case question_type
-      when "multiple_choice"
-        "Which convention establishes minimum standards for training, certification, and watchkeeping? (Question #{question_number})"
-      when "short_answer"
-        "What does SOLAS stand for? (Question #{question_number})"
-      when "true_false"
-        "STCW Convention applies to all seafarers. (Question #{question_number})"
-      when "long_form"
-        "Explain the key provisions of the STCW Convention and how they ensure maritime safety. (Question #{question_number})"
-      end
+      "Which convention establishes minimum standards for training, certification, and watchkeeping? (Question #{question_number})"
     when 1 # Emergency Response
-      case question_type
-      when "multiple_choice"
-        "What is the correct procedure for a fire emergency on board? (Question #{question_number})"
-      when "short_answer"
-        "How should abandon ship signals be given? (Question #{question_number})"
-      when "true_false"
-        "Emergency lighting must function for at least 3 hours. (Question #{question_number})"
-      when "long_form"
-        "Describe the complete fire emergency response procedure including alarm systems, crew duties, and safety measures. (Question #{question_number})"
-      end
+      "What is the correct procedure for a fire emergency on board? (Question #{question_number})"
     when 2 # Safety Equipment
-      case question_type
-      when "multiple_choice"
-        "What is the proper way to don a life jacket? (Question #{question_number})"
-      when "short_answer"
-        "How often should EPIRBs be tested? (Question #{question_number})"
-      when "true_false"
-        "Immersion suits are only required in Arctic waters. (Question #{question_number})"
-      when "long_form"
-        "Explain the maintenance requirements for all personal safety equipment and why regular inspection is crucial. (Question #{question_number})"
-      end
+      "What is the proper way to don a life jacket? (Question #{question_number})"
     when 3 # Navigation Safety
-      case question_type
-      when "multiple_choice"
-        "What is the rule of the road for collision avoidance? (Question #{question_number})"
-      when "short_answer"
-        "How should radar be used for navigation? (Question #{question_number})"
-      when "true_false"
-        "Bridge resource management is only important during emergencies. (Question #{question_number})"
-      when "long_form"
-        "Discuss the principles of bridge resource management and how they contribute to safe navigation. (Question #{question_number})"
-      end
+      "What is the rule of the road for collision avoidance? (Question #{question_number})"
     when 4 # Cargo Safety
-      case question_type
-      when "multiple_choice"
-        "How should dangerous goods be stowed? (Question #{question_number})"
-      when "short_answer"
-        "What are the requirements for cargo securing? (Question #{question_number})"
-      when "true_false"
-        "IMDG code only applies to container ships. (Question #{question_number})"
-      when "long_form"
-        "Explain the IMDG code requirements and how proper cargo segregation prevents accidents at sea. (Question #{question_number})"
-      end
+      "How should dangerous goods be stowed? (Question #{question_number})"
     end
     
     # Set up question-specific attributes
@@ -285,69 +235,19 @@ maritime_final = Test.create!(
   topic = topics[i % 5]
   
   # Determine question type based on position (mix of types)
-  question_type = case i % 4
-  when 0 then "multiple_choice"
-  when 1 then "short_answer"
-  when 2 then "true_false"
-  when 3 then "long_form"
-  end
+  question_type = "multiple_choice"  # Only multiple choice questions
   
   content = case i % 5
   when 0 # Maritime Law
-    case question_type
-    when "multiple_choice"
-      "What is the primary purpose of the STCW Convention? (Final Question #{question_number})"
-    when "short_answer"
-      "Which SOLAS chapter covers fire safety? (Final Question #{question_number})"
-    when "true_false"
-      "MARPOL Annex I regulates oil pollution from ships. (Final Question #{question_number})"
-    when "long_form"
-      "Explain the comprehensive role of the Master in ship security under the ISPS Code and how it integrates with other maritime safety regulations. (Final Question #{question_number})"
-    end
+    "What is the primary purpose of the STCW Convention? (Final Question #{question_number})"
   when 1 # Emergency Response
-    case question_type
-    when "multiple_choice"
-      "What is the first action in a fire emergency? (Final Question #{question_number})"
-    when "short_answer"
-      "How should emergency signals be given? (Final Question #{question_number})"
-    when "true_false"
-      "Emergency power must be available for at least 3 hours. (Final Question #{question_number})"
-    when "long_form"
-      "Describe the complete emergency response protocol from initial alarm to post-emergency procedures, including crew coordination and safety measures. (Final Question #{question_number})"
-    end
+    "What is the first action in a fire emergency? (Final Question #{question_number})"
   when 2 # Safety Equipment
-    case question_type
-    when "multiple_choice"
-      "What is the minimum number of life jackets required? (Final Question #{question_number})"
-    when "short_answer"
-      "When must immersion suits be provided? (Final Question #{question_number})"
-    when "true_false"
-      "SART devices have a range of 5 nautical miles. (Final Question #{question_number})"
-    when "long_form"
-      "Explain the maintenance and inspection requirements for all life-saving appliances and how they ensure crew safety in emergency situations. (Final Question #{question_number})"
-    end
+    "What is the minimum number of life jackets required? (Final Question #{question_number})"
   when 3 # Navigation Safety
-    case question_type
-    when "multiple_choice"
-      "What is the stand-on vessel's obligation? (Final Question #{question_number})"
-    when "short_answer"
-      "How should radar be used in restricted visibility? (Final Question #{question_number})"
-    when "true_false"
-      "Navigation lights must be displayed from sunset to sunrise. (Final Question #{question_number})"
-    when "long_form"
-      "Discuss the principles of bridge resource management and how effective lookout duties contribute to collision avoidance and safe navigation. (Final Question #{question_number})"
-    end
+    "What is the stand-on vessel's obligation? (Final Question #{question_number})"
   when 4 # Cargo Safety
-    case question_type
-    when "multiple_choice"
-      "How should dangerous goods be segregated? (Final Question #{question_number})"
-    when "short_answer"
-      "What is the minimum securing strength? (Final Question #{question_number})"
-    when "true_false"
-      "IMDG classification has 9 different classes. (Final Question #{question_number})"
-    when "long_form"
-      "Explain the IMDG code requirements for dangerous goods handling and how proper cargo segregation and securing prevents maritime accidents. (Final Question #{question_number})"
-    end
+    "How should dangerous goods be segregated? (Final Question #{question_number})"
   end
   
   # Set up question-specific attributes
@@ -425,58 +325,17 @@ navigation_test = Test.create!(
   question_number = i + 1
   
   # Determine question type based on position (mix of types)
-  question_type = case i % 4
-  when 0 then "multiple_choice"
-  when 1 then "short_answer"
-  when 2 then "true_false"
-  when 3 then "long_form"
-  end
+  question_type = "multiple_choice"  # Only multiple choice questions
   
   content = case i % 4
   when 0 # GPS Systems
-    case question_type
-    when "multiple_choice"
-      "What is the accuracy of GPS under normal conditions? (Question #{question_number})"
-    when "short_answer"
-      "How many satellites are needed for 3D positioning? (Question #{question_number})"
-    when "true_false"
-      "WAAS improves GPS accuracy. (Question #{question_number})"
-    when "long_form"
-      "Explain how GPS positioning works, including the role of satellites, signal processing, and factors that affect accuracy in maritime navigation. (Question #{question_number})"
-    end
+    "What is the accuracy of GPS under normal conditions? (Question #{question_number})"
   when 1 # ECDIS Systems
-    case question_type
-    when "multiple_choice"
-      "What does ECDIS stand for? (Question #{question_number})"
-    when "short_answer"
-      "How often should electronic charts be updated? (Question #{question_number})"
-    when "true_false"
-      "Paper charts are required as backup for ECDIS. (Question #{question_number})"
-    when "long_form"
-      "Describe the complete ECDIS system operation including chart data management, alarm handling, and backup procedures for safe navigation. (Question #{question_number})"
-    end
+    "What does ECDIS stand for? (Question #{question_number})"
   when 2 # Radar Systems
-    case question_type
-    when "multiple_choice"
-      "What is the radar range resolution? (Question #{question_number})"
-    when "short_answer"
-      "How should radar be tuned for best performance? (Question #{question_number})"
-    when "true_false"
-      "Weather can cause radar interference. (Question #{question_number})"
-    when "long_form"
-      "Explain radar operation principles, echo interpretation techniques, and how to optimize radar performance for collision avoidance and navigation. (Question #{question_number})"
-    end
+    "What is the radar range resolution? (Question #{question_number})"
   when 3 # AIS Systems
-    case question_type
-    when "multiple_choice"
-      "What is AIS used for? (Question #{question_number})"
-    when "short_answer"
-      "How often does AIS transmit position? (Question #{question_number})"
-    when "true_false"
-      "AIS provides vessel identification information. (Question #{question_number})"
-    when "long_form"
-      "Discuss AIS functionality, data transmission protocols, and how AIS integration with other navigation systems enhances maritime safety and traffic management. (Question #{question_number})"
-    end
+    "What is AIS used for? (Question #{question_number})"
   end
   
   # Set up question-specific attributes
@@ -548,23 +407,9 @@ practice_test = Test.create!(
   question_number = i + 1
   
   # Determine question type based on position (mix of types)
-  question_type = case i % 4
-  when 0 then "multiple_choice"
-  when 1 then "short_answer"
-  when 2 then "true_false"
-  when 3 then "long_form"
-  end
+  question_type = "multiple_choice"  # Only multiple choice questions
   
-  content = case question_type
-  when "multiple_choice"
-    "What is the most important aspect of maritime safety? (Practice Question #{question_number})"
-  when "short_answer"
-    "What does SOLAS stand for? (Practice Question #{question_number})"
-  when "true_false"
-    "Regular safety drills are required on all commercial vessels. (Practice Question #{question_number})"
-  when "long_form"
-    "Explain the key principles of maritime safety and how they work together to ensure vessel and crew safety at sea. (Practice Question #{question_number})"
-  end
+  content = "What is the most important aspect of maritime safety? (Practice Question #{question_number})"
   
   # Set up question-specific attributes
   question_attributes = {
@@ -574,23 +419,13 @@ practice_test = Test.create!(
   }
   
   # Add options for multiple choice questions
-  if question_type == "multiple_choice"
-    question_attributes[:options] = [
-      ["Equipment", "Training", "Regulations", "All of the above"][i % 4],
-      ["Training", "Equipment", "Procedures", "All of the above"][i % 4],
-      ["Regulations", "Training", "Equipment", "All of the above"][i % 4],
-      ["All of the above", "Equipment only", "Training only", "Regulations only"][i % 4]
-    ]
-    question_attributes[:correct_answer] = "All of the above"
-  elsif question_type == "true_false"
-    question_attributes[:correct_answer] = ["True", "False"][i % 2]
-  elsif question_type == "short_answer"
-    question_attributes[:correct_answer] = ["All of the above", "Safety of Life at Sea", "Training standards", "Equipment maintenance"][i % 4]
-    question_attributes[:max_length] = 100
-  else # long_form
-    question_attributes[:correct_answer] = "Comprehensive explanation covering safety equipment, crew training, regulatory compliance, and emergency procedures as fundamental aspects of maritime safety."
-    question_attributes[:max_length] = 1000
-  end
+  question_attributes[:options] = [
+    ["Equipment", "Training", "Regulations", "All of the above"][i % 4],
+    ["Training", "Equipment", "Procedures", "All of the above"][i % 4],
+    ["Regulations", "Training", "Equipment", "All of the above"][i % 4],
+    ["All of the above", "Equipment only", "Training only", "Regulations only"][i % 4]
+  ]
+  question_attributes[:correct_answer] = "All of the above"
   
   Question.create!(question_attributes)
 end

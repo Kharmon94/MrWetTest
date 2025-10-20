@@ -60,61 +60,18 @@
                 <div class="form-group">
                   <%= label_tag "test_attempt_questions[#{taq.id}]", "Your Answer:", class: "form-label fw-semibold", style: "color: var(--text-primary);" %>
                   
-                  <% case taq.question.question_type %>
-                  <% when 'multiple_choice' %>
-                    <% if taq.question.multiple_choice_options.any? %>
-                      <div class="multiple-choice-options">
-                        <% taq.question.multiple_choice_options.each do |option| %>
-                          <div class="form-check mb-2">
-                            <%= radio_button_tag "test_attempt_questions[#{taq.id}]", option, taq.chosen_answer == option,
-                                class: "form-check-input", 
-                                style: "background: var(--bg-primary); border-color: var(--border-primary);" %>
-                            <%= label_tag "test_attempt_questions_#{taq.id}_#{option}", option, 
-                                class: "form-check-label", 
-                                style: "color: var(--text-primary);" %>
-                          </div>
-                        <% end %>
-                      </div>
-                    <% else %>
-                      <div class="alert alert-warning">
-                        <small>This multiple choice question has no options configured.</small>
-                      </div>
-                    <% end %>
-                    
-                  <% when 'true_false' %>
-                    <div class="true-false-options">
+                  <div class="multiple-choice-options">
+                    <% taq.question.multiple_choice_options.each do |option| %>
                       <div class="form-check mb-2">
-                        <%= radio_button_tag "test_attempt_questions[#{taq.id}]", "True", taq.chosen_answer == "True",
+                        <%= radio_button_tag "test_attempt_questions[#{taq.id}]", option, taq.chosen_answer == option,
                             class: "form-check-input", 
                             style: "background: var(--bg-primary); border-color: var(--border-primary);" %>
-                        <%= label_tag "test_attempt_questions_#{taq.id}_True", "True", 
+                        <%= label_tag "test_attempt_questions_#{taq.id}_#{option}", option, 
                             class: "form-check-label", 
                             style: "color: var(--text-primary);" %>
                       </div>
-                      <div class="form-check mb-2">
-                        <%= radio_button_tag "test_attempt_questions[#{taq.id}]", "False", taq.chosen_answer == "False",
-                            class: "form-check-input", 
-                            style: "background: var(--bg-primary); border-color: var(--border-primary);" %>
-                        <%= label_tag "test_attempt_questions_#{taq.id}_False", "False", 
-                            class: "form-check-label", 
-                            style: "color: var(--text-primary);" %>
-                      </div>
-                    </div>
-                    
-                  <% else %>
-                    <!-- Short Answer and Long Form -->
-                    <%= text_area_tag "test_attempt_questions[#{taq.id}]", taq.chosen_answer, 
-                        class: "form-control", 
-                        rows: taq.question.text_area_rows,
-                        maxlength: taq.question.max_length,
-                        style: "background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary);",
-                        placeholder: taq.question.text_input_placeholder %>
-                    <% if taq.question.max_length.present? %>
-                      <small class="text-muted mt-1 d-block">
-                        Maximum <%= taq.question.max_length %> characters
-                      </small>
                     <% end %>
-                  <% end %>
+                  </div>
                 </div>
               </div>
               <% end %>

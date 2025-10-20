@@ -29,7 +29,7 @@
                   <div class="d-flex gap-2 mb-3">
                     <%= link_to "View Test", course_test_path(@course, test), class: "btn btn-primary btn-sm" %>
                     <% if current_user.can_access?(test) %>
-                      <%= link_to "Take Test", new_tests_test_attempt_path(test_id: test.id), class: "btn btn-outline-primary btn-sm" %>
+                      <%= link_to "Take Test", procedures_test_path(test), class: "btn btn-outline-primary btn-sm" %>
                     <% end %>
                   </div>
                   

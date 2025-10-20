@@ -30,9 +30,9 @@ class Tests::TestAttemptsController < ApplicationController
     end
     
     # Check honor statement requirement
-    if @test.requires_honor_statement? && params[:honor_statement] != '1'
+    if @test.requires_honor_statement? && !session["honor_statement_accepted_#{@test.id}"]
       flash[:alert] = "You must agree to the honor statement to proceed."
-      redirect_to new_tests_test_attempt_path(test_id: params[:test_id]) and return
+      redirect_to honor_statement_test_path(@test) and return
     end
     
     # Check max attempts

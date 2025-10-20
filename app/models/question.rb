@@ -3,18 +3,32 @@ class Question < ApplicationRecord
   has_many :test_attempt_questions, dependent: :destroy
 
   validates :content, :correct_answer, presence: true
-  validates :question_type, inclusion: { in: %w[multiple_choice short_answer long_form true_false] }
-  validates :max_length, numericality: { greater_than: 0 }, allow_nil: true
+  validates :question_type, inclusion: { in: ['multiple_choice'] }
+  validates :options, presence: true, length: { minimum: 2 }
+  validate :correct_answer_must_be_in_options
 
   # Serialize options for multiple choice questions
   serialize :options, coder: JSON
 
+  before_validation :set_question_type
+
+  private
+
+  def set_question_type
+    self.question_type = 'multiple_choice'
+  end
+
+  def correct_answer_must_be_in_options
+    return unless options.present? && correct_answer.present?
+    
+    unless multiple_choice_options.include?(correct_answer)
+      errors.add(:correct_answer, 'must be one of the provided options')
+    end
+  end
+
   # Question type constants
   QUESTION_TYPES = {
-    'multiple_choice' => 'Multiple Choice',
-    'short_answer' => 'Short Answer',
-    'long_form' => 'Long Form',
-    'true_false' => 'True/False'
+    'multiple_choice' => 'Multiple Choice'
   }.freeze
   
   # Enhanced feedback methods for compliance
@@ -87,18 +101,6 @@ class Question < ApplicationRecord
     question_type == 'multiple_choice'
   end
 
-  def short_answer?
-    question_type == 'short_answer'
-  end
-
-  def long_form?
-    question_type == 'long_form'
-  end
-
-  def true_false?
-    question_type == 'true_false'
-  end
-
   def question_type_display
     QUESTION_TYPES[question_type] || 'Unknown'
   end
@@ -108,57 +110,10 @@ class Question < ApplicationRecord
     options.is_a?(Array) ? options : JSON.parse(options)
   end
 
-  def text_input_placeholder
-    case question_type
-    when 'short_answer'
-      "Enter a brief answer (max #{max_length || 100} characters)..."
-    when 'long_form'
-      "Enter your detailed response (max #{max_length || 1000} characters)..."
-    else
-      "Enter your answer here..."
-    end
-  end
-
-  def text_area_rows
-    case question_type
-    when 'short_answer'
-      2
-    when 'long_form'
-      6
-    else
-      3
-    end
-  end
-
   def validate_answer_format(answer)
     return true if answer.blank?
     
-    case question_type
-    when 'multiple_choice', 'true_false'
-      # For multiple choice, answer should be one of the options
-      if multiple_choice?
-        multiple_choice_options.include?(answer)
-      else
-        ['True', 'False', 'true', 'false'].include?(answer)
-      end
-    when 'short_answer', 'long_form'
-      # For text answers, check length
-      return false if max_length.present? && answer.length > max_length
-      true
-    else
-      true
-    end
-  end
-
-  # Override the old question_type method to use the database field
-  def question_type_from_content
-    # Legacy method for backward compatibility
-    if content.match?(/\b(true|false)\b/i)
-      'true_false'
-    elsif content.match?(/\b(which|what|how|when|where|why)\b/i)
-      'multiple_choice'
-    else
-      'short_answer'
-    end
+    # For multiple choice, answer should be one of the options
+    multiple_choice_options.include?(answer)
   end
 end

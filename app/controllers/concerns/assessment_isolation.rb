@@ -23,7 +23,7 @@ module AssessmentIsolation
     # Block access to course materials during assessment
     if course_material_path?
       flash[:alert] = "Course materials are not accessible during assessments. Please complete or abandon your current assessment first."
-      redirect_to tests_test_attempt_path(active_attempt)
+      redirect_to edit_tests_test_attempt_path(active_attempt)
     end
   end
 
@@ -46,7 +46,8 @@ module AssessmentIsolation
       /^\/courses\/\d+\/lessons/,
       /^\/lessons/,
       /^\/courses\/\d+$/,
-      /^\/courses\/browse/
+      /^\/courses\/browse/,
+      /^\/courses$/
     ]
 
     current_path = request.path
