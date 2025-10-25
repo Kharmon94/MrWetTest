@@ -250,7 +250,7 @@
                       </td>
                       <td>
                         <small class="text-muted">
-                          <%= attempt.taken_at.strftime("%m/%d/%Y at %I:%M %p") %>
+                          <%= attempt.taken_at&.strftime("%m/%d/%Y at %I:%M %p") || "Not taken" %>
                         </small>
                       </td>
                     </tr>

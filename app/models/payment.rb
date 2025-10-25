@@ -8,7 +8,11 @@ class Payment < ApplicationRecord
   validates :amount, presence: true, numericality: { greater_than: 0 }
   validates :currency, presence: true, inclusion: { in: %w[usd eur gbp cad aud] }
   validates :status, presence: true, inclusion: { in: %w[pending succeeded failed canceled requires_payment_method requires_action] }
-  validates :stripe_payment_intent_id, presence: true, uniqueness: true
+  validates :stripe_payment_intent_id, presence: true, uniqueness: true, allow_blank: true
+  validates :stripe_checkout_session_id, presence: true, uniqueness: true, allow_blank: true
+  
+  # Ensure at least one Stripe ID is present
+  validate :has_stripe_identifier
   
   # Scopes
   scope :successful, -> { where(status: 'succeeded') }
@@ -48,6 +52,14 @@ class Payment < ApplicationRecord
       'Test Purchase'
     else
       payable_type || 'Payment'
+    end
+  end
+
+  private
+
+  def has_stripe_identifier
+    if stripe_payment_intent_id.blank? && stripe_checkout_session_id.blank?
+      errors.add(:base, 'Either payment intent ID or checkout session ID must be present')
     end
   end
 end

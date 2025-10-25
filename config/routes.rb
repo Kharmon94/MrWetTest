@@ -48,16 +48,16 @@ Rails.application.routes.draw do
     end
   end
 
+  # Payment success and cancel routes (must come before resources)
+  get 'payments/success', to: 'payments#success', as: :payment_success
+  get 'payments/cancel', to: 'payments#cancel', as: :payment_cancel
+  
   # Payment routes
   resources :payments, only: [:index, :show, :new, :create] do
     member do
       post :confirm
     end
   end
-  
-  # Payment success and cancel routes
-  get 'payments/success', to: 'payments#success', as: :payment_success
-  get 'payments/cancel', to: 'payments#cancel', as: :payment_cancel
 
   # Stripe webhooks
   post 'webhooks/stripe', to: 'webhooks#stripe'

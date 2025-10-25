@@ -144,9 +144,7 @@
                         <div class="font-weight-bold"><%= user.email %></div>
                         <small class="text-muted">
                           ID: <%= user.id %>
-                          <% if user.first_name.present? || user.last_name.present? %>
-                            | <%= [user.first_name, user.last_name].compact.join(' ') %>
-                          <% end %>
+                          | Created: <%= user.created_at.strftime("%m/%d/%Y") %>
                         </small>
                       </div>
                     </div>

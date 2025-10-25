@@ -44,7 +44,7 @@
                       </td>
                       <td>
                         <% if attempt.score.present? %>
-                          <span class="badge <%= attempt.score >= attempt.test.passing_score ? 'bg-success' : 'bg-danger' %>">
+                          <span class="badge <%= attempt.test.passing_score.present? && attempt.score >= attempt.test.passing_score ? 'bg-success' : 'bg-danger' %>">
                             <%= number_with_precision(attempt.score, precision: 1) %>%
                           </span>
                         <% else %>

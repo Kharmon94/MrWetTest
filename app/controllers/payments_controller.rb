@@ -52,10 +52,21 @@ class PaymentsController < ApplicationController
       # Create Stripe customer if doesn't exist
       current_user.create_stripe_customer
 
-      # Create payment intent
-      payment_intent = StripeService.create_payment_intent(
-        @payable_item.price,
-        'usd',
+      # Create checkout session
+      checkout_session = StripeService.create_checkout_session(
+        [{
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: @payable_item.title,
+              description: (@payable_item.respond_to?(:description) ? @payable_item.description : nil)
+            },
+            unit_amount: (@payable_item.price * 100).to_i
+          },
+          quantity: 1
+        }],
+        payment_success_url,
+        payment_cancel_url,
         {
           user_id: current_user.id,
           payable_type: @payable_item.class.name,
@@ -66,7 +77,7 @@ class PaymentsController < ApplicationController
 
       # Create payment record
       @payment = current_user.payments.create!(
-        stripe_payment_intent_id: payment_intent.id,
+        stripe_checkout_session_id: checkout_session.id,
         payable: @payable_item,
         amount: @payable_item.price,
         currency: 'usd',
@@ -78,7 +89,8 @@ class PaymentsController < ApplicationController
         }
       )
 
-      redirect_to payment_path(@payment), notice: 'Payment initialized successfully.'
+      # Redirect to Stripe Checkout
+      redirect_to checkout_session.url, allow_other_host: true
 
     rescue Stripe::StripeError => e
       Rails.logger.error "Stripe error: #{e.message}"
@@ -128,17 +140,23 @@ class PaymentsController < ApplicationController
   end
 
   def success
-    @payment = current_user.payments.find_by(stripe_payment_intent_id: params[:payment_intent])
+    session_id = params[:session_id] || params[:payment_intent]
+    @payment = current_user.payments.find_by(stripe_checkout_session_id: session_id) ||
+               current_user.payments.find_by(stripe_payment_intent_id: session_id)
     
     if @payment&.successful?
       redirect_to @payment.payable, notice: 'Payment successful! You now have access to this content.'
+    elsif @payment
+      redirect_to payment_path(@payment), notice: 'Payment is being processed. Please check the status below.'
     else
-      redirect_to payments_path, alert: 'Payment not found or not successful.'
+      redirect_to payments_path, alert: 'Payment not found.'
     end
   end
 
   def cancel
-    @payment = current_user.payments.find_by(stripe_payment_intent_id: params[:payment_intent])
+    session_id = params[:session_id] || params[:payment_intent]
+    @payment = current_user.payments.find_by(stripe_checkout_session_id: session_id) ||
+               current_user.payments.find_by(stripe_payment_intent_id: session_id)
     
     if @payment
       @payment.update!(status: 'canceled')
@@ -155,8 +173,9 @@ class PaymentsController < ApplicationController
   end
 
   def set_payable_item
-    payable_type = params[:payable_type]
-    payable_id = params[:payable_id]
+    # Handle both direct params and nested payment params
+    payable_type = params[:payable_type] || params.dig(:payment, :payable_type)
+    payable_id = params[:payable_id] || params.dig(:payment, :payable_id)
 
     case payable_type
     when 'Course'

@@ -164,8 +164,25 @@ class StripeService
     end
 
     def handle_checkout_completed(session)
-      # Handle successful checkout session
-      Rails.logger.info "Checkout session completed: #{session.id}"
+      # Find payment by checkout session ID
+      payment = Payment.find_by(stripe_checkout_session_id: session.id)
+      
+      unless payment
+        Rails.logger.error "Payment not found for checkout session: #{session.id}"
+        return
+      end
+
+      # Update payment with payment intent ID from session
+      payment.update!(
+        stripe_payment_intent_id: session.payment_intent,
+        status: 'succeeded',
+        metadata: session.metadata || {}
+      )
+
+      # Grant access to the purchased item
+      grant_access_to_purchase(payment)
+      
+      Rails.logger.info "Checkout session completed successfully: #{session.id}"
     end
 
     def grant_access_to_purchase(payment)

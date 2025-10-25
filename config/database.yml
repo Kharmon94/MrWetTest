@@ -2,20 +2,15 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  host: localhost
-  username: postgres
-  password: <%= Rails.application.credentials.POSTGRES %>
 
 development:
   <<: *default
-  database: mr_wet_test_development
+  url: <%= ENV.fetch("DATABASE_URL", "postgresql://localhost/mr_wet_test_development") %>
 
 test:
   <<: *default
-  database: mr_wet_test_test
+  url: <%= ENV.fetch("TEST_DATABASE_URL", "postgresql://localhost/mr_wet_test_test") %>
 
 production:
   <<: *default
-  database: mr_wet_test_production
-  username: <%= ENV['DATABASE_USERNAME'] %>
-  password: <%= ENV['DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>

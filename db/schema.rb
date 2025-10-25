@@ -108,7 +108,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_213328) do
     t.datetime "updated_at", null: false
     t.string "payable_type", null: false
     t.bigint "payable_id", null: false
+    t.string "stripe_checkout_session_id"
     t.index ["payable_type", "payable_id"], name: "index_payments_on_payable"
+    t.index ["stripe_checkout_session_id"], name: "index_payments_on_stripe_checkout_session_id"
     t.index ["user_id"], name: "index_payments_on_user_id"
   end
 

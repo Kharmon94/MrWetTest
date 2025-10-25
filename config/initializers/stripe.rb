@@ -1,4 +1,19 @@
 # Stripe configuration
+# 
+# Test Mode Setup Instructions:
+# 1. Get test keys from Stripe Dashboard (https://dashboard.stripe.com/test/apikeys)
+# 2. Edit credentials: EDITOR="code --wait" rails credentials:edit
+# 3. Add the following structure:
+#    stripe:
+#      publishable_key: pk_test_YOUR_KEY_HERE
+#      secret_key: sk_test_YOUR_KEY_HERE
+#      webhook_secret: whsec_YOUR_WEBHOOK_SECRET_HERE
+#
+# Test Card Numbers:
+# - Success: 4242 4242 4242 4242
+# - Decline: 4000 0000 0000 0002
+# - 3D Secure: 4000 0000 0000 3220
+
 if Rails.application.credentials.stripe.present?
   Stripe.api_key = Rails.application.credentials.stripe[:secret_key]
   

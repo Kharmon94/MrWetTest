@@ -1,0 +1,12 @@
+[phases.setup]
+nixPkgs = ['nodejs', 'yarn']
+
+[phases.build]
+cmds = [
+  'bundle install',
+  'yarn install',
+  'bin/rails assets:precompile'
+]
+
+[start]
+cmd = 'bin/rails server -p $PORT -e production'
