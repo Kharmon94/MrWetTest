@@ -1,9 +1,0 @@
-[phases.setup]
-nixPkgs = ['nodejs', 'yarn']
-
-[phases.build]
-cmds = [
-  'bundle install',
-  'yarn install',
-  'RAILS_ENV=production bin/rails assets:precompile'
-]
