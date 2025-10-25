@@ -37,3 +37,8 @@
 !/app/assets/builds/.keep
 
 /node_modules
+
+# Railway
+/.railway
+railway.json.backup
+.env.railway
