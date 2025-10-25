@@ -4,7 +4,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "bin/rails server -p $PORT",
+    "startCommand": "RAILS_ENV=production bin/rails server -p $PORT",
     "healthcheckPath": "/up",
     "healthcheckTimeout": 100,
     "restartPolicyType": "ON_FAILURE",
