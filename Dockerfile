@@ -20,5 +20,5 @@ COPY . .
 # Expose port
 EXPOSE 3000
 
-# Use a shell form CMD to allow migrations to run before starting the server
-CMD bash -c "bundle exec rails db:migrate && bundle exec rails server -b 0.0.0.0 -p 3000"
+# Use a shell form CMD to allow migrations and seeds to run before starting the server
+CMD bash -c "bundle exec rails db:migrate && bundle exec rails db:seed && bundle exec rails server -b 0.0.0.0 -p 3000"
