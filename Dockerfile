@@ -17,9 +17,6 @@ RUN bundle install
 # Copy application code
 COPY . .
 
-# Precompile assets
-RUN RAILS_ENV=production bundle exec rails assets:precompile
-
 # Expose port
 EXPOSE 3000
 
