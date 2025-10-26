@@ -88,6 +88,9 @@ Rails.application.configure do
   config.hosts << ENV["RAILWAY_PUBLIC_DOMAIN"].to_s if ENV["RAILWAY_PUBLIC_DOMAIN"].present?
   config.hosts << ENV["RAILS_HOST"].to_s if ENV["RAILS_HOST"].present?
   
+  # Allow all *.up.railway.app subdomains
+  config.hosts << /.*\.up\.railway\.app/
+  
   # Skip DNS rebinding protection for the default health check endpoint.
   config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 end
