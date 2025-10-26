@@ -17,8 +17,11 @@ RUN bundle install
 # Copy application code
 COPY . .
 
+# Precompile assets
+RUN RAILS_ENV=production bundle exec rails assets:precompile
+
 # Expose port
 EXPOSE 3000
 
-# Start server
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
+# Use a shell form CMD to allow migrations to run before starting the server
+CMD bash -c "bundle exec rails db:migrate && bundle exec rails server -b 0.0.0.0 -p 3000"
