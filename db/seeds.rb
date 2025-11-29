@@ -1750,93 +1750,22 @@ Lesson.create!(
 
 puts "   Created: Boating Activities"
 
-puts "➡️ Creating final tests and questions for Boaters Courses..."
+puts "➡️ Creating Boaters Safety Final Exam..."
 
-# Course 1: Boating Basics and the Environment - Final Test
-test1 = Test.create!(
+boaters_final_test = Test.create!(
   course: course1,
-  title: "Boating Basics and the Environment - Final Assessment",
-  description: "Final assessment covering boat capacities, hull types, registration, sewage handling, waste management, and marine ecosystem protection.",
-  instructions: "Complete all questions within the time limit. You must score at least 80% to pass. Honor statement required.",
+  title: "Boaters Safety Final Exam",
+  description: "Comprehensive final assessment covering all Boaters Course topics including operator responsibilities, small boats, navigation rules, emergency preparedness, equipment, and boating activities.",
+  instructions: "This is the final certification exam for the Boaters Course. Read all six course modules before attempting this exam. You must score at least 80% to pass. Honor statement required.",
   assessment_type: "final",
-  time_limit: 60,
+  time_limit: 90,
   honor_statement_required: true,
   max_attempts: 3,
   passing_score: 80.0,
-  question_pool_size: 10
+  question_pool_size: 50
 )
 
-# Course 2: Boating Equipment - Final Test
-test2 = Test.create!(
-  course: course2,
-  title: "Boating Equipment - Final Assessment",
-  description: "Final assessment covering personal flotation devices, required safety equipment, ventilation systems, and marine communications.",
-  instructions: "Complete all questions within the time limit. You must score at least 80% to pass. Honor statement required.",
-  assessment_type: "final",
-  time_limit: 60,
-  honor_statement_required: true,
-  max_attempts: 3,
-  passing_score: 80.0,
-  question_pool_size: 10
-)
-
-# Course 3: Trip Planning and Preparation - Final Test
-test3 = Test.create!(
-  course: course3,
-  title: "Trip Planning and Preparation - Final Assessment",
-  description: "Final assessment covering operator responsibilities, trip planning, guest safety, and preparation procedures.",
-  instructions: "Complete all questions within the time limit. You must score at least 80% to pass. Honor statement required.",
-  assessment_type: "final",
-  time_limit: 60,
-  honor_statement_required: true,
-  max_attempts: 3,
-  passing_score: 80.0,
-  question_pool_size: 10
-)
-
-# Course 4: Safe Boat Operation - Final Test
-test4 = Test.create!(
-  course: course4,
-  title: "Safe Boat Operation - Final Assessment",
-  description: "Final assessment covering safe operation practices, navigation rules, anchoring, and the influence of drugs and alcohol.",
-  instructions: "Complete all questions within the time limit. You must score at least 80% to pass. Honor statement required.",
-  assessment_type: "final",
-  time_limit: 60,
-  honor_statement_required: true,
-  max_attempts: 3,
-  passing_score: 80.0,
-  question_pool_size: 10
-)
-
-# Course 5: Emergency Preparation - Final Test
-test5 = Test.create!(
-  course: course5,
-  title: "Emergency Preparation - Final Assessment",
-  description: "Final assessment covering emergency preparedness, capsizing, cold water immersion, carbon monoxide, fire prevention, and other emergency procedures.",
-  instructions: "Complete all questions within the time limit. You must score at least 80% to pass. Honor statement required.",
-  assessment_type: "final",
-  time_limit: 60,
-  honor_statement_required: true,
-  max_attempts: 3,
-  passing_score: 80.0,
-  question_pool_size: 10
-)
-
-# Course 6: Boating Activities - Final Test
-test6 = Test.create!(
-  course: course6,
-  title: "Boating Activities - Final Assessment",
-  description: "Final assessment covering water skiing, towed devices, wake sports, hunting, fishing, and water-jet propelled boats.",
-  instructions: "Complete all questions within the time limit. You must score at least 80% to pass. Honor statement required.",
-  assessment_type: "final",
-  time_limit: 60,
-  honor_statement_required: true,
-  max_attempts: 3,
-  passing_score: 80.0,
-  question_pool_size: 10
-)
-
-puts "   Created 6 final tests"
+puts "   Created Boaters Safety Final Exam"
 
 # Add questions from NASBLA Question Bank
 # Questions are organized by topic and mapped to appropriate courses
@@ -1849,7 +1778,7 @@ puts "➡️ Adding questions from NASBLA Question Bank..."
 
 # Small Boats questions (11 questions total - adding sample questions)
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What is the primary purpose of a capacity plate on a boat?",
   question_type: "multiple_choice",
   options: [
@@ -1862,7 +1791,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "Boats under 20 feet with certain engines made after what date are required to have a capacity plate?",
   question_type: "multiple_choice",
   options: [
@@ -1875,7 +1804,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What type of hull is designed to skim across the surface of the water?",
   question_type: "multiple_choice",
   options: [
@@ -1888,7 +1817,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What is the Hull Identification Number (HIN) used for?",
   question_type: "multiple_choice",
   options: [
@@ -1901,7 +1830,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "In Florida, what is the minimum distance boats must stay away from a displayed diver-down flag?",
   question_type: "multiple_choice",
   options: [
@@ -1914,7 +1843,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What is the primary concern with improper sewage disposal in waterways?",
   question_type: "multiple_choice",
   options: [
@@ -1927,7 +1856,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What is gray water?",
   question_type: "multiple_choice",
   options: [
@@ -1940,7 +1869,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What is one of the biggest global pollution issues affecting waterways?",
   question_type: "multiple_choice",
   options: [
@@ -1953,7 +1882,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What should boaters do to prevent the spread of invasive aquatic species?",
   question_type: "multiple_choice",
   options: [
@@ -1966,7 +1895,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "How far should boaters stay away from right whales?",
   question_type: "multiple_choice",
   options: [
@@ -1982,7 +1911,7 @@ Question.create!(
 # Continuing with environmental and basic boating questions from NASBLA Question Bank
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What is the recommended formula for calculating maximum people on a boat under 20 feet without a capacity plate?",
   question_type: "multiple_choice",
   options: [
@@ -1995,7 +1924,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What type of hull pushes water aside as the boat moves and is common in sailboats and trawlers?",
   question_type: "multiple_choice",
   options: [
@@ -2008,7 +1937,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What is the maximum speed capability of a displacement hull based on?",
   question_type: "multiple_choice",
   options: [
@@ -2021,7 +1950,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "Which vessels are exempt from having a capacity plate?",
   question_type: "multiple_choice",
   options: [
@@ -2034,7 +1963,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What is a leading cause of capsizing?",
   question_type: "multiple_choice",
   options: [
@@ -2047,7 +1976,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What must be displayed on a boat's hull for registration?",
   question_type: "multiple_choice",
   options: [
@@ -2060,7 +1989,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "Where is the Hull Identification Number (HIN) typically located?",
   question_type: "multiple_choice",
   options: [
@@ -2073,7 +2002,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What is required for boats to be federally documented through the U.S. Coast Guard?",
   question_type: "multiple_choice",
   options: [
@@ -2086,7 +2015,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What type of waste is considered black water?",
   question_type: "multiple_choice",
   options: [
@@ -2099,7 +2028,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What is gray water?",
   question_type: "multiple_choice",
   options: [
@@ -2112,7 +2041,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What is one of the biggest global pollution issues affecting waterways?",
   question_type: "multiple_choice",
   options: [
@@ -2125,7 +2054,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What should boaters do to prevent the spread of invasive aquatic species?",
   question_type: "multiple_choice",
   options: [
@@ -2138,7 +2067,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "How far should boaters stay away from sea turtles and dolphins?",
   question_type: "multiple_choice",
   options: [
@@ -2151,7 +2080,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "How far should boaters stay away from right whales?",
   question_type: "multiple_choice",
   options: [
@@ -2164,7 +2093,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What color water typically indicates shallow areas with grass or land?",
   question_type: "multiple_choice",
   options: [
@@ -2177,7 +2106,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What should boaters do to help sustain fish populations?",
   question_type: "multiple_choice",
   options: [
@@ -2190,7 +2119,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "Why is it important not to disturb wildlife while boating?",
   question_type: "multiple_choice",
   options: [
@@ -2203,7 +2132,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test1,
+  test: boaters_final_test,
   content: "What should boaters avoid to protect seagrass beds?",
   question_type: "multiple_choice",
   options: [
@@ -2218,7 +2147,7 @@ Question.create!(
 # Add remaining questions to reach 40+ (currently at 28, need 12 more)
 (29..40).each do |i|
   Question.create!(
-    test: test1,
+    test: boaters_final_test,
     content: "What is the primary purpose of boat registration? (Question #{i})",
     question_type: "multiple_choice",
     options: [
@@ -2235,7 +2164,7 @@ end
 # Topics: Aids to Navigation System, Equipment-related questions
 
 Question.create!(
-  test: test2,
+  test: boaters_final_test,
   content: "What safety equipment should always be on board regardless of the boat size?",
   question_type: "multiple_choice",
   options: [
@@ -2248,7 +2177,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test2,
+  test: boaters_final_test,
   content: "Which life jacket type is best for calm, inland water where there is a good chance of quick rescue?",
   question_type: "multiple_choice",
   options: [
@@ -2261,7 +2190,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test2,
+  test: boaters_final_test,
   content: "In Florida, what type of PFD is required for children under 6 on vessels less than 26 feet in length?",
   question_type: "multiple_choice",
   options: [
@@ -2274,7 +2203,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test2,
+  test: boaters_final_test,
   content: "What do the red and green lights on a boat indicate at night?",
   question_type: "multiple_choice",
   options: [
@@ -2287,7 +2216,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test2,
+  test: boaters_final_test,
   content: "What is an important safety practice when fueling your boat?",
   question_type: "multiple_choice",
   options: [
@@ -2303,7 +2232,7 @@ Question.create!(
 # Aids to Navigation System questions (6 questions total from NASBLA)
 
 Question.create!(
-  test: test2,
+  test: boaters_final_test,
   content: "What is the primary purpose of navigation aids?",
   question_type: "multiple_choice",
   options: [
@@ -2316,7 +2245,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test2,
+  test: boaters_final_test,
   content: "What do red navigation markers typically indicate?",
   question_type: "multiple_choice",
   options: [
@@ -2329,7 +2258,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test2,
+  test: boaters_final_test,
   content: "What do green navigation markers typically indicate?",
   question_type: "multiple_choice",
   options: [
@@ -2342,7 +2271,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test2,
+  test: boaters_final_test,
   content: "What is the purpose of a throwable flotation device?",
   question_type: "multiple_choice",
   options: [
@@ -2355,7 +2284,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test2,
+  test: boaters_final_test,
   content: "What is required for proper ventilation on a boat?",
   question_type: "multiple_choice",
   options: [
@@ -2368,7 +2297,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test2,
+  test: boaters_final_test,
   content: "What should be checked before operating a VHF radio?",
   question_type: "multiple_choice",
   options: [
@@ -2381,7 +2310,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test2,
+  test: boaters_final_test,
   content: "What is Channel 16 used for on a VHF radio?",
   question_type: "multiple_choice",
   options: [
@@ -2394,7 +2323,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test2,
+  test: boaters_final_test,
   content: "What type of PFD is designed for unconscious persons in rough, open water?",
   question_type: "multiple_choice",
   options: [
@@ -2407,7 +2336,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test2,
+  test: boaters_final_test,
   content: "What is the purpose of a bilge pump?",
   question_type: "multiple_choice",
   options: [
@@ -2420,7 +2349,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test2,
+  test: boaters_final_test,
   content: "What should be done with navigation lights at night?",
   question_type: "multiple_choice",
   options: [
@@ -2435,7 +2364,7 @@ Question.create!(
 # Add remaining questions to reach 40+ (currently at 16, need 24 more)
 (17..40).each do |i|
   Question.create!(
-    test: test2,
+    test: boaters_final_test,
     content: "What safety equipment is essential for all boats? (Question #{i})",
     question_type: "multiple_choice",
     options: [
@@ -2452,7 +2381,7 @@ end
 # Topics: Operator Responsibilities (25 questions total)
 
 Question.create!(
-  test: test3,
+  test: boaters_final_test,
   content: "What is a boater's primary responsibility when guests join the boat?",
   question_type: "multiple_choice",
   options: [
@@ -2465,7 +2394,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test3,
+  test: boaters_final_test,
   content: "What should a boat operator do before guests step aboard?",
   question_type: "multiple_choice",
   options: [
@@ -2478,7 +2407,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test3,
+  test: boaters_final_test,
   content: "What is a boater's responsibility towards other water users?",
   question_type: "multiple_choice",
   options: [
@@ -2491,7 +2420,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test3,
+  test: boaters_final_test,
   content: "What should be included in a float plan left with someone onshore?",
   question_type: "multiple_choice",
   options: [
@@ -2504,7 +2433,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test3,
+  test: boaters_final_test,
   content: "Why should you avoid anchoring by the stern?",
   question_type: "multiple_choice",
   options: [
@@ -2520,7 +2449,7 @@ Question.create!(
 # Operator Responsibilities questions (25 questions total from NASBLA)
 
 Question.create!(
-  test: test3,
+  test: boaters_final_test,
   content: "What should boat operators consider when planning a trip?",
   question_type: "multiple_choice",
   options: [
@@ -2533,7 +2462,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test3,
+  test: boaters_final_test,
   content: "What is the operator's primary responsibility when guests are aboard?",
   question_type: "multiple_choice",
   options: [
@@ -2546,7 +2475,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test3,
+  test: boaters_final_test,
   content: "What should be included in a safety briefing before departure?",
   question_type: "multiple_choice",
   options: [
@@ -2559,7 +2488,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test3,
+  test: boaters_final_test,
   content: "What should the operator do before guests step aboard?",
   question_type: "multiple_choice",
   options: [
@@ -2572,7 +2501,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test3,
+  test: boaters_final_test,
   content: "What should be done with the engine when people are in or near the water?",
   question_type: "multiple_choice",
   options: [
@@ -2585,7 +2514,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test3,
+  test: boaters_final_test,
   content: "What is a float plan?",
   question_type: "multiple_choice",
   options: [
@@ -2598,7 +2527,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test3,
+  test: boaters_final_test,
   content: "What should operators know about their boat?",
   question_type: "multiple_choice",
   options: [
@@ -2611,7 +2540,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test3,
+  test: boaters_final_test,
   content: "What should be considered when planning for guests?",
   question_type: "multiple_choice",
   options: [
@@ -2624,7 +2553,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test3,
+  test: boaters_final_test,
   content: "What should operators do regarding their boat's wake?",
   question_type: "multiple_choice",
   options: [
@@ -2637,7 +2566,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test3,
+  test: boaters_final_test,
   content: "What should operators do in no-wake zones?",
   question_type: "multiple_choice",
   options: [
@@ -2652,7 +2581,7 @@ Question.create!(
 # Add remaining questions to reach 40+ (currently at 16, need 24 more)
 (17..40).each do |i|
   Question.create!(
-    test: test3,
+    test: boaters_final_test,
     content: "What is the operator's responsibility regarding boat noise? (Question #{i})",
     question_type: "multiple_choice",
     options: [
@@ -2669,7 +2598,7 @@ end
 # Topics: Influence of Drugs and Alcohol (15 questions), Anchoring (9 questions), Navigation Rules (81 questions)
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "What is the effect of alcohol consumption while boating?",
   question_type: "multiple_choice",
   options: [
@@ -2682,7 +2611,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "In Florida, what is the blood alcohol content (BAC) limit for a person to be legally considered boating under the influence (BUI)?",
   question_type: "multiple_choice",
   options: [
@@ -2695,7 +2624,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "What are the consequences of operating a boat under the influence of alcohol or drugs?",
   question_type: "multiple_choice",
   options: [
@@ -2708,7 +2637,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "What should a powerboat do when crossing paths with a sailboat?",
   question_type: "multiple_choice",
   options: [
@@ -2721,7 +2650,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "What extra precaution should be taken when boating at night?",
   question_type: "multiple_choice",
   options: [
@@ -2734,7 +2663,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "What should you do if you find yourself boating in fog?",
   question_type: "multiple_choice",
   options: [
@@ -2747,7 +2676,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "When boating in restricted visibility, such as fog, what should you do?",
   question_type: "multiple_choice",
   options: [
@@ -2760,7 +2689,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "In Florida, which side should boats pass each other when navigating in opposite directions?",
   question_type: "multiple_choice",
   options: [
@@ -2773,7 +2702,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "What is a key factor to consider when anchoring in a current?",
   question_type: "multiple_choice",
   options: [
@@ -2789,7 +2718,7 @@ Question.create!(
 # Navigation Rules, Drugs/Alcohol, and Anchoring questions from NASBLA
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "What is the stand-on vessel's obligation in a crossing situation?",
   question_type: "multiple_choice",
   options: [
@@ -2802,7 +2731,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "What should the give-way vessel do in a crossing situation?",
   question_type: "multiple_choice",
   options: [
@@ -2815,7 +2744,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "What is safe speed determined by?",
   question_type: "multiple_choice",
   options: [
@@ -2828,7 +2757,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "What is required for proper look-out?",
   question_type: "multiple_choice",
   options: [
@@ -2841,7 +2770,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "What should be done when risk of collision exists?",
   question_type: "multiple_choice",
   options: [
@@ -2854,7 +2783,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "What action should be taken to avoid a collision?",
   question_type: "multiple_choice",
   options: [
@@ -2867,7 +2796,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "What should be done in restricted visibility?",
   question_type: "multiple_choice",
   options: [
@@ -2880,7 +2809,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "What is the effect of alcohol on boat operation?",
   question_type: "multiple_choice",
   options: [
@@ -2893,7 +2822,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "What are the legal consequences of boating under the influence?",
   question_type: "multiple_choice",
   options: [
@@ -2906,7 +2835,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "What should be considered when anchoring?",
   question_type: "multiple_choice",
   options: [
@@ -2919,7 +2848,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "Why should you avoid anchoring by the stern?",
   question_type: "multiple_choice",
   options: [
@@ -2932,7 +2861,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test4,
+  test: boaters_final_test,
   content: "What is the proper scope for anchoring?",
   question_type: "multiple_choice",
   options: [
@@ -2947,7 +2876,7 @@ Question.create!(
 # Add remaining questions to reach 40+ (currently at 22, need 18 more)
 (23..40).each do |i|
   Question.create!(
-    test: test4,
+    test: boaters_final_test,
     content: "What should a powerboat do when meeting a sailboat? (Question #{i})",
     question_type: "multiple_choice",
     options: [
@@ -2964,7 +2893,7 @@ end
 # Topics: Emergency Preparedness and Response (57 questions total)
 
 Question.create!(
-  test: test5,
+  test: boaters_final_test,
   content: "What is the first action to take if a person falls overboard?",
   question_type: "multiple_choice",
   options: [
@@ -2977,7 +2906,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test5,
+  test: boaters_final_test,
   content: "What is the first action to take if your boat starts taking on water?",
   question_type: "multiple_choice",
   options: [
@@ -2990,7 +2919,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test5,
+  test: boaters_final_test,
   content: "What immediate danger does cold water immersion pose?",
   question_type: "multiple_choice",
   options: [
@@ -3003,7 +2932,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test5,
+  test: boaters_final_test,
   content: "How can you reduce the risk of hypothermia while boating in cold water?",
   question_type: "multiple_choice",
   options: [
@@ -3016,7 +2945,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test5,
+  test: boaters_final_test,
   content: "What technique helps reduce the loss of body heat in cold water?",
   question_type: "multiple_choice",
   options: [
@@ -3029,7 +2958,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test5,
+  test: boaters_final_test,
   content: "What should you do in case of a fire on board?",
   question_type: "multiple_choice",
   options: [
@@ -3045,7 +2974,7 @@ Question.create!(
 # Emergency Preparedness and Response questions from NASBLA
 
 Question.create!(
-  test: test5,
+  test: boaters_final_test,
   content: "What is the proper procedure for a man overboard situation?",
   question_type: "multiple_choice",
   options: [
@@ -3058,7 +2987,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test5,
+  test: boaters_final_test,
   content: "What is the first action if someone falls overboard?",
   question_type: "multiple_choice",
   options: [
@@ -3071,7 +3000,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test5,
+  test: boaters_final_test,
   content: "What should be done if a boat capsizes?",
   question_type: "multiple_choice",
   options: [
@@ -3084,7 +3013,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test5,
+  test: boaters_final_test,
   content: "What is the Heat Escape Lessening Posture (HELP)?",
   question_type: "multiple_choice",
   options: [
@@ -3097,7 +3026,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test5,
+  test: boaters_final_test,
   content: "What is the first stage of cold water immersion?",
   question_type: "multiple_choice",
   options: [
@@ -3110,7 +3039,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test5,
+  test: boaters_final_test,
   content: "What is a danger of carbon monoxide on boats?",
   question_type: "multiple_choice",
   options: [
@@ -3123,7 +3052,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test5,
+  test: boaters_final_test,
   content: "Where can carbon monoxide accumulate on a boat?",
   question_type: "multiple_choice",
   options: [
@@ -3136,7 +3065,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test5,
+  test: boaters_final_test,
   content: "What should be done to prevent propeller accidents?",
   question_type: "multiple_choice",
   options: [
@@ -3149,7 +3078,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test5,
+  test: boaters_final_test,
   content: "What is the first action in case of a fire on board?",
   question_type: "multiple_choice",
   options: [
@@ -3162,7 +3091,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test5,
+  test: boaters_final_test,
   content: "What should be done if a boat runs aground?",
   question_type: "multiple_choice",
   options: [
@@ -3175,7 +3104,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test5,
+  test: boaters_final_test,
   content: "What is required when rendering assistance to another vessel?",
   question_type: "multiple_choice",
   options: [
@@ -3188,7 +3117,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test5,
+  test: boaters_final_test,
   content: "What should be done to prevent fires on board?",
   question_type: "multiple_choice",
   options: [
@@ -3203,7 +3132,7 @@ Question.create!(
 # Add remaining questions to reach 40+ (currently at 19, need 21 more)
 (20..40).each do |i|
   Question.create!(
-    test: test5,
+    test: boaters_final_test,
     content: "What is the proper response to a distress signal? (Question #{i})",
     question_type: "multiple_choice",
     options: [
@@ -3220,7 +3149,7 @@ end
 # Topics: Water Skiing, Towed Devices, Wake Sports (6 questions), Hunting and Fishing (6 questions), Water-Jet Propelled Boats (15 questions)
 
 Question.create!(
-  test: test6,
+  test: boaters_final_test,
   content: "What should be considered when towing a skier or tuber behind a boat?",
   question_type: "multiple_choice",
   options: [
@@ -3233,7 +3162,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test6,
+  test: boaters_final_test,
   content: "In Florida, what is the minimum age to legally operate a personal watercraft (PWC) without supervision?",
   question_type: "multiple_choice",
   options: [
@@ -3246,7 +3175,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test6,
+  test: boaters_final_test,
   content: "What is required when operating a personal watercraft (PWC)?",
   question_type: "multiple_choice",
   options: [
@@ -3259,7 +3188,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test6,
+  test: boaters_final_test,
   content: "Why is it important not to disturb wildlife while boating?",
   question_type: "multiple_choice",
   options: [
@@ -3272,7 +3201,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test6,
+  test: boaters_final_test,
   content: "What should anglers do to help sustain fish populations?",
   question_type: "multiple_choice",
   options: [
@@ -3288,7 +3217,7 @@ Question.create!(
 # Water Activities questions from NASBLA (Water Skiing, Hunting/Fishing, PWC)
 
 Question.create!(
-  test: test6,
+  test: boaters_final_test,
   content: "What safety equipment is required when towing water skiers?",
   question_type: "multiple_choice",
   options: [
@@ -3301,7 +3230,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test6,
+  test: boaters_final_test,
   content: "What should be considered when towing a skier or tuber?",
   question_type: "multiple_choice",
   options: [
@@ -3314,7 +3243,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test6,
+  test: boaters_final_test,
   content: "What is the minimum age to operate a personal watercraft (PWC) without supervision in Florida?",
   question_type: "multiple_choice",
   options: [
@@ -3327,7 +3256,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test6,
+  test: boaters_final_test,
   content: "What is required to operate a personal watercraft (PWC)?",
   question_type: "multiple_choice",
   options: [
@@ -3340,7 +3269,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test6,
+  test: boaters_final_test,
   content: "What should anglers do to help sustain fish populations?",
   question_type: "multiple_choice",
   options: [
@@ -3353,7 +3282,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test6,
+  test: boaters_final_test,
   content: "What should be done with used fishing line?",
   question_type: "multiple_choice",
   options: [
@@ -3366,7 +3295,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test6,
+  test: boaters_final_test,
   content: "What is important when operating a water-jet propelled boat?",
   question_type: "multiple_choice",
   options: [
@@ -3379,7 +3308,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test6,
+  test: boaters_final_test,
   content: "What should be done when hunting from a boat?",
   question_type: "multiple_choice",
   options: [
@@ -3392,7 +3321,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test6,
+  test: boaters_final_test,
   content: "What is required for wake sports activities?",
   question_type: "multiple_choice",
   options: [
@@ -3405,7 +3334,7 @@ Question.create!(
 )
 
 Question.create!(
-  test: test6,
+  test: boaters_final_test,
   content: "What should be done with bait and fish remains?",
   question_type: "multiple_choice",
   options: [
@@ -3420,7 +3349,7 @@ Question.create!(
 # Add remaining questions to reach 40+ (currently at 16, need 24 more)
 (17..40).each do |i|
   Question.create!(
-    test: test6,
+    test: boaters_final_test,
     content: "What is important when participating in water activities? (Question #{i})",
     question_type: "multiple_choice",
     options: [
