@@ -16,6 +16,10 @@ class AssessmentComplianceController < ApplicationController
     @test_attempt = current_user.test_attempts.build(test: @test)
   end
 
+  def security_policies
+    # Display internet security and privacy policies for electronic testing
+    @security_policies_text = AssessmentComplianceService.internet_security_policies_text
+  end
   def accept_honor_statement
     unless params[:honor_statement_accepted] == '1'
       flash[:alert] = "You must accept the honor statement to proceed with the assessment."

@@ -49,6 +49,36 @@ class AssessmentComplianceService
     By proceeding, you acknowledge that you have read and understood these procedures.
   PROCEDURES
 
+  INTERNET_SECURITY_POLICIES_TEXT = <<~SECURITY
+    INTERNET SECURITY AND PRIVACY POLICIES
+
+    We take the protection of your personal information (PII) and assessment data seriously. The following controls are in place whenever you use this online testing system:
+
+    DATA TRANSMISSION AND ENCRYPTION:
+    • All traffic between your browser and our servers is encrypted using HTTPS (TLS).
+    • Sensitive actions such as login, password reset, and assessment submission are always performed over secure connections.
+
+    ACCOUNT AND SESSION SECURITY:
+    • Each student has a unique login account protected by a password.
+    • Sessions automatically expire after periods of inactivity to reduce the risk of unauthorized access.
+    • Session identifiers are stored in secure, HTTP‑only cookies to prevent client‑side scripts from reading them.
+
+    APPLICATION SECURITY CONTROLS:
+    • Security headers (HSTS, X‑Frame‑Options, X‑Content‑Type‑Options, X‑XSS‑Protection) are used to mitigate common web attacks.
+    • Access to assessment content is restricted to authorized, authenticated users only.
+    • Course materials are blocked while an assessment is in progress to maintain exam integrity.
+
+    DATA STORAGE AND ACCESS CONTROL:
+    • Assessment results and PII are stored in secured databases with access limited to authorized system components and administrative personnel.
+    • System logs are maintained for assessment events (start, abandon, submission, integrity checks) to support audits and investigations.
+
+    PRIVACY AND USE OF DATA:
+    • Assessment data is used only for course completion, certification, compliance reporting, and system quality improvement.
+    • We do not share your PII or assessment responses with third parties except as required by law or by regulatory agencies overseeing boater education programs.
+
+    By continuing with this assessment, you acknowledge that you have been informed of how your information and exam data are protected when using this electronic testing system.
+  SECURITY
+
   class << self
     def honor_statement_text
       HONOR_STATEMENT_TEXT
@@ -56,6 +86,10 @@ class AssessmentComplianceService
 
     def assessment_procedures_text
       ASSESSMENT_PROCEDURES_TEXT
+    end
+
+    def internet_security_policies_text
+      INTERNET_SECURITY_POLICIES_TEXT
     end
 
     def validate_assessment_compliance(test, user)

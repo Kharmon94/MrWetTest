@@ -333,10 +333,10 @@ course1 = Course.create!(
   description: "Comprehensive boating safety and education course covering boat capacities, hull types, registration requirements, sewage handling, waste management, and marine ecosystem protection.",
   price: 0.00,
   time_managed: false,
-  chapter_assessments_required: false
+  chapter_assessments_required: true
 )
 
-Lesson.create!(
+lesson1 = Lesson.create!(
   course: course1,
   title: "Boating Basics and the Environment",
   content: course1_content,
@@ -344,6 +344,86 @@ Lesson.create!(
 )
 
 puts "   Created: Boating Basics and the Environment"
+
+# Course 1 Chapter Quiz (NASBLA-compliant chapter assessment)
+course1_quiz = Test.create!(
+  course: course1,
+  lesson: lesson1,
+  title: "Boating Basics and the Environment - Lesson Quiz",
+  description: "Chapter quiz covering boat capacities, hull types, registration, sewage handling, waste management, and environmental protection.",
+  instructions: "Complete this quiz after reading the lesson. You must score at least 80% to pass. Course materials will not be available while the quiz is in progress.",
+  assessment_type: "chapter",
+  time_limit: 20,
+  honor_statement_required: false,
+  max_attempts: 3,
+  passing_score: 80.0,
+  question_pool_size: 5
+)
+
+Question.create!(
+  test: course1_quiz,
+  content: "What is the main purpose of a boat's capacity plate?",
+  question_type: "multiple_choice",
+  options: [
+    "To display the maximum safe weight and number of people",
+    "To show the boat's registration number",
+    "To list the manufacturer's contact information",
+    "To display the boat's fuel capacity"
+  ],
+  correct_answer: "To display the maximum safe weight and number of people"
+)
+
+Question.create!(
+  test: course1_quiz,
+  content: "Which hull type is designed to push water aside rather than ride on top of it?",
+  question_type: "multiple_choice",
+  options: [
+    "Planing hull",
+    "Displacement hull",
+    "Flat-bottom hull",
+    "Catamaran hull"
+  ],
+  correct_answer: "Displacement hull"
+)
+
+Question.create!(
+  test: course1_quiz,
+  content: "Where is the Hull Identification Number (HIN) typically found on a recreational vessel?",
+  question_type: "multiple_choice",
+  options: [
+    "On the bow near the registration numbers",
+    "On the upper right (starboard) side of the transom",
+    "Inside the cabin on the bulkhead",
+    "On the engine cover"
+  ],
+  correct_answer: "On the upper right (starboard) side of the transom"
+)
+
+Question.create!(
+  test: course1_quiz,
+  content: "What is gray water on a boat?",
+  question_type: "multiple_choice",
+  options: [
+    "Sewage from toilets",
+    "Water from sinks, showers, and cleaning",
+    "Bilge water mixed with oil",
+    "Rainwater collected on deck"
+  ],
+  correct_answer: "Water from sinks, showers, and cleaning"
+)
+
+Question.create!(
+  test: course1_quiz,
+  content: "Which practice best helps prevent the spread of invasive aquatic species?",
+  question_type: "multiple_choice",
+  options: [
+    "Running the engine at high speed",
+    "Cleaning, draining, and drying your boat and gear between waterways",
+    "Anchoring only in deep water",
+    "Leaving bait in the water when you leave"
+  ],
+  correct_answer: "Cleaning, draining, and drying your boat and gear between waterways"
+)
 
 # Course 2: Boating Equipment
 course2_content = <<~CONTENT
@@ -595,10 +675,10 @@ course2 = Course.create!(
   description: "Comprehensive guide to personal flotation devices, required safety equipment, ventilation systems, and marine communications including VHF radios.",
   price: 0.00,
   time_managed: false,
-  chapter_assessments_required: false
+  chapter_assessments_required: true
 )
 
-  Lesson.create!(
+lesson2 = Lesson.create!(
   course: course2,
   title: "Boating Equipment",
   content: course2_content,
@@ -606,6 +686,86 @@ course2 = Course.create!(
 )
 
 puts "   Created: Boating Equipment"
+
+# Course 2 Chapter Quiz
+course2_quiz = Test.create!(
+  course: course2,
+  lesson: lesson2,
+  title: "Boating Equipment - Lesson Quiz",
+  description: "Chapter quiz covering life jackets, required safety equipment, ventilation systems, and VHF radio basics.",
+  instructions: "Complete this quiz after reading the lesson. You must score at least 80% to pass. Course materials will not be available while the quiz is in progress.",
+  assessment_type: "chapter",
+  time_limit: 20,
+  honor_statement_required: false,
+  max_attempts: 3,
+  passing_score: 80.0,
+  question_pool_size: 5
+)
+
+Question.create!(
+  test: course2_quiz,
+  content: "Which life jacket type is best suited for calm, inland water where quick rescue is likely?",
+  question_type: "multiple_choice",
+  options: [
+    "Type I",
+    "Type II",
+    "Type III",
+    "Type IV"
+  ],
+  correct_answer: "Type III"
+)
+
+Question.create!(
+  test: course2_quiz,
+  content: "In Florida, children under what age must wear a USCG-approved life jacket on boats under 26 feet while underway?",
+  question_type: "multiple_choice",
+  options: [
+    "Under 6 years",
+    "Under 8 years",
+    "Under 10 years",
+    "Under 12 years"
+  ],
+  correct_answer: "Under 6 years"
+)
+
+Question.create!(
+  test: course2_quiz,
+  content: "What safety equipment should always be on board regardless of boat size?",
+  question_type: "multiple_choice",
+  options: [
+    "A radio and GPS system",
+    "A life jacket for each person and a throwable flotation device",
+    "A set of oars or paddles",
+    "A cooler with food and drinks"
+  ],
+  correct_answer: "A life jacket for each person and a throwable flotation device"
+)
+
+Question.create!(
+  test: course2_quiz,
+  content: "What is Channel 16 primarily used for on a VHF marine radio?",
+  question_type: "multiple_choice",
+  options: [
+    "General conversation",
+    "Distress, safety, and calling",
+    "Weather reports only",
+    "Commercial traffic only"
+  ],
+  correct_answer: "Distress, safety, and calling"
+)
+
+Question.create!(
+  test: course2_quiz,
+  content: "Why is proper ventilation required on gasoline-powered boats?",
+  question_type: "multiple_choice",
+  options: [
+    "To keep the cabin cool",
+    "To prevent fuel and carbon monoxide fumes from building up",
+    "To improve engine horsepower",
+    "To reduce noise from the engine"
+  ],
+  correct_answer: "To prevent fuel and carbon monoxide fumes from building up"
+)
 
 # Course 3: Trip Planning and Preparation
 course3_content = <<~CONTENT
@@ -803,10 +963,10 @@ course3 = Course.create!(
   description: "Comprehensive guide to operator responsibilities, weather awareness, boat maintenance, trailering, and safe fueling procedures.",
   price: 0.00,
   time_managed: false,
-  chapter_assessments_required: false
+  chapter_assessments_required: true
 )
 
-Lesson.create!(
+lesson3 = Lesson.create!(
   course: course3,
   title: "Trip Planning and Preparation",
   content: course3_content,
@@ -814,6 +974,86 @@ Lesson.create!(
 )
 
 puts "   Created: Trip Planning and Preparation"
+
+# Course 3 Chapter Quiz
+course3_quiz = Test.create!(
+  course: course3,
+  lesson: lesson3,
+  title: "Trip Planning and Preparation - Lesson Quiz",
+  description: "Chapter quiz covering operator responsibilities, trip planning, guest safety, and boating environments.",
+  instructions: "Complete this quiz after reading the lesson. You must score at least 80% to pass. Course materials will not be available while the quiz is in progress.",
+  assessment_type: "chapter",
+  time_limit: 20,
+  honor_statement_required: false,
+  max_attempts: 3,
+  passing_score: 80.0,
+  question_pool_size: 5
+)
+
+Question.create!(
+  test: course3_quiz,
+  content: "What is the operator's primary responsibility when guests are aboard?",
+  question_type: "multiple_choice",
+  options: [
+    "To provide entertainment and a fun experience",
+    "To provide a reasonably safe environment and warn of hazards",
+    "To ensure everyone knows how to swim",
+    "To drive as fast as conditions allow"
+  ],
+  correct_answer: "To provide a reasonably safe environment and warn of hazards"
+)
+
+Question.create!(
+  test: course3_quiz,
+  content: "What is a float plan?",
+  question_type: "multiple_choice",
+  options: [
+    "A diagram of the boat's hull",
+    "A document left with someone onshore describing your route and return time",
+    "A list of required safety equipment",
+    "The boat's registration paperwork"
+  ],
+  correct_answer: "A document left with someone onshore describing your route and return time"
+)
+
+Question.create!(
+  test: course3_quiz,
+  content: "Which factors should you consider when planning a boating trip?",
+  question_type: "multiple_choice",
+  options: [
+    "Only your destination",
+    "Boat condition, passengers, destination, weather, and equipment",
+    "Fuel price only",
+    "Number of restaurants nearby"
+  ],
+  correct_answer: "Boat condition, passengers, destination, weather, and equipment"
+)
+
+Question.create!(
+  test: course3_quiz,
+  content: "Why is it important to know who will be aboard before you depart?",
+  question_type: "multiple_choice",
+  options: [
+    "To plan the music playlist",
+    "To plan safety briefings, life jacket fit, and assistance in emergencies",
+    "To decide which side of the boat they sit on",
+    "To determine whether to carry flares"
+  ],
+  correct_answer: "To plan safety briefings, life jacket fit, and assistance in emergencies"
+)
+
+Question.create!(
+  test: course3_quiz,
+  content: "What should you do if conditions become worse than expected during your trip?",
+  question_type: "multiple_choice",
+  options: [
+    "Increase speed to reach destination sooner",
+    "Continue as planned no matter what",
+    "Slow down, reassess your plan, and seek safe harbor if needed",
+    "Ask passengers to move to the bow"
+  ],
+  correct_answer: "Slow down, reassess your plan, and seek safe harbor if needed"
+)
 
 # Course 4: Safe Boat Operation
 course4_content = <<~CONTENT
@@ -1118,10 +1358,10 @@ course4 = Course.create!(
   description: "Comprehensive guide to boating under the influence, rules of the road, collision avoidance, anchoring, docking, and safe operation practices.",
   price: 0.00,
   time_managed: false,
-  chapter_assessments_required: false
+  chapter_assessments_required: true
 )
 
-  Lesson.create!(
+lesson4 = Lesson.create!(
   course: course4,
   title: "Safe Boat Operation",
   content: course4_content,
@@ -1129,6 +1369,86 @@ course4 = Course.create!(
 )
 
 puts "   Created: Safe Boat Operation"
+
+# Course 4 Chapter Quiz
+course4_quiz = Test.create!(
+  course: course4,
+  lesson: lesson4,
+  title: "Safe Boat Operation - Lesson Quiz",
+  description: "Chapter quiz covering boating under the influence, navigation rules, safe speed, and anchoring basics.",
+  instructions: "Complete this quiz after reading the lesson. You must score at least 80% to pass. Course materials will not be available while the quiz is in progress.",
+  assessment_type: "chapter",
+  time_limit: 20,
+  honor_statement_required: false,
+  max_attempts: 3,
+  passing_score: 80.0,
+  question_pool_size: 5
+)
+
+Question.create!(
+  test: course4_quiz,
+  content: "What is the legal blood alcohol limit for boating under the influence (BUI) in most states, including Florida?",
+  question_type: "multiple_choice",
+  options: [
+    "0.02%",
+    "0.05%",
+    "0.08%",
+    "0.10%"
+  ],
+  correct_answer: "0.08%"
+)
+
+Question.create!(
+  test: course4_quiz,
+  content: "Why is operating a boat under the influence often more dangerous than driving a car impaired?",
+  question_type: "multiple_choice",
+  options: [
+    "Boats are slower than cars",
+    "Boating stressors like sun, wind, vibration, and waves compound the effects of alcohol",
+    "Water is softer than pavement",
+    "There are fewer rules on the water"
+  ],
+  correct_answer: "Boating stressors like sun, wind, vibration, and waves compound the effects of alcohol"
+)
+
+Question.create!(
+  test: course4_quiz,
+  content: "What is the stand-on vessel required to do in a crossing situation according to navigation rules?",
+  question_type: "multiple_choice",
+  options: [
+    "Change course rapidly",
+    "Maintain course and speed while the give-way vessel takes action",
+    "Stop immediately",
+    "Sound the horn continuously"
+  ],
+  correct_answer: "Maintain course and speed while the give-way vessel takes action"
+)
+
+Question.create!(
+  test: course4_quiz,
+  content: "Which of the following best describes 'safe speed' under the navigation rules?",
+  question_type: "multiple_choice",
+  options: [
+    "The fastest speed the boat can travel",
+    "A speed that allows you to take proper and effective action to avoid collision",
+    "Any speed under the posted limit",
+    "The same speed as nearby vessels"
+  ],
+  correct_answer: "A speed that allows you to take proper and effective action to avoid collision"
+)
+
+Question.create!(
+  test: course4_quiz,
+  content: "Why should you avoid anchoring your boat by the stern?",
+  question_type: "multiple_choice",
+  options: [
+    "It is more difficult to retrieve the anchor",
+    "It can lead to the boat being swamped or capsizing",
+    "It uses more anchor line",
+    "It is illegal in all areas"
+  ],
+  correct_answer: "It can lead to the boat being swamped or capsizing"
+)
 
 # Course 5: Emergency Preparation
 course5_content = <<~CONTENT
@@ -1378,10 +1698,10 @@ course5 = Course.create!(
   description: "Comprehensive guide to handling boating accidents, capsizing, crew overboard situations, fires, hypothermia, and first aid procedures.",
   price: 0.00,
   time_managed: false,
-  chapter_assessments_required: false
+  chapter_assessments_required: true
 )
 
-Lesson.create!(
+lesson5 = Lesson.create!(
   course: course5,
   title: "Emergency Preparation",
   content: course5_content,
@@ -1389,6 +1709,86 @@ Lesson.create!(
 )
 
 puts "   Created: Emergency Preparation"
+
+# Course 5 Chapter Quiz
+course5_quiz = Test.create!(
+  course: course5,
+  lesson: lesson5,
+  title: "Emergency Preparation - Lesson Quiz",
+  description: "Chapter quiz covering accident preparedness, capsizing, crew overboard, reporting requirements, and emergency response.",
+  instructions: "Complete this quiz after reading the lesson. You must score at least 80% to pass. Course materials will not be available while the quiz is in progress.",
+  assessment_type: "chapter",
+  time_limit: 20,
+  honor_statement_required: false,
+  max_attempts: 3,
+  passing_score: 80.0,
+  question_pool_size: 5
+)
+
+Question.create!(
+  test: course5_quiz,
+  content: "What is the first thing you should do if your boat capsizes?",
+  question_type: "multiple_choice",
+  options: [
+    "Swim immediately for the nearest shore",
+    "Stay calm, account for everyone, and stay with the boat if it is safe to do so",
+    "Dive under the hull to check for leaks",
+    "Remove your life jacket to swim more easily"
+  ],
+  correct_answer: "Stay calm, account for everyone, and stay with the boat if it is safe to do so"
+)
+
+Question.create!(
+  test: course5_quiz,
+  content: "Which action helps prevent falls overboard?",
+  question_type: "multiple_choice",
+  options: [
+    "Standing on the gunwales while underway",
+    "Maintaining three points of contact when moving onboard",
+    "Wearing sandals or flip‑flops on deck",
+    "Leaning over the side to look at the water"
+  ],
+  correct_answer: "Maintaining three points of contact when moving onboard"
+)
+
+Question.create!(
+  test: course5_quiz,
+  content: "When is a Boating Accident Report (BAR) required?",
+  question_type: "multiple_choice",
+  options: [
+    "Only when a boat sinks",
+    "Only when there is property damage over $10,000",
+    "When there is a death, serious injury, certain property damage thresholds, or a vessel is lost",
+    "Only when law enforcement is present"
+  ],
+  correct_answer: "When there is a death, serious injury, certain property damage thresholds, or a vessel is lost"
+)
+
+Question.create!(
+  test: course5_quiz,
+  content: "What is the primary purpose of a float plan in emergency preparation?",
+  question_type: "multiple_choice",
+  options: [
+    "To record fuel purchases",
+    "To inform someone onshore of your route and expected return time",
+    "To list everyone’s favorite snacks",
+    "To track maintenance history"
+  ],
+  correct_answer: "To inform someone onshore of your route and expected return time"
+)
+
+Question.create!(
+  test: course5_quiz,
+  content: "What should you do when someone falls overboard?",
+  question_type: "multiple_choice",
+  options: [
+    "Continue at speed and circle back later",
+    "Immediately stop forward motion, throw flotation, and keep the victim in sight",
+    "Jump in after them without flotation",
+    "Reverse the boat toward the person"
+  ],
+  correct_answer: "Immediately stop forward motion, throw flotation, and keep the victim in sight"
+)
 
 # Course 6: Boating Activities
 course6_content = <<~CONTENT
@@ -1738,10 +2138,10 @@ course6 = Course.create!(
   description: "Comprehensive guide to personal watercraft, paddlesports, swimming and diving, hunting and fishing, and inland boating activities.",
   price: 0.00,
   time_managed: false,
-  chapter_assessments_required: false
+  chapter_assessments_required: true
 )
 
-Lesson.create!(
+lesson6 = Lesson.create!(
   course: course6,
   title: "Boating Activities",
   content: course6_content,
@@ -1749,6 +2149,86 @@ Lesson.create!(
 )
 
 puts "   Created: Boating Activities"
+
+# Course 6 Chapter Quiz
+course6_quiz = Test.create!(
+  course: course6,
+  lesson: lesson6,
+  title: "Boating Activities - Lesson Quiz",
+  description: "Chapter quiz covering personal watercraft, towed sports, hunting and fishing from boats, and other water activities.",
+  instructions: "Complete this quiz after reading the lesson. You must score at least 80% to pass. Course materials will not be available while the quiz is in progress.",
+  assessment_type: "chapter",
+  time_limit: 20,
+  honor_statement_required: false,
+  max_attempts: 3,
+  passing_score: 80.0,
+  question_pool_size: 5
+)
+
+Question.create!(
+  test: course6_quiz,
+  content: "What is the minimum age to operate a personal watercraft (PWC) without supervision in Florida?",
+  question_type: "multiple_choice",
+  options: [
+    "12 years",
+    "14 years",
+    "16 years",
+    "18 years"
+  ],
+  correct_answer: "14 years"
+)
+
+Question.create!(
+  test: course6_quiz,
+  content: "What safety equipment is required when towing water skiers or tubers?",
+  question_type: "multiple_choice",
+  options: [
+    "Only a tow rope",
+    "Only a life jacket for the skier",
+    "An observer in addition to the operator and proper life jackets",
+    "No special equipment"
+  ],
+  correct_answer: "An observer in addition to the operator and proper life jackets"
+)
+
+Question.create!(
+  test: course6_quiz,
+  content: "What should anglers do to help sustain fish populations?",
+  question_type: "multiple_choice",
+  options: [
+    "Keep every fish caught",
+    "Ignore size and bag limits",
+    "Learn and follow local regulations and practice selective harvest",
+    "Fish only in deep water"
+  ],
+  correct_answer: "Learn and follow local regulations and practice selective harvest"
+)
+
+Question.create!(
+  test: course6_quiz,
+  content: "Why should PWC operators avoid running in water less than about 2 feet deep or over seagrass beds?",
+  question_type: "multiple_choice",
+  options: [
+    "It reduces top speed",
+    "It can suck debris into the jet drive and damage the impeller or harm habitat",
+    "It makes steering easier",
+    "It improves fuel economy"
+  ],
+  correct_answer: "It can suck debris into the jet drive and damage the impeller or harm habitat"
+)
+
+Question.create!(
+  test: course6_quiz,
+  content: "When hunting or fishing from a boat, what is the most important safety consideration?",
+  question_type: "multiple_choice",
+  options: [
+    "Ensuring weapons and gear are stored for quick access only",
+    "Following all boating, hunting/fishing, and firearm safety rules together",
+    "Standing while shooting for better aim",
+    "Removing life jackets to move more freely"
+  ],
+  correct_answer: "Following all boating, hunting/fishing, and firearm safety rules together"
+)
 
 puts "➡️ Creating Boaters Safety Final Exam..."
 

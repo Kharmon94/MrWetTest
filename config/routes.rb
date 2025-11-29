@@ -45,6 +45,7 @@ Rails.application.routes.draw do
       get :procedures, to: 'assessment_compliance#show_procedures'
       get :honor_statement, to: 'assessment_compliance#show_honor_statement'
       post :accept_honor, to: 'assessment_compliance#accept_honor_statement'
+      get :security_policies, to: 'assessment_compliance#security_policies'
     end
   end
 
